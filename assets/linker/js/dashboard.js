@@ -26,9 +26,9 @@ DASHBOARD_UTILS.prototype.updateTimestamps = function() {
 		var creationDate = new Date($(comment).data('timestamp'));
 		var nowDate = new Date();
 
-		var fancyDate = _fancyDate(creationDate, nowDate, true);
+		var _fancyDate = fancyDate(creationDate, nowDate, true);
 
-		$(comment).find('.commentTime').html(fancyDate);
+		$(comment).find('.commentTime').html(_fancyDate);
 	});
 };
 
