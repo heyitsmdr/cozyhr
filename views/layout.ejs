@@ -6,28 +6,6 @@
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-    <!--
-
-      Stylesheets
-      ========================
-
-      You can link any CSS, LESS, or image files in your `assets` directory
-      as you would normally: using <link/> tags.
-      
-    -->
-
-    <!--
-
-      Support for LESS included by default
-      ================================================
-
-      LESS files are automatically compiled when they change using the Gruntfile
-      located in the top-level of this Sails app.  If you run into issues with styles
-      not reloading, check the Sails log output in your console for LESS compilation errors.
-      If necessary, shut down and then lift your app again.
-      
-    -->
-
     <!-- jQuery -->
     <script src="/js/vendor/jquery-1.11.1.min.js"></script>
     <!-- skelJS -->
@@ -60,8 +38,13 @@
     <!-- qTip2 -->
     <link type="text/css" rel="stylesheet" href="/styles/vendor/jquery.qtip.2.2.0.min.css" />
     <script src="/js/vendor/jquery.qtip.2.2.0.min.js"></script>
-    <!-- Client Script -->
+    <!-- noty -->
+    <script src="/js/vendor/jquery.noty.packaged.2.2.4.min.js"></script>
+    <!--SCRIPTS-->
     <script src="/linker/js/client.js"></script>
+    <script src="/linker/js/dashboard.js"></script>
+    <script src="/linker/js/timeclock.js"></script>
+    <!--SCRIPTS END-->
   </head>
 
   <body>
@@ -79,7 +62,7 @@
       Client-side Javascript
       ========================
 
-      You can import any js files in your `assets` directory as you would 
+      You can import any js files in your `assets` directory as you would
       normally: using <script></script> tags.
 
       Here's an example of importing a few dependencies, in order:
@@ -115,7 +98,7 @@
       Another way: The Asset Linker
       ========================
 
-      Sails supports a Grunt-based asset linker, to automatically inject 
+      Sails supports a Grunt-based asset linker, to automatically inject
       <link> and <script> tags, as well any client-side templates you're using
       into your HTML layouts and views, respecting dependencies.
 

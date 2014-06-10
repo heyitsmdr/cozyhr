@@ -1,24 +1,27 @@
-$(document).ready(function(){
-	// Set up listeners
-	socket.on('feedUpdate', onFeedUpdate);
-	socket.on('newFeedComment', onNewFeedComment);
-	socket.on('destroyFeedComment', onDestroyFeedComment);
+var DASHBOARD_UTILS = function() { DASHBOARD_UTILS.instance = this; };
 
-	// Set up bindings
-	$(document).on('mouseover', 'div.specificComment', onCommentMouseOver);
-	$(document).on('mouseout', 'div.specificComment', onCommentMouseOut);
+DASHBOARD_UTILS.instance = null;
 
-	// Set up timers
-	setInterval(updateTimestamps, 60000);
+DASHBOARD_UTILS.prototype.init = function() {
+	$(document).ready(function(){
+		// Set up listeners
+		socket.on('feedUpdate', this.onFeedUpdate.bind(this));
+		socket.on('newFeedComment', this.onNewFeedComment.bind(this));
+		socket.on('destroyFeedComment', this.onDestroyFeedComment.bind(this));
 
-	// Get news feed items
-	socket.post('/main/getFeed', { start: 0 });
+		// Set up bindings
+		$(document).on('mouseover', 'div.specificComment', this.onCommentMouseOver.bind(this));
+		$(document).on('mouseout', 'div.specificComment', this.onCommentMouseOut.bind(this));
 
-	// TEMP
+		// Set up timers
+		setInterval(this.updateTimestamps, 60000);
 
-});
+		// Get news feed items
+		socket.post('/main/getFeed', { start: 0 });
+	}.bind(DASHBOARD_UTILS.instance));
+};
 
-function updateTimestamps() {
+DASHBOARD_UTILS.prototype.updateTimestamps = function() {
 	$('.specificComment').each(function(index, comment){
 		var creationDate = new Date($(comment).data('timestamp'));
 		var nowDate = new Date();
@@ -29,7 +32,7 @@ function updateTimestamps() {
 	});
 };
 
-function onNewFeedComment(res) {
+DASHBOARD_UTILS.prototype.onNewFeedComment = function(res) {
 	var _commentItem = [];
 	_commentItem.push('<div id="cid-' + res.commentId + '" data-timestamp="%TIMESTAMP%" class="specificComment" style="display:none;">');
 	_commentItem.push('    ' + generatePictureDiv(true) + '<div class="commentText">%COMMENT%</div><span class="commentTime">Just now</span><span class="commentLinks">%LINKS%</span>');
@@ -44,20 +47,20 @@ function onNewFeedComment(res) {
 			.replace('%COMMENT%', res.content)
 			.replace('%NAME%', res.authorName)
 			.replace('%TIMESTAMP%', res.timestamp)
-			.replace('%LINKS%', ((res.authorId==APP.USERID)?' - <a href="#" onclick="doDeleteComment(this)">Delete</a>':''))
+			.replace('%LINKS%', ((res.authorId==APP.USERID)?' - <a href="#" onclick="DASHBOARD_UTILS.instance.doDeleteComment(this)">Delete</a>':''))
 	);
 
 	$('#cid-' + res.commentId).fadeIn(400);
 };
 
-function onFeedUpdate(res) {
+DASHBOARD_UTILS.prototype.onFeedUpdate = function(res) {
 	var html = [], commenthtml = [], _feedItem = [], _commentItem = [];
 	_feedItem.push('<div id="fid-%FEEDID%" class="feeditem">');
 	_feedItem.push('	' + generatePictureDiv(false));
 	_feedItem.push('	<div class="action">%CONTENT%</div>');
 	_feedItem.push('	<div class="date">%DATE%</div>');
 	_feedItem.push('	<div class="comments">%COMMENTS%</div>');
-	_feedItem.push('	<div class="comment"><div class="picture small"></div><input type="text" data-feedid="%FEEDID%" placeholder="Write a comment.." onkeyup="doWriteComment(event, this)"></div>');
+	_feedItem.push('	<div class="comment"><div class="picture small"></div><input type="text" data-feedid="%FEEDID%" placeholder="Write a comment.." onkeyup="DASHBOARD_UTILS.instance.doWriteComment(event, this)"></div>');
 	_feedItem.push('</div>');
 	_commentItem.push('<div id="cid-%COMMENTID%" data-timestamp="%TIMESTAMP%" class="specificComment">');
 	_commentItem.push('    ' + generatePictureDiv(true) + '<div class="commentText">%COMMENT%</div><span class="commentTime">now</span><span class="commentLinks">%LINKS%</span>');
@@ -73,7 +76,7 @@ function onFeedUpdate(res) {
 				.replace('%COMMENT%', comment.content)
 				.replace('%NAME%', comment.authorName)
 				.replace('%TIMESTAMP%', comment.createdAt)
-				.replace('%LINKS%', ((comment.userId==APP.USERID)?' - <a href="#" onclick="doDeleteComment(this)">Delete</a>':''))
+				.replace('%LINKS%', ((comment.userId==APP.USERID)?' - <a href="#" onclick="DASHBOARD_UTILS.instance.doDeleteComment(this)">Delete</a>':''))
 			);
 		});
 		// Assemble html
@@ -91,15 +94,15 @@ function onFeedUpdate(res) {
 		$('#subSectionCompanyFeedEntries').html( html.join('\n') );
 		$('#subSectionCompanyFeedEntries').fadeIn(200);
 
-		updateTimestamps();
-	});
+		this.updateTimestamps();
+	}.bind(this));
 };
 
-function onDestroyFeedComment(res) {
+DASHBOARD_UTILS.prototype.onDestroyFeedComment = function(res) {
 	$('#cid-' + res.commentId).fadeOut(400);
 };
 
-function doWriteComment(evt, elem) {
+DASHBOARD_UTILS.prototype.doWriteComment = function(evt, elem) {
 	var charCode = (typeof evt.which === "number") ? evt.which : evt.keyCode;
 	if(charCode == 13 && $(elem).val().length > 0) {
 		// Disable the comment box
@@ -122,7 +125,7 @@ function doWriteComment(evt, elem) {
 	}
 };
 
-function doDeleteComment(elem) {
+DASHBOARD_UTILS.prototype.doDeleteComment = function(elem) {
 	var commentId;
 
 	try {
@@ -140,10 +143,10 @@ function doDeleteComment(elem) {
 	}
 };
 
-function onCommentMouseOver(evt) {
+DASHBOARD_UTILS.prototype.onCommentMouseOver = function(evt) {
 	$(evt.currentTarget).find('.commentLinks').show();
 };
 
-function onCommentMouseOut(evt) {
+DASHBOARD_UTILS.prototype.onCommentMouseOut = function(evt) {
 	$(evt.currentTarget).find('.commentLinks').hide();
 };

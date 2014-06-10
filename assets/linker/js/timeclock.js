@@ -1,11 +1,17 @@
-$(document).ready(function(){
-	$(document).on('mousedown touchstart', '#clockInOutBox', onClockInOutMouseDown);
-	$(document).on('mouseup touchend', '#clockInOutBox', onClockInOutMouseUp);
-});
+var TIMECLOCK_UTILS = function() { TIMECLOCK_UTILS.instance = this; };
+
+TIMECLOCK_UTILS.instance = null;
+
+TIMECLOCK_UTILS.prototype.init = function() {
+	$(document).ready(function(){
+		$(document).on('mousedown touchstart', '#clockInOutBox', this.onClockInOutMouseDown.bind(this));
+		$(document).on('mouseup touchend', '#clockInOutBox', this.onClockInOutMouseUp.bind(this));
+	}.bind(TIMECLOCK_UTILS.instance));
+};
 
 fillClockInOutTimer = null;
 
-function onClockInOutMouseDown(evt) {
+TIMECLOCK_UTILS.prototype.onClockInOutMouseDown = function(evt) {
 	var elem = evt.currentTarget;
 
 	$(elem).find('.fillBox').css('top', '200px');
@@ -28,7 +34,7 @@ function onClockInOutMouseDown(evt) {
 	}, 50);
 };
 
-function onClockInOutMouseUp(evt) {
+TIMECLOCK_UTILS.prototype.onClockInOutMouseUp = function(evt) {
 	var elem = evt.currentTarget;
 
 	$(elem).find('.fillBox').hide();

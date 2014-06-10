@@ -13,6 +13,14 @@ $(document).ready(function(){
 			style: 'qtip-light'
 		});
 	});
+
+	// Set up noty defauls
+	$.noty.defaults = {
+		layout: 'topRight',
+		type: 'alert',
+		maxVisible: 5,
+		timeout: 5000
+	};
 });
 
 function generatePictureDiv(smallPicture) {
@@ -52,5 +60,11 @@ function _fancyDate(a, b, fancyReturn) {
 	else {
 		return ret.days + 'd ago';
 	}
-	
+
+};
+
+function createNotification(content) {
+	var n = noty({
+		text: content
+	});
 };
