@@ -1,0 +1,24 @@
+{
+  "name": "Greenleaf",
+  "private": true,
+  "version": "0.0.0",
+  "description": "a Sails application",
+  "dependencies": {
+    "bcrypt": "^0.7.8",
+    "ejs": "0.8.4",
+    "graphdat": "^0.4.6",
+    "grunt": "0.4.1",
+    "optimist": "0.3.4",
+    "sails": "0.9.16",
+    "sails-disk": "~0.9.0",
+    "sails-mongo": "^0.9.8"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "debug": "node debug app.js"
+  },
+  "main": "app.js",
+  "repository": "",
+  "author": "",
+  "license": ""
+}

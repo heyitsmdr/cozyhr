@@ -1,0 +1,3 @@
+require('graphdat');
+
+module.exports = {};

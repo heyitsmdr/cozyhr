@@ -1,0 +1,149 @@
+$(document).ready(function(){
+	// Set up listeners
+	socket.on('feedUpdate', onFeedUpdate);
+	socket.on('newFeedComment', onNewFeedComment);
+	socket.on('destroyFeedComment', onDestroyFeedComment);
+
+	// Set up bindings
+	$(document).on('mouseover', 'div.specificComment', onCommentMouseOver);
+	$(document).on('mouseout', 'div.specificComment', onCommentMouseOut);
+
+	// Set up timers
+	setInterval(updateTimestamps, 60000);
+
+	// Get news feed items
+	socket.post('/main/getFeed', { start: 0 });
+
+	// TEMP
+
+});
+
+function updateTimestamps() {
+	$('.specificComment').each(function(index, comment){
+		var creationDate = new Date($(comment).data('timestamp'));
+		var nowDate = new Date();
+
+		var fancyDate = _fancyDate(creationDate, nowDate, true);
+
+		$(comment).find('.commentTime').html(fancyDate);
+	});
+};
+
+function onNewFeedComment(res) {
+	var _commentItem = [];
+	_commentItem.push('<div id="cid-' + res.commentId + '" data-timestamp="%TIMESTAMP%" class="specificComment" style="display:none;">');
+	_commentItem.push('    ' + generatePictureDiv(true) + '<div class="commentText">%COMMENT%</div><span class="commentTime">Just now</span><span class="commentLinks">%LINKS%</span>');
+	_commentItem.push('</div>');
+
+	if(!$('#fid-' + res.feedId + ' .comments'))
+		return;
+
+	$('#fid-' + res.feedId + ' .comments').append(
+		_commentItem
+			.join('\n')
+			.replace('%COMMENT%', res.content)
+			.replace('%NAME%', res.authorName)
+			.replace('%TIMESTAMP%', res.timestamp)
+			.replace('%LINKS%', ((res.authorId==APP.USERID)?' - <a href="#" onclick="doDeleteComment(this)">Delete</a>':''))
+	);
+
+	$('#cid-' + res.commentId).fadeIn(400);
+};
+
+function onFeedUpdate(res) {
+	var html = [], commenthtml = [], _feedItem = [], _commentItem = [];
+	_feedItem.push('<div id="fid-%FEEDID%" class="feeditem">');
+	_feedItem.push('	' + generatePictureDiv(false));
+	_feedItem.push('	<div class="action">%CONTENT%</div>');
+	_feedItem.push('	<div class="date">%DATE%</div>');
+	_feedItem.push('	<div class="comments">%COMMENTS%</div>');
+	_feedItem.push('	<div class="comment"><div class="picture small"></div><input type="text" data-feedid="%FEEDID%" placeholder="Write a comment.." onkeyup="doWriteComment(event, this)"></div>');
+	_feedItem.push('</div>');
+	_commentItem.push('<div id="cid-%COMMENTID%" data-timestamp="%TIMESTAMP%" class="specificComment">');
+	_commentItem.push('    ' + generatePictureDiv(true) + '<div class="commentText">%COMMENT%</div><span class="commentTime">now</span><span class="commentLinks">%LINKS%</span>');
+	_commentItem.push('</div>');
+
+	res.forEach(function(feedItem) {
+		commenthtml = [];
+		// Generate comments
+		feedItem.comments.forEach(function(comment){
+			commenthtml.push( _commentItem
+				.join('\n')
+				.replace('%COMMENTID%', comment.id)
+				.replace('%COMMENT%', comment.content)
+				.replace('%NAME%', comment.authorName)
+				.replace('%TIMESTAMP%', comment.createdAt)
+				.replace('%LINKS%', ((comment.userId==APP.USERID)?' - <a href="#" onclick="doDeleteComment(this)">Delete</a>':''))
+			);
+		});
+		// Assemble html
+		html.push( _feedItem
+			.join('\n')
+			.replace('%NAME%', feedItem.authorName)
+			.replace('%CONTENT%', feedItem.content)
+			.replace('%DATE%', new Date(feedItem.date).toLocaleString())
+			.replace(/\%FEEDID\%/g, feedItem.feedid)
+			.replace('%COMMENTS%', commenthtml.join('\n'))
+		);
+	});
+
+	$('#subSectionCompanyFeedEntries').fadeOut(200, function(){
+		$('#subSectionCompanyFeedEntries').html( html.join('\n') );
+		$('#subSectionCompanyFeedEntries').fadeIn(200);
+
+		updateTimestamps();
+	});
+};
+
+function onDestroyFeedComment(res) {
+	$('#cid-' + res.commentId).fadeOut(400);
+};
+
+function doWriteComment(evt, elem) {
+	var charCode = (typeof evt.which === "number") ? evt.which : evt.keyCode;
+	if(charCode == 13 && $(elem).val().length > 0) {
+		// Disable the comment box
+		$(elem).prop('disabled', true);
+		$(elem).addClass('disabled');
+		// Send away
+		socket.post('/main/writeComment', {
+			feedid: $(elem).data('feedid'),
+			comment: $(elem).val()
+		}, function(res) {
+			// Enable the comment box
+			$(this).prop('disabled', false);
+			$(this).removeClass('disabled');
+			$(this).val('');
+			// Check if unsuccesful
+			if(!res.success) {
+				alert('Error writing comment. Try again.');
+			}
+		}.bind(elem));
+	}
+};
+
+function doDeleteComment(elem) {
+	var commentId;
+
+	try {
+		commentId = $(elem).parent().parent().attr('id').split('-')[1] || null;
+
+		if(commentId) {
+			socket.post('/main/removeComment', {
+				commentId: commentId
+			});
+		}
+	} catch(ex) {
+		console.log('Error deleting comment.')
+	} finally {
+		return false;
+	}
+};
+
+function onCommentMouseOver(evt) {
+	$(evt.currentTarget).find('.commentLinks').show();
+};
+
+function onCommentMouseOut(evt) {
+	$(evt.currentTarget).find('.commentLinks').hide();
+};

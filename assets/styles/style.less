@@ -1,0 +1,204 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,700,600,800,300);
+
+/*
+	Table of Contents:
+	- Section 0: Variables & Mixins
+	- Section 1: General
+*/
+
+/* Section 0: Variables & Mixins */
+
+@highlightcolor: #85e880;
+
+.generalfont(@size) {
+  font-family: 'Open Sans';
+  font-size: @size;
+  font-weight: 400;
+  color: #000;
+}
+
+.topmenugradient(@start, @end) {
+  background-color: @end;
+  background-image: -moz-linear-gradient(@start, @end);
+  background-image: -webkit-linear-gradient(@start, @end);
+  background-image: linear-gradient(@start, @end);
+  background-repeat: repeat-x;
+}
+
+.noselect {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* Section 1: General */
+
+::selection {
+  background: @highlightcolor;
+}
+
+::-moz-selection {
+  background: @highlightcolor;
+}
+
+body {
+  background: #fff;
+  color: #b2b9bC;
+  padding-top: 46px;
+  .generalfont(14px);
+}
+
+#topMenu {
+  .topmenugradient(#f9f9f9, #f3f3f3);
+  border-bottom: 1px solid rgb(229, 229, 229);
+
+  .menuitem a {
+	height: 41px;
+	padding: 10px 9px;
+	float: left;
+	font-size: 13px; 
+	font-weight: 600;
+	color: #000;
+	text-decoration: none;
+
+	&:hover {
+	  border-bottom: 1px solid rgb(150, 150, 150);
+	}
+
+	&.dash:hover {
+	  border-bottom: 1px solid rgb(250, 150, 150);
+	}
+
+	&.selected {
+	  border-bottom: 1px solid rgb(200, 200, 200);
+	}
+  }
+}
+
+/* Section 2: Dashboard */
+
+#mainContainer {
+	.section {
+		background-color: rgba(171, 224, 245, 0.0);
+	}
+
+	.sectionYou {
+		padding: 20px 0 10px 0;
+
+		.position {
+			font-size: 12px;
+		}
+	}
+
+	.picture {
+		&.small {
+			width: 30px !important;
+			height: 30px !important;
+		}
+		width: 40px;
+		height: 40px;
+		background-image: url('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfp1/t1.0-1/p320x320/1800382_10201588748065624_112239215_n.jpg');
+		background-size: cover;
+		background-position: center;
+		display: block;
+		border-radius: 50%;
+		-webkit-border-radius: 50%;
+		-moz-border-radius: 50%;
+		border: 1px solid rgba(0,0,0,0.5);
+		float: left;
+		margin-right: 10px;
+	}
+
+  .feeditem {
+	margin-bottom: 20px;
+
+	.date {
+	  font-size: 12px;
+	}
+
+	.comment {
+	  margin-top: 5px;
+	  margin-left: 50px;
+
+	  input {
+		border: 1px solid #ddd;
+		.generalfont(11px);
+		padding: 4px;
+		margin-top: 2px;
+		width: 80%;
+
+		&:focus {
+		  outline: 0;
+		  border: 1px solid #aaa;
+		}
+
+		&.disabled {
+		  color: #ccc;
+		}
+	  }
+	}
+
+	.specificComment {
+	  margin: 10px 0px 15px 50px;
+
+	  .commentText {
+		font-size: 12px;
+	  }
+
+	  .commentTime {
+		font-size: 12px;
+		color: #888;
+	  }
+
+	  .commentLinks {
+		display: none;
+		color: #ccc;
+
+		a {
+		  font-size: 12px;
+		  text-decoration: none;
+		  color: inherit;
+
+		  &:hover {
+			color: #333;
+		  }
+		}
+	  }
+	}
+  }
+}
+
+/* Section 3: Timeclock */
+
+#mainContainer {
+	.sectionClockInOut {
+		.noselect;
+		border: 1px solid #ccc;
+		height: 200px;
+		overflow: hidden;
+
+		&:hover {
+			border: 1px solid #888;
+		}
+
+		p {
+			text-align: center;
+			padding-top: 80px;
+			font-size: 12px;
+			color: #444;
+			float: left;
+			width: 100%;
+		}
+
+		.fillBox {
+			background-color: rgba(179, 245, 180, 0.4);
+			height: inherit;
+			position: relative;
+			top: 200px;
+			display: none;
+		}
+	}
+}
