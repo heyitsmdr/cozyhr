@@ -55,11 +55,11 @@ function fancyDate(a, b, fancyReturn) {
 
 };
 
-function createNotification(content) {
+function createNotification(content, alertType) {
 	var n = noty({
 		text: content,
 		layout: 'topRight',
-		type: 'alert',
+		type: alertType || 'alert',
 		maxVisible: 5,
 		timeout: 3000
 	});
