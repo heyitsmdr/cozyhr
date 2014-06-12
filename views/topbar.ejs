@@ -6,6 +6,9 @@
 			  <div class="menuitem"><a class="" href="#">You</a></div>
 			  <div class="menuitem"><a class="" href="#">Calendar</a></div>
 			  <div class="menuitem"><a class="<% if(selectedPage=="timeclock"){ %>selected<% } %>" href="/timeclock">Timeclock</a></div>
+			  <% if(req.session.permissionType == 1) { %>
+			  	<div class="menuitem"><a class="" href="#">Admin</a></div>
+			  <% } %>
 			</div>
 			<div class="1u">
 			  <div class="menuitem"><a href="/auth/signout">Signout</a></div>

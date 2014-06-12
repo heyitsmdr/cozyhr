@@ -26,7 +26,7 @@ module.exports = {
 					// Iterate through the feedComments to get the authorName
 					async.each(feedComments, function(comment, cb) {
 						User.findOne(comment.userId).done(function(err, commentAuthor) {
-							comment.authorName = commentAuthor.firstName + ' ' + commentAuthor.lastName;
+							comment.authorName = commentAuthor.fullName();
 
 							cb();
 						});
@@ -34,7 +34,7 @@ module.exports = {
 						User.findOne(feed.userId).done(function(err, author){
 							feedItems.push({
 								authorName: author.firstName + ' ' + author.lastName,
-								content: '<strong>' + author.firstName + ' ' + author.lastName + '</strong> ' + feed.content,
+								content: '<strong>' + author.fullName() + '</strong> ' + feed.content,
 								date: feed.createdAt,
 								feedid: feed.id,
 								comments: feedComments
@@ -72,7 +72,7 @@ module.exports = {
 						commentId: newComment.id,
 						content: newComment.content,
 						timestamp: newComment.createdAt,
-						authorName: req.session.userinfo.firstName + ' ' + req.session.userinfo.lastName,
+						authorName: req.session.userinfo.fullName,
 						authorId: newComment.userId
 				});
 				// Send to everyone listening within this company
@@ -83,7 +83,7 @@ module.exports = {
 							commentId: newComment.id,
 							content: newComment.content,
 							timestamp: newComment.createdAt,
-							authorName: req.session.userinfo.firstName + ' ' + req.session.userinfo.lastName,
+							authorName: req.session.userinfo.fullName,
 							authorId: newComment.userId
 				});
 				res.json({ success: true });
@@ -111,11 +111,4 @@ module.exports = {
 		});
 	},
 
-  /**
-   * Overrides for the settings in `config/controllers.js`
-   * (specific to MainController)
-   */
-  _config: {}
-
-  
 };

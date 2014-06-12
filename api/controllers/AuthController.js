@@ -1,24 +1,7 @@
 var bcrypt = require('bcrypt');
 
-/**
- * AuthController
- *
- * @module      :: Controller
- * @description	:: A set of functions called `actions`.
- *
- *                 Actions contain code telling Sails how to respond to a certain type of request.
- *                 (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
- *
- *                 You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
- *                 and/or override them with custom routes (`config/routes.js`)
- *
- *                 NOTE: The code you write here supports both HTTP and Socket.io automatically.
- *
- * @docs        :: http://sailsjs.org/#!documentation/controllers
- */
-
 module.exports = {
-    
+
   signin: function(req, res) {
   	res.view({
   		companyName: 'Leaf, Inc',
@@ -72,10 +55,36 @@ module.exports = {
           if(user) {
             bcrypt.compare(req.param('password'), user.password, function (err, match) {
               if(match) {
-                req.session.userinfo = user;
-                req.session.userinfo.fullName = user.fullName();
-                req.session.authenticated = true;
-                res.redirect('/main/home');
+                // Let's prepare the response
+                var doneCallback = function(user, perms) {
+                  req.session.userinfo = user;
+                  req.session.userinfo.fullName = user.fullName();
+                  req.session.authenticated = true;
+                  req.session.permissions = perms
+                  res.redirect('/main/home');
+                };
+
+                Permission.findOne(user.permissionId).done(function(err, perm) {
+                  if(!perm) {
+                    // No permissions? Let's set them as an admin
+                    Permission.create({ userId: user.id, companyId: user.companyId, companyAdmin: true }).done(function(err, newPermission) {
+                      if(newPermission) {
+                        user.permissionId = newPermission.id;
+                        user.save(function(err) {
+                          if(err) {
+                            return res.serverError(new Error('AuthPermissionSaveException'));
+                          }
+                          doneCallback(user, newPermission);
+                        });
+                      } else {
+                        return res.serverError(new Error('AuthPermissionCreateException'));
+                      }
+                    });
+                  } else {
+                    // Permission set found. Set session vars and redirect visitor
+                    doneCallback(user, perm);
+                  }
+                });
               } else {
                 res.send('incorrect password');
               }
@@ -111,5 +120,5 @@ module.exports = {
    */
   _config: {}
 
-  
+
 };

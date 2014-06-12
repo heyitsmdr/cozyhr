@@ -30,7 +30,8 @@ module.exports = {
 			type: 'boolean',
 			defaultsTo: false
 		},
-		companyId: 'string'
+		companyId: 'string',
+		permissionId: 'string'
 	},
 	beforeCreate: function (attrs, next) {
 		bcrypt.genSalt(10, function(err, salt) {
