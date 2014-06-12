@@ -7,14 +7,23 @@ describe('AuthController', function() {
     it('should render the view', function() {
       var spy = sinon.spy();
 
-      AuthController.signin({
-        session: { authenticated: false }
-      }, {
+      AuthController.signin(null, {
         view: spy
       });
 
       assert.ok(spy.called);
-      assert.equal(false, spy.firstCall.args[0].authenticated);
+    });
+  });
+
+  describe('viewing /main/register', function() {
+    it('should render the view', function() {
+      var spy = sinon.spy();
+
+      AuthController.register(null, {
+        view: spy
+      });
+
+      assert.ok(spy.called);
     });
   });
 

@@ -3,14 +3,15 @@ var bcrypt = require('bcrypt');
 module.exports = {
 
   signin: function(req, res) {
-  	res.view({
-  		companyName: 'Leaf, Inc',
-      authenticated: req.session.authenticated
-  	});
+  	res.view();
+  },
+
+  register: function(req, res) {
+    res.view();
   },
 
   do_signin: function(req, res) {
-  	if(!req.param('email') || !req.param('password')) {
+  	if(!req.param('email') || !req.param('password') || !req.param('firstname') || !req.param('lastname')) {
   		res.send('bad');
   		return;
   	}
@@ -22,8 +23,8 @@ module.exports = {
           if(!user) {
             // Create the user
             User.create({
-              firstName: 'Joe',
-              lastName: 'Smith',
+              firstName: req.param('firstname'),
+              lastName: req.param('lastname'),
               email: req.param('email'),
               password: req.param('password')
             }).done(function(err, user) {
