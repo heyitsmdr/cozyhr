@@ -11,7 +11,7 @@ module.exports = {
   },
 
   do_signin: function(req, res) {
-  	if(!req.param('email') || !req.param('password') || !req.param('firstname') || !req.param('lastname')) {
+  	if(!req.param('email') || !req.param('password')) {
   		res.send('bad');
   		return;
   	}
