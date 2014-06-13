@@ -56,25 +56,29 @@ body {
   border-bottom: 1px solid rgb(229, 229, 229);
 
   .menuitem a {
-	height: 41px;
-	padding: 10px 9px;
-	float: left;
-	font-size: 13px;
-	font-weight: 600;
-	color: #000;
-	text-decoration: none;
+		height: 41px;
+		padding: 10px 9px;
+		float: left;
+		font-size: 13px;
+		font-weight: 600;
+		color: #000;
+		text-decoration: none;
 
-	&:hover {
-	  border-bottom: 1px solid rgb(150, 150, 150);
-	}
+		&:hover {
+		  border-bottom: 1px solid rgb(150, 150, 150) !important;
+		}
 
-	&.admin:hover {
-	  border-bottom: 1px solid rgb(200, 150, 150);
-	}
+		&.selected {
+		  border-bottom: 1px solid rgb(200, 200, 200);
+		}
 
-	&.selected {
-	  border-bottom: 1px solid rgb(200, 200, 200);
-	}
+		&.admin.selected {
+			border-bottom: 1px solid rgb(200, 150, 150);
+		}
+
+		&.admin:hover {
+		  border-bottom: 1px solid rgb(150, 100, 100) !important;
+		}
   }
 }
 
@@ -199,6 +203,63 @@ body {
 			position: relative;
 			top: 200px;
 			display: none;
+		}
+	}
+}
+
+/* Section 4: Admin */
+
+#mainContainer #pageAdmin {
+	.adminmenu, .admincontent {
+		margin-top: 20px;
+	}
+
+	.adminmenu {
+		background-color: rgba(200,200,200,0.1);
+		border: 1px solid #ddd;
+
+		padding: 0;
+
+		.item div {
+			padding: 8px;
+		}
+
+		.item {
+			text-decoration: none;
+			color: #000;
+			font-size: 12px;
+
+			div {
+				background-color: #f9f9f9;
+
+				&.selected {
+					border-left: 1px solid #0f0;
+					font-weight: bold;
+					background-color: #fefefe;
+				}
+			}
+
+			div:hover {
+				background-color: #f3f3f3;
+			}
+		}
+	}
+
+	.admincontent {
+		.section {
+			background-color: rgba(200,200,200,0.1);
+			border: 1px solid #ddd;
+
+			.header {
+				padding: 8px;
+				background-color: rgba(200,200,200,0.3);
+				font-weight: bold;
+			}
+
+			.content {
+				padding: 8px;
+				font-size: 13px;
+			}
 		}
 	}
 }

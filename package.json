@@ -8,11 +8,13 @@
     "ejs": "0.8.4",
     "graphdat": "^0.4.6",
     "grunt": "0.4.1",
+    "kue": "^0.8.0",
     "mocha": "^1.20.1",
     "optimist": "0.3.4",
     "sails": "0.9.16",
     "sails-disk": "~0.9.0",
     "sails-mongo": "^0.9.8",
+    "sendgrid": "^1.0.5",
     "sinon": "^1.10.2"
   },
   "scripts": {
