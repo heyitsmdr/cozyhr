@@ -4,7 +4,7 @@
    - Handled by worker queue in production
  */
 
-var kue = require('kue'),
+/*var kue = require('kue'),
     jobs = kue.createQueue({
       prefix: 'q',
       redis: {
@@ -12,7 +12,7 @@ var kue = require('kue'),
         host: 'koi.redistogo.com',
         auth: '5952fbe237e40957ca1d7b7c91edc90f'
       }
-    });
+    });*/
 
 var sendgrid  = require('sendgrid')('app26186884@heroku.com', 'euktdwll');
 
@@ -34,5 +34,7 @@ module.exports.sendEmail = function(options) {
     EmailServiceOperations.send(options);
   } else {
     // add to worker job queue in redis (using kue)
+    // TEMP: Send without worker
+    EmailServiceOperations.send(options);
   }
 };
