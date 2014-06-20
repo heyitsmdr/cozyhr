@@ -3,6 +3,7 @@ var bcrypt = require('bcrypt');
 module.exports = {
 
   signin: function(req, res) {
+    QueueService.sendEmail({});
   	res.view();
   },
 

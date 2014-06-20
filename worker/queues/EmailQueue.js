@@ -12,6 +12,8 @@ EmailQueue.prototype.subscribe = function() {
 };
 
 EmailQueue.prototype.sendEmail = function(opt) {
+  console.log(opt);
+  return;
   sendgrid.send({
       to: opt.to,
       from: 'info@greenleaf.com',
