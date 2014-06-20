@@ -5,12 +5,6 @@ function EmailQueue() {
   this._queue; // RabbitMQ-Queue
 };
 
-EmailQueue.prototype.subscribe = function() {
-  this._queue.subscribe(function(message, headers, deliveryInfo, messageObject) {
-    console.log(message);
-  });
-};
-
 EmailQueue.prototype.sendEmail = function(opt) {
   console.log(opt);
   return;
