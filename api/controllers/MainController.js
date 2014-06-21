@@ -16,9 +16,7 @@ module.exports = {
 
 		feedItems = [];
 
-		CompanyFeed.find({
-			companyId: req.session.userinfo.companyId
-		}).limit(10).sort('createdAt DESC').done(function(err, feeds){
+		CompanyFeed.find({companyId: req.session.userinfo.companyId}).limit(10).sort('createdAt DESC').done(function(err, feeds){
 			// Iterate through the feeds at this company
 			async.each(feeds, function(feed, callback){
 				// Let's gather the comments (if any)
@@ -33,7 +31,7 @@ module.exports = {
 					}, function(err) {
 						User.findOne(feed.userId).done(function(err, author){
 							feedItems.push({
-								authorName: author.firstName + ' ' + author.lastName,
+								authorName: author.fullName(),
 								content: '<strong>' + author.fullName() + '</strong> ' + feed.content,
 								date: feed.createdAt,
 								feedid: feed.id,

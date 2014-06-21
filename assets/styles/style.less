@@ -4,6 +4,9 @@
 	Table of Contents:
 	- Section 0: Variables & Mixins
 	- Section 1: General
+	- Section 2: Dashboard
+	- Section 3: Timeclock
+	- Section 4: Admin
 */
 
 /* Section 0: Variables & Mixins */
@@ -17,7 +20,7 @@
   color: #000;
 }
 
-.topmenugradient(@start, @end) {
+.menugradiant(@start, @end) {
   background-color: @end;
   background-image: -moz-linear-gradient(@start, @end);
   background-image: -webkit-linear-gradient(@start, @end);
@@ -52,7 +55,7 @@ body {
 }
 
 #topMenu {
-  .topmenugradient(#f9f9f9, #f3f3f3);
+  .menugradiant(#f9f9f9, #f3f3f3);
   border-bottom: 1px solid rgb(229, 229, 229);
 
   .menuitem a {
@@ -82,6 +85,25 @@ body {
   }
 }
 
+#bottomMenu {
+	.menugradiant(#f9f9f9, #f3f3f3);
+	border-top: 1px solid rgb(229, 229, 229);
+
+	.linkInfo, .versionInfo {
+		height: 41px;
+		padding: 10px 9px;
+		font-size: 12px;
+	}
+
+	.versionInfo {
+		float: left;
+	}
+
+	.linkInfo {
+		text-align: right;
+	}
+}
+
 /* Section 2: Dashboard */
 
 #mainContainer {
@@ -92,8 +114,23 @@ body {
 	.sectionYou {
 		padding: 20px 0 10px 0;
 
-		.position {
-			font-size: 12px;
+		.box {
+			background-color:#ededed;
+			padding: 10px;
+			border-radius: 5px;
+
+			.position {
+				font-size: 12px;
+			}
+
+			.sep {
+				border-top: 1px solid #ccc;
+				margin: 15px 0px;
+			}
+
+			.info {
+				font-size: 13px;
+			}
 		}
 	}
 
