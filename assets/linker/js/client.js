@@ -52,7 +52,13 @@ function fancyDate(a, b, fancyReturn) {
 	else {
 		return ret.days + 'd ago';
 	}
+};
 
+function handleValidationError(ve) {
+	ve.ValidationError.content.forEach(function(err) {
+		var e = new Error('ValidationError: ' + err.message);
+		console.log(e.stack);
+	});
 };
 
 function createNotification(content, alertType) {

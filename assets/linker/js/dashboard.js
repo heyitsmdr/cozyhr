@@ -104,7 +104,7 @@ DASHBOARD_UTILS.prototype.onDestroyFeedComment = function(res) {
 
 DASHBOARD_UTILS.prototype.doWriteComment = function(evt, elem) {
 	var charCode = (typeof evt.which === "number") ? evt.which : evt.keyCode;
-	if(charCode == 13 && $(elem).val().length > 0) {
+	if(charCode == 13 && $(elem).val().length > 1) {
 		// Disable the comment box
 		$(elem).prop('disabled', true);
 		$(elem).addClass('disabled');
@@ -119,7 +119,8 @@ DASHBOARD_UTILS.prototype.doWriteComment = function(evt, elem) {
 			$(this).val('');
 			// Check if unsuccesful
 			if(!res.success) {
-				alert('Error writing comment. Try again.');
+				alert('Error writing comment. See console for details.');
+				handleValidationError(res.error);
 			}
 		}.bind(elem));
 	}

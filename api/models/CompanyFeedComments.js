@@ -11,7 +11,11 @@ module.exports = {
 	attributes: {
 		feedId: 'string',
 		userId: 'string',
-		content: 'string'
+		content: {
+      type: 'string',
+      minLength: 2,
+      maxLength: 1024
+    }
 	}
 
 };
