@@ -138,9 +138,9 @@ module.exports = {
 				} else {
 					res.json({ success: false, reason: 'user mismatch' });
 				}
-			} else if(!err & !comment) {
+			} else if(!err && !comment) {
 				res.json({ success: false, reason: 'comment not found' });
-			} else(err) {
+			} else {
 				res.json({ success: false, reason: 'database error', error: err })
 			}
 		});
