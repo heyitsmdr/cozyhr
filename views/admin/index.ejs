@@ -1,16 +1,16 @@
 <div id="pageAdmin" class="row">
   <div class="-1u 2u adminmenu">
     <a class="item" href="/admin/general"><div class="<% if(selectedSection=="general"){ %>selected<% } %>">General</div></a>
-    <a class="item" href="/admin/misc"><div class="<% if(selectedSection=="misc"){ %>selected<% } %>">Misc</div></a>
-    <a class="item" href="#"><div>Basic Settings</div></a>
+    <a class="item" href="/admin/employees"><div class="<% if(selectedSection=="employees"){ %>selected<% } %>">Employees</div></a>
+    <a class="item" href="/admin/roles"><div>Roles</div></a>
   </div>
   <div class="8u admincontent">
     <% if(selectedSection=="general"){ %>
       <%- partial('general') %>
     <% } %>
 
-    <% if(selectedSection=="misc"){ %>
-      <%- partial('misc') %>
+    <% if(selectedSection=="employees"){ %>
+      <%- partial('employees') %>
     <% } %>
   </div>
 </div>

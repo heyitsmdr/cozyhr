@@ -114,20 +114,44 @@ body {
 	}
 }
 
+.tooltip {
+	padding: 5px;
+
+	.position {
+		font-size: 12px;
+	}
+
+	.name {
+		font-size: 13px;
+		font-weight: bold;
+	}
+}
+
+#mainContainer {
+	.sectionSpace {
+		margin: 20px 0;
+	}
+}
+
 /* Section 2: Dashboard */
 
 #mainContainer {
 	.section {
 		background-color: rgba(171, 224, 245, 0.0);
-	}
-
-	.sectionYou {
-		padding: 20px 0 10px 0;
 
 		.box {
 			background-color:#ededed;
 			padding: 10px;
 			border-radius: 5px;
+
+			.name {
+				font-size: 15px;
+			}
+
+			.head h3 {
+				margin: 0px;
+				padding: 0px 0px 10px 0px;
+			}
 
 			.position {
 				font-size: 12px;
@@ -140,7 +164,19 @@ body {
 
 			.info {
 				font-size: 13px;
+
+				.pto { margin-right: 2px; padding: 4px; background-color: rgba(0, 204, 255, 0.32); }
 			}
+		}
+	}
+
+	.sectionYou, .sectionBirthdays {
+		padding: 20px 0 10px 0;
+	}
+
+	.sectionWorkingNow {
+		#subSectionWorkers {
+			overflow: auto;
 		}
 	}
 
@@ -149,16 +185,19 @@ body {
 			width: 30px !important;
 			height: 30px !important;
 		}
+		&.large-margin {
+			margin: 5px 5px 5px 5px !important;
+		}
+
 		width: 40px;
 		height: 40px;
-		background-image: url('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfp1/t1.0-1/p320x320/1800382_10201588748065624_112239215_n.jpg');
 		background-size: cover;
 		background-position: center;
 		display: block;
 		border-radius: 50%;
 		-webkit-border-radius: 50%;
 		-moz-border-radius: 50%;
-		border: 1px solid rgba(0,0,0,0.5);
+		border: 1px solid #000;
 		float: left;
 		margin-right: 10px;
 	}
@@ -264,11 +303,20 @@ body {
 	.adminmenu {
 		background-color: rgba(200,200,200,0.1);
 		border: 1px solid #ddd;
-
 		padding: 0;
 
-		.item div {
+		.head {
 			padding: 8px;
+			background-color: rgba(200,200,200,0.2);
+			overflow: auto;
+
+			.name {
+				padding-top: 5px;
+			}
+		}
+
+		.item div {
+			padding: 6px;
 		}
 
 		.item {
@@ -306,6 +354,26 @@ body {
 			.content {
 				padding: 8px;
 				font-size: 13px;
+
+				.employee {
+
+					a {
+						text-decoration: none;
+						color: #000;
+
+						&:hover {
+							text-decoration: underline;
+						}
+					}
+
+					.name {
+						font-weight: bold;
+					}
+
+					.position {
+
+					}
+				}
 			}
 		}
 	}

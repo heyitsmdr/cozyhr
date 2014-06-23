@@ -3,9 +3,6 @@ $(document).ready(function(){
 	$(document).on('mouseover', 'div.person', function(event) {
 		$(this).qtip({
 			overwrite: false,
-			text: function(event, api) {
-				return 'Loading...';
-			},
 			show: {
 				event: event.type,
 				ready: true
@@ -15,8 +12,11 @@ $(document).ready(function(){
 	});
 });
 
-function generatePictureDiv(smallPicture) {
-	return "<div title='%NAME%' class='person picture " + ((smallPicture)?'small':'') + "'></div>";
+function generatePictureDiv(opt, extraClassOptions) {
+	var lines = [];
+	lines.push("<span class=\"name\">" + opt.name + "</span>");
+	lines.push("<span class=\"position\">" + opt.position + "</span>");
+	return "<div title='<div class=\"tooltip\">" + lines.join('<br>') + "</div>' class='person picture " + ((opt.small)?'small':'') + " " + extraClassOptions + "' style='background-image:url(" + opt.picture + ")'></div>";
 };
 
 function fancyDate(a, b, fancyReturn) {

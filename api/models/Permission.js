@@ -10,8 +10,8 @@ module.exports = {
 
   attributes: {
 
-    userId: 'string',
     companyId: 'string',
+    position: 'string',
     companyAdmin: 'boolean'
 
   }

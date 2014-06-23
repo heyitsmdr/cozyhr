@@ -1,0 +1,36 @@
+<div class="section">
+  <div class="content">
+    Manage the employees at <strong><%- req.session.company.name %></strong> from here.
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Employees
+  </div>
+
+  <div class="content">
+
+    <% var rowCount = 0; %>
+    <% for(var i = 0; i < employees.length; i++) { %>
+      <% rowCount++ %>
+      <% if( rowCount == 1 ) { %>
+      <div class="row">
+      <% } %>
+        <div class="4u employee">
+          <a href="/admin/employee/<%= employees[i].id %>">
+            <div class="picture" style="background-image:url('<%= employees[i].picture %>')"></div>
+            <div class="name"><%= employees[i].firstName + ' ' + employees[i].lastName %></div>
+            <div class="position"><%= employees[i].models.permission.position %></div>
+          </a>
+        </div>
+      <% if( rowCount == 3 ) { %>
+      </div>
+      <% rowCount = 0; %>
+      <% } %>
+    <% } %>
+
+  </div>
+</div>

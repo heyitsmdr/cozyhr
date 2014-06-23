@@ -1,0 +1,16 @@
+<div id="pageAdmin" class="row">
+  <div class="-1u 2u adminmenu">
+    <div class="head"><div class="picture small" style="background-image:url('<%= employee.picture %>')"></div><div class="name"><%= employee.firstName + ' ' + employee.lastName %></div></div>
+    <a class="item" href="?section=basic"><div class="<% if(selectedSection=="basic"){ %>selected<% } %>">Basic Information</div></a>
+  </div>
+  <div class="8u admincontent">
+    <% if(selectedSection=="basic"){ %>
+      <%- partial('basic') %>
+    <% } %>
+  </div>
+</div>
+
+<!-- Initialize Script -->
+<script>
+
+</script>

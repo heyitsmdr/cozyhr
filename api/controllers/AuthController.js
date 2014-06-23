@@ -56,36 +56,40 @@ module.exports = {
           if(user) {
             bcrypt.compare(req.param('password'), user.password, function (err, match) {
               if(match) {
-                // Let's prepare the response
-                var doneCallback = function(user, perms) {
+                var gotPermissions = function(user, company, perms) {
                   req.session.userinfo = user;
                   req.session.userinfo.fullName = user.fullName();
                   req.session.authenticated = true;
                   req.session.permissions = perms
+                  req.session.company = company;
                   res.redirect('/main/home');
                 };
 
-                Permission.findOne(user.permissionId).done(function(err, perm) {
-                  if(!perm) {
-                    // No permissions? Let's set them as an admin
-                    Permission.create({ userId: user.id, companyId: user.companyId, companyAdmin: true }).done(function(err, newPermission) {
-                      if(newPermission) {
-                        user.permissionId = newPermission.id;
-                        user.save(function(err) {
-                          if(err) {
-                            return res.serverError(new Error('AuthPermissionSaveException'));
-                          }
-                          doneCallback(user, newPermission);
-                        });
-                      } else {
-                        return res.serverError(new Error('AuthPermissionCreateException'));
-                      }
-                    });
-                  } else {
-                    // Permission set found. Set session vars and redirect visitor
-                    doneCallback(user, perm);
-                  }
-                });
+                var gotCompany = function(err, company) {
+                  Permission.findOne(user.permissionId).done(function(err, perm) {
+                    if(!perm) {
+                      // Company has no permissions (new company)? Let's set them as an admin
+                      Permission.create({ companyId: user.companyId, companyAdmin: true }).done(function(err, newPermission) {
+                        if(newPermission) {
+                          user.permissionId = newPermission.id;
+                          user.save(function(err) {
+                            if(err) {
+                              return res.serverError(new Error('AuthPermissionSaveException'));
+                            }
+                            gotPermissions(user, company, newPermission);
+                          });
+                        } else {
+                          return res.serverError(new Error('AuthPermissionCreateException'));
+                        }
+                      });
+                    } else {
+                      // Permission set found. Set session vars and redirect visitor
+                      gotPermissions(user, company, perm);
+                    }
+                  });
+                };
+
+                Company.findOne(user.companyId).done(gotCompany);
               } else {
                 res.send('incorrect password');
               }

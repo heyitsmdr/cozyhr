@@ -1,8 +1,11 @@
 module.exports = {
 
 	home: function(req, res) {
-		res.view({
-			selectedPage: 'dash'
+		User.findOne(req.session.userinfo.id).done(function(e, usr) {
+			res.view({
+				selectedPage: 'dash',
+				picture: usr.generatePicture(false, req)
+			});
 		});
 	},
 
@@ -23,19 +26,22 @@ module.exports = {
 				CompanyFeedComments.find({ feedId: feed.id }).limit(15).done(function(err, feedComments){
 					// Iterate through the feedComments to get the authorName
 					async.each(feedComments, function(comment, cb) {
-						User.findOne(comment.userId).done(function(err, commentAuthor) {
+						UserSpecial.one(comment.userId, function(commentAuthor) {
 							comment.authorName = commentAuthor.fullName();
+							comment.picture = commentAuthor.genPicture(true);
 
 							cb();
 						});
 					}, function(err) {
-						User.findOne(feed.userId).done(function(err, author){
+						UserSpecial.one(feed.userId, function(author){
 							feedItems.push({
 								authorName: author.fullName(),
 								content: '<strong>' + author.fullName() + '</strong> ' + feed.content,
 								date: feed.createdAt,
 								feedid: feed.id,
-								comments: feedComments
+								comments: feedComments,
+								picture: author.genPicture(false),
+								mePicture: req.session.userinfo.picture
 							});
 
 							callback();
@@ -51,41 +57,66 @@ module.exports = {
 		req.listen('dash-cid-' + req.session.userinfo.companyId);
 	},
 
+	getWorkingNow: function(req, res) {
+		if(!req.isSocket)
+			return;
+
+		workingNow = [];
+
+		User.findOne(req.session.userinfo.id).done(function(e, usr) {
+			workingNow.push({
+				picture: usr.generatePicture(false, req)
+			});
+
+			workingNow.push({
+				picture: usr.generatePicture(false, req)
+			});
+
+			req.socket.emit('workersUpdate', workingNow);
+		});
+	},
+
 	writeComment: function(req, res) {
 		if(!req.isSocket)
 			return;
 
-		CompanyFeedComments.create({
-			feedId: req.param('feedid'),
-			userId: req.session.userinfo.id,
-			content: req.param('comment')
-		}).done(function(err, newComment){
-			if(err) {
-				res.json({ success: false, error: err });
-			} else {
-				// Send to you
-				req.socket
-					.emit('newFeedComment', {
-						feedId: req.param('feedid'),
-						commentId: newComment.id,
-						content: newComment.content,
-						timestamp: newComment.createdAt,
-						authorName: req.session.userinfo.fullName,
-						authorId: newComment.userId
-				});
-				// Send to everyone listening within this company
-				req.socket
-					.broadcast.to('dash-cid-' + req.session.userinfo.companyId)
+		UserSpecial.one(req.session.userinfo.id, function(usr) {
+
+			CompanyFeedComments.create({
+				feedId: req.param('feedid'),
+				userId: req.session.userinfo.id,
+				content: req.param('comment')
+			}).done(function(err, newComment){
+				if(err) {
+					res.json({ success: false, error: err });
+				} else {
+					// Send to you
+					req.socket
 						.emit('newFeedComment', {
 							feedId: req.param('feedid'),
 							commentId: newComment.id,
 							content: newComment.content,
 							timestamp: newComment.createdAt,
 							authorName: req.session.userinfo.fullName,
-							authorId: newComment.userId
-				});
-				res.json({ success: true });
-			}
+							authorId: newComment.userId,
+							picture: usr.genPicture(true)
+					});
+					// Send to everyone listening within this company
+					req.socket
+						.broadcast.to('dash-cid-' + req.session.userinfo.companyId)
+							.emit('newFeedComment', {
+								feedId: req.param('feedid'),
+								commentId: newComment.id,
+								content: newComment.content,
+								timestamp: newComment.createdAt,
+								authorName: req.session.userinfo.fullName,
+								authorId: newComment.userId,
+								picture: usr.genPicture(true)
+					});
+					res.json({ success: true });
+				}
+			});
+
 		});
 	},
 

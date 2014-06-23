@@ -30,11 +30,42 @@ module.exports = {
     });
   },
 
-  misc: function(req, res) {
-    res.view('admin/index', {
-      selectedPage: 'admin',
-      selectedSection: 'misc'
+  employees: function(req, res) {
+    UserSpecial.many({companyId: req.session.userinfo.companyId}, {sort: 'lastName ASC'}, function(employees) {
+      res.view('admin/index', {
+          selectedPage: 'admin',
+          selectedSection: 'employees',
+          employees: employees
+        });
     });
+  },
+
+  employee: function(req, res) {
+    var userId = req.params['id'];
+
+    if(!userId) {
+      return res.serverError(new Error('AdminEmployeeNotSpecifiedException'));
+    }
+
+    var gotEmployee = function(e, employee) {
+      if(e || !employee) {
+        return res.serverError(new Error('AdminEmployeeNotFoundException'));
+      }
+
+      // same company?
+      if(employee.companyId != req.session.userinfo.companyId) {
+        return res.serverError(new Error('AdminEmployeeCompanyMismatchException'));
+      }
+
+      // okay
+      res.view('admin/employee/edit', {
+        selectedPage: 'admin',
+        employee: employee,
+        selectedSection: 'basic'
+      });
+    };
+
+    User.findOne(userId).done(gotEmployee);
   }
 
 };

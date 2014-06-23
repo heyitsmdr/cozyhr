@@ -8,6 +8,7 @@ DASHBOARD_UTILS.prototype.init = function() {
 		socket.on('feedUpdate', this.onFeedUpdate.bind(this));
 		socket.on('newFeedComment', this.onNewFeedComment.bind(this));
 		socket.on('destroyFeedComment', this.onDestroyFeedComment.bind(this));
+		socket.on('workersUpdate', this.onWorkersUpdate.bind(this));
 
 		// Set up bindings
 		$(document).on('mouseover', 'div.specificComment', this.onCommentMouseOver.bind(this));
@@ -18,6 +19,9 @@ DASHBOARD_UTILS.prototype.init = function() {
 
 		// Get news feed items
 		socket.post('/main/getFeed', { start: 0 });
+
+		// Get employees working now
+		socket.post('/main/getWorkingNow');
 	}.bind(DASHBOARD_UTILS.instance));
 };
 
@@ -35,7 +39,7 @@ DASHBOARD_UTILS.prototype.updateTimestamps = function() {
 DASHBOARD_UTILS.prototype.onNewFeedComment = function(res) {
 	var _commentItem = [];
 	_commentItem.push('<div id="cid-' + res.commentId + '" data-timestamp="%TIMESTAMP%" class="specificComment" style="display:none;">');
-	_commentItem.push('    ' + generatePictureDiv(true) + '<div class="commentText">%COMMENT%</div><span class="commentTime">Just now</span><span class="commentLinks">%LINKS%</span>');
+	_commentItem.push('    %PICTURE%<div class="commentText">%COMMENT%</div><span class="commentTime">Just now</span><span class="commentLinks">%LINKS%</span>');
 	_commentItem.push('</div>');
 
 	if(!$('#fid-' + res.feedId + ' .comments'))
@@ -47,6 +51,7 @@ DASHBOARD_UTILS.prototype.onNewFeedComment = function(res) {
 			.replace('%COMMENT%', res.content)
 			.replace('%NAME%', res.authorName)
 			.replace('%TIMESTAMP%', res.timestamp)
+			.replace('%PICTURE%', generatePictureDiv(res.picture))
 			.replace('%LINKS%', ((res.authorId==APP.USERID)?' - <a href="#" onclick="DASHBOARD_UTILS.instance.doDeleteComment(this)">Delete</a>':''))
 	);
 
@@ -56,14 +61,14 @@ DASHBOARD_UTILS.prototype.onNewFeedComment = function(res) {
 DASHBOARD_UTILS.prototype.onFeedUpdate = function(res) {
 	var html = [], commenthtml = [], _feedItem = [], _commentItem = [];
 	_feedItem.push('<div id="fid-%FEEDID%" class="feeditem">');
-	_feedItem.push('	' + generatePictureDiv(false));
+	_feedItem.push('	%PICTURE%');
 	_feedItem.push('	<div class="action">%CONTENT%</div>');
 	_feedItem.push('	<div class="date">%DATE%</div>');
 	_feedItem.push('	<div class="comments">%COMMENTS%</div>');
-	_feedItem.push('	<div class="comment"><div class="picture small"></div><input type="text" data-feedid="%FEEDID%" placeholder="Write a comment.." onkeyup="DASHBOARD_UTILS.instance.doWriteComment(event, this)"></div>');
+	_feedItem.push('	<div class="comment"><div class="picture small" style="background-image:url(%YOURPICTURE%)"></div><input type="text" data-feedid="%FEEDID%" placeholder="Write a comment.." onkeyup="DASHBOARD_UTILS.instance.doWriteComment(event, this)"></div>');
 	_feedItem.push('</div>');
 	_commentItem.push('<div id="cid-%COMMENTID%" data-timestamp="%TIMESTAMP%" class="specificComment">');
-	_commentItem.push('    ' + generatePictureDiv(true) + '<div class="commentText">%COMMENT%</div><span class="commentTime">now</span><span class="commentLinks">%LINKS%</span>');
+	_commentItem.push('    %PICTURE%<div class="commentText">%COMMENT%</div><span class="commentTime">now</span><span class="commentLinks">%LINKS%</span>');
 	_commentItem.push('</div>');
 
 	res.forEach(function(feedItem) {
@@ -76,6 +81,7 @@ DASHBOARD_UTILS.prototype.onFeedUpdate = function(res) {
 				.replace('%COMMENT%', comment.content)
 				.replace('%NAME%', comment.authorName)
 				.replace('%TIMESTAMP%', comment.createdAt)
+				.replace('%PICTURE%', generatePictureDiv(comment.picture))
 				.replace('%LINKS%', ((comment.userId==APP.USERID)?' - <a href="#" onclick="DASHBOARD_UTILS.instance.doDeleteComment(this)">Delete</a>':''))
 			);
 		});
@@ -86,6 +92,8 @@ DASHBOARD_UTILS.prototype.onFeedUpdate = function(res) {
 			.replace('%CONTENT%', feedItem.content)
 			.replace('%DATE%', new Date(feedItem.date).toLocaleString())
 			.replace(/\%FEEDID\%/g, feedItem.feedid)
+			.replace('%PICTURE%', generatePictureDiv(feedItem.picture))
+			.replace('%YOURPICTURE%', feedItem.mePicture)
 			.replace('%COMMENTS%', commenthtml.join('\n'))
 		);
 	});
@@ -150,4 +158,17 @@ DASHBOARD_UTILS.prototype.onCommentMouseOver = function(evt) {
 
 DASHBOARD_UTILS.prototype.onCommentMouseOut = function(evt) {
 	$(evt.currentTarget).find('.commentLinks').hide();
+};
+
+DASHBOARD_UTILS.prototype.onWorkersUpdate = function(res) {
+	var _html = "";
+
+	res.forEach(function(worker) {
+		_html += generatePictureDiv(worker.picture, 'large-margin');
+		_html += generatePictureDiv(worker.picture, 'large-margin');
+		_html += generatePictureDiv(worker.picture, 'large-margin');
+		_html += generatePictureDiv(worker.picture, 'large-margin');
+	});
+
+	$('#subSectionWorkers').html( _html );
 };

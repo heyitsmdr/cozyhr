@@ -31,8 +31,19 @@ module.exports = {
 			defaultsTo: false
 		},
 		companyId: 'string',
-		permissionId: 'string'
+		permissionId: 'string',
+		picture: 'string',
+		generatePicture: function(smallPicture) {
+			return {
+					name: this.fullName(),
+					picture: this.picture,
+					small: smallPicture,
+					position: ''
+			};
+		}
 	},
+
+	/* Lifecycle Callbacks */
 	beforeCreate: function (attrs, next) {
 		bcrypt.genSalt(10, function(err, salt) {
 		  if (err) return next(err);
@@ -44,6 +55,6 @@ module.exports = {
 		    next();
 		  });
 		});
-  	}
+	}
 
 };

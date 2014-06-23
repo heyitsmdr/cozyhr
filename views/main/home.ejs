@@ -3,16 +3,20 @@
 		<!-- You -->
 		<div class="section sectionYou">
 			<div class="box">
-				<div class="picture"></div>
+				<div class="picture" style="background-image:url('<%- req.session.userinfo.picture %>')"></div>
 				<div class="name"><strong><%- req.session.userinfo.fullName %></strong></div>
-				<div class="position">CEO / Founder</div>
+				<div class="position"><%- req.session.permissions.position %></div>
 				<div class="sep"></div>
-				<div class="info"><strong>PTO</strong>: 50.0 hours</div>
+				<div class="info"><span class='pto'>PTO</span> 50.0 hours</div>
 			</div>
 		</div>
 		<!-- Your Schedule -->
 		<div class="section sectionYourSchedule">
-			<h3>Your Schedule</h3>
+			<div class="box">
+				<div class="head"><h3>Your Schedule</h3></div>
+				<div>More stuff..</div>
+				<div>More stuff..</div>
+			</div>
 		</div>
 	</div>
 	<div class="6u">
@@ -25,13 +29,19 @@
 		</div>
 	</div>
 	<div class="3u">
-		<!-- Working Now -->
-		<div class="section sectionWorkingNow">
-			<h3>Working Now</h3>
-		</div>
 		<!-- Birthdays -->
 		<div class="section sectionBirthdays">
-			<h3>Birthdays</h3>
+			<div class="box">
+				<div class="head"><h3>Birthdays</h3></div>
+				<div></div>
+			</div>
+		</div>
+		<!-- Working Now -->
+		<div class="section sectionWorkingNow">
+			<div class="box">
+				<div class="head"><h3>Working Now</h3></div>
+				<div id="subSectionWorkers"></div>
+			</div>
 		</div>
 	</div>
 </div>
