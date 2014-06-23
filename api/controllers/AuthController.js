@@ -62,6 +62,7 @@ module.exports = {
                   req.session.authenticated = true;
                   req.session.permissions = perms
                   req.session.company = company;
+                  req.session.globalAdmin = user.admin || false;
                   res.redirect('/main/home');
                 };
 

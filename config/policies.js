@@ -22,24 +22,8 @@ module.exports.policies = {
   	'*': 'isAuthenticatedRedirect'
   },
 
-  'UserController': {
-  	'*': ['isAuthenticatedRedirect', 'isAdmin']
-  },
-
-  'CompanyController': {
-  	'*': ['isAuthenticatedRedirect', 'isAdmin']
-  },
-
-  'CompanyFeedController': {
-  	'*': ['isAuthenticatedRedirect', 'isAdmin']
-  },
-
-  'CompanyFeedCommentsController': {
-  	'*': ['isAuthenticatedRedirect', 'isAdmin']
-  },
-
-  'PermissionController': {
-    '*': ['isAuthenticatedRedirect', 'isAdmin']
+  'AdminController': {
+    '*': ['isAuthenticatedRedirect', 'isCompanyAdmin']
   }
 
   /*
