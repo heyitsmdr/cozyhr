@@ -135,7 +135,13 @@ module.exports = {
 						// Send to everyone listening within this company
 						req.socket.broadcast.to('dash-cid-' + req.session.userinfo.companyId).emit('destroyFeedComment', { commentId: req.param('commentId') });
 					});
+				} else {
+					res.json({ success: false, reason: 'user mismatch' });
 				}
+			} else if(!err & !comment) {
+				res.json({ success: false, reason: 'comment not found' });
+			} else(err) {
+				res.json({ success: false, reason: 'database error', error: err })
 			}
 		});
 	},
