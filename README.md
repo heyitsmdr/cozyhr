@@ -1,5 +1,4 @@
 # CozyHR, Inc.
-### a Sails application
 
 Welcome to CozyHR. Let's get started.
 
@@ -21,3 +20,7 @@ You can then install the dependencies:
 The server can then be ran using the following:
 
     sails lift
+    
+And you can run unit testing (which should be done before commiting) using:
+
+    npm test
