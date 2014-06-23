@@ -21,6 +21,10 @@ The server can then be ran using the following:
 
     sails lift
     
+The worker app can be ran using:
+
+    node worker/worker.js
+    
 And you can run unit testing (which should be done before commiting) using:
 
     npm test
