@@ -1,4 +1,15 @@
 $(document).ready(function(){
+	// Set up regular tooltips
+	$(document).on('mouseover', '.tt', function(event) {
+		$(this).qtip({
+			overwrite: false,
+			show: {
+				event: event.type,
+				ready: true
+			},
+			style: 'qtip-green'
+		});
+	});
 	// Set up person tooltips
 	$(document).on('mouseover', 'div.person', function(event) {
 		$(this).qtip({
@@ -7,7 +18,7 @@ $(document).ready(function(){
 				event: event.type,
 				ready: true
 			},
-			style: 'qtip-light'
+			style: 'qtip-green'
 		});
 	});
 });

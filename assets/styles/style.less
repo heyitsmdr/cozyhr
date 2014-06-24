@@ -38,6 +38,14 @@
 	user-select: none;
 }
 
+.rotate {
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+}
+
 /* Section 1: General */
 
 ::selection {
@@ -288,32 +296,23 @@ body {
 
 /* Section 3: Timeclock */
 
-#mainContainer {
-	.sectionClockInOut {
+#mainContainer #pageDay {
+	.dayData {
 		.noselect;
+		height: 100px;
+		width: 95%;
 		border: 1px solid #ccc;
-		height: 200px;
-		overflow: hidden;
 
 		&:hover {
-			border: 1px solid #888;
+			border: 1px solid #aaa;
 		}
 
-		p {
+		.label {
 			text-align: center;
-			padding-top: 80px;
-			font-size: 12px;
-			color: #444;
-			float: left;
-			width: 100%;
-		}
+			padding-top: 20px;
+			font-size: 40px;
+			color: #ddd;
 
-		.fillBox {
-			background-color: rgba(179, 245, 180, 0.4);
-			height: inherit;
-			position: relative;
-			top: 200px;
-			display: none;
 		}
 	}
 }

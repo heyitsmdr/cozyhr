@@ -4,43 +4,29 @@ TIMECLOCK_UTILS.instance = null;
 
 TIMECLOCK_UTILS.prototype.init = function() {
 	$(document).ready(function(){
-		$(document).on('mousedown touchstart', '#clockInOutBox', this.onClockInOutMouseDown.bind(this));
-		$(document).on('mouseup touchend', '#clockInOutBox', this.onClockInOutMouseUp.bind(this));
+		this.initializeDays();
 	}.bind(TIMECLOCK_UTILS.instance));
 };
 
-fillClockInOutTimer = null;
+TIMECLOCK_UTILS.prototype.initializeDays = function() {
+	var now = new Date();
+	var _htmlToAppend = "";
+	var _html = [];
+	_html.push("<div class='row'>");
+	_html.push("	<div class='12u'>");
+	_html.push("		<div class='dayData'>");
+	_html.push("			<div class='label'>%DAY%</div>");
+	_html.push("		</div>");
+	_html.push("	</div>");
+	_html.push("</div>");
 
-TIMECLOCK_UTILS.prototype.onClockInOutMouseDown = function(evt) {
-	var elem = evt.currentTarget;
+	for(var x = 0; x <= 6; x++) {
+		var _day = new Date(now.getTime() - ((24 * 60 * 60 * 1000) * x) );
 
-	$(elem).find('.fillBox').css('top', '200px');
-	$(elem).find('.fillBox').show();
-
-	$(elem).find('p').html('Keep holding..');
-
-	fillClockInOutTimer = setInterval(function() {
-		var currentSize = $(elem).find('.fillBox').css('top').split('px')[0]
-
-		currentSize -= 5;
-
-		if(currentSize <= 0) {
-			clearInterval(fillClockInOutTimer);
-			fillClockInOutTimer = null;
-			// Clock in or out!
-		}
-
-		$(elem).find('.fillBox').css('top', currentSize + 'px');
-	}, 50);
-};
-
-TIMECLOCK_UTILS.prototype.onClockInOutMouseUp = function(evt) {
-	var elem = evt.currentTarget;
-
-	$(elem).find('.fillBox').hide();
-
-	$(elem).find('p').html('Click and hold to click in or out.');
-
-	clearInterval(fillClockInOutTimer);
-	fillClockInOutTimer = null;
+		$('#timeclockDays').append(
+			_html
+				.join('\n')
+				.replace('%DAY%', ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][(_day.getDay())])
+		);
+	}
 };

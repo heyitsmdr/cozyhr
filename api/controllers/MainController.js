@@ -63,13 +63,13 @@ module.exports = {
 
 		workingNow = [];
 
-		User.findOne(req.session.userinfo.id).done(function(e, usr) {
+		UserSpecial.one(req.session.userinfo.id, function(usr) {
 			workingNow.push({
-				picture: usr.generatePicture(false, req)
+				picture: usr.genPicture(false)
 			});
 
 			workingNow.push({
-				picture: usr.generatePicture(false, req)
+				picture: usr.genPicture(false)
 			});
 
 			req.socket.emit('workersUpdate', workingNow);
