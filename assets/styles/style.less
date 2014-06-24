@@ -7,6 +7,7 @@
 	- Section 2: Dashboard
 	- Section 3: Timeclock
 	- Section 4: Admin
+	- Section 5: Sidemenu
 */
 
 /* Section 0: Variables & Mixins */
@@ -127,7 +128,27 @@ body {
 	}
 }
 
-#mainContainer {
+#mainContainer .sectionContainer {
+	.section {
+		background-color: rgba(235,235,235,0.1);
+		border: 1px solid #ddd;
+		border-radius: 4px;
+
+		.header {
+			padding: 8px;
+			background-color: rgba(200,200,200,0.3);
+			font-weight: bold;
+			text-shadow: #fff 0px 1px 0px;
+			font-size: 13px;
+			border-bottom: 1px solid #ddd;
+		}
+
+		.content {
+			padding: 8px;
+			font-size: 13px;
+		}
+	}
+
 	.sectionSpace {
 		margin: 20px 0;
 	}
@@ -218,20 +239,20 @@ body {
 	  margin-left: 50px;
 
 	  input {
-		border: 1px solid #ddd;
-		.generalfont(11px);
-		padding: 4px;
-		margin-top: 2px;
-		width: 80%;
+			border: 1px solid #ddd;
+			.generalfont(11px);
+			padding: 4px;
+			margin-top: 2px;
+			width: 80%;
 
-		&:focus {
-		  outline: 0;
-		  border: 1px solid #aaa;
-		}
+			&:focus {
+			  outline: 0;
+			  border: 1px solid #aaa;
+			}
 
-		&.disabled {
-		  color: #ccc;
-		}
+			&.disabled {
+			  color: #ccc;
+			}
 	  }
 	}
 
@@ -300,85 +321,69 @@ body {
 /* Section 4: Admin */
 
 #mainContainer #pageAdmin {
-	.adminmenu, .admincontent {
+	.admincontent {
 		margin-top: 20px;
 	}
 
-	.adminmenu {
-		background-color: rgba(200,200,200,0.1);
-		border: 1px solid #ddd;
-		padding: 0;
+	.section {
+		.content {
+			.employee {
+				a {
+					text-decoration: none;
+					color: #000;
 
-		.head {
-			padding: 8px;
-			background-color: rgba(200,200,200,0.2);
-			overflow: auto;
-
-			.name {
-				padding-top: 5px;
-			}
-		}
-
-		.item div {
-			padding: 6px;
-		}
-
-		.item {
-			text-decoration: none;
-			color: #000;
-			font-size: 12px;
-
-			div {
-				background-color: #f9f9f9;
-
-				&.selected {
-					border-left: 1px solid #0f0;
-					font-weight: bold;
-					background-color: #fefefe;
+					&:hover {
+						text-decoration: underline;
+					}
 				}
-			}
 
-			div:hover {
-				background-color: #f3f3f3;
+				.name {
+					font-weight: bold;
+				}
 			}
 		}
 	}
+}
 
-	.admincontent {
-		.section {
-			background-color: rgba(200,200,200,0.1);
-			border: 1px solid #ddd;
+/* Section 5: Sidemenu */
 
-			.header {
-				padding: 8px;
-				background-color: rgba(200,200,200,0.3);
+.sidemenu {
+	background-color: rgba(180,180,180,0.1);
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 0;
+	margin-top: 20px;
+
+	.head {
+		padding: 8px;
+		background-color: rgba(180,180,180,0.2);
+		overflow: auto;
+
+		.name {
+			padding-top: 5px;
+		}
+	}
+
+	.item div {
+		padding: 6px;
+	}
+
+	.item {
+		text-decoration: none;
+		color: #000;
+		font-size: 12px;
+		background-color: rgba(249,249,249,1);
+
+		div {
+			&.selected {
+				border-left: 1px solid #0f0;
 				font-weight: bold;
+				background-color: #fefefe;
 			}
+		}
 
-			.content {
-				padding: 8px;
-				font-size: 13px;
-
-				.employee {
-
-					a {
-						text-decoration: none;
-						color: #000;
-
-						&:hover {
-							text-decoration: underline;
-						}
-					}
-
-					.name {
-						font-weight: bold;
-					}
-
-					.position {
-
-					}
-				}
-			}
+		div:hover {
+			background-color: #f3f3f3;
 		}
 	}
 }
