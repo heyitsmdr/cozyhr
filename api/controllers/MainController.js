@@ -2,7 +2,7 @@ module.exports = {
 
 	home: function(req, res) {
 		User.findOne(req.session.userinfo.id).done(function(e, usr) {
-			res.view({
+			res.view('main/dash', {
 				selectedPage: 'dash',
 				picture: usr.generatePicture(false, req)
 			});
