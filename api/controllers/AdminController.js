@@ -41,7 +41,7 @@ module.exports = {
   },
 
   employee: function(req, res) {
-    var userId = req.params['id'];
+    var userId = req.param('id');
 
     if(!userId) {
       return res.serverError(new Error('AdminEmployeeNotSpecifiedException'));
