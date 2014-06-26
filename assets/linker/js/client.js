@@ -7,6 +7,7 @@ $(document).ready(function(){
 				event: event.type,
 				ready: true
 			},
+			position: {target: 'mouse'},
 			style: 'qtip-green'
 		});
 	});
