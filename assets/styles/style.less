@@ -154,6 +154,10 @@ body {
 		.content {
 			padding: 8px;
 			font-size: 13px;
+
+			&.no-padding {
+				padding: 0px;
+			}
 		}
 	}
 
@@ -296,23 +300,41 @@ body {
 
 /* Section 3: Timeclock */
 
-#mainContainer #pageDay {
-	.dayData {
-		.noselect;
-		height: 100px;
-		width: 95%;
-		border: 1px solid #ccc;
-
-		&:hover {
-			border: 1px solid #aaa;
+#mainContainer #pageTimeclock {
+	.day {
+		.name {
+			padding: 8px;
+			border-right: 1px solid #ddd;
+			width: 100px;
+			text-align: center;
 		}
 
-		.label {
-			text-align: center;
-			padding-top: 20px;
-			font-size: 40px;
-			color: #ddd;
+		.daycontent .bar {
+			height: 34px;
+		}
 
+		.shifts {
+			border-top: 1px solid #ddd;
+
+			.shiftContainer {
+				.head, .shift {
+					float: left;
+					width: 25%;
+					padding: 4px;
+					font-size: 12px;
+				}
+
+				.head {
+					background-color: rgba(200,200,200,0.2);
+				}
+
+				.shift {
+					.indicator {
+						background-color: #f00;
+						margin-right: 5px;
+					}
+				}
+			}
 		}
 	}
 }
