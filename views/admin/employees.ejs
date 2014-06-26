@@ -13,24 +13,28 @@
 
   <div class="content">
 
-    <% var rowCount = 0; %>
-    <% for(var i = 0; i < employees.length; i++) { %>
-      <% rowCount++ %>
-      <% if( rowCount == 1 ) { %>
-      <div class="row">
+    <table id="companyEmployees" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Job Title</th>
+          <th>Office</th>
+        </tr>
+      </thead>
+
+      <tbody>
+      <% for(var i = 0; i < employees.length; i++) { %>
+        <tr>
+          <td data-order="<%= employees[i].lastName + ', ' + employees[i].firstName %>">
+            <a href="/admin/employee?id=<%= employees[i].id %>"><div class="picture" style="background-image:url('<%= employees[i].picture %>')"></div></a>
+            <div class="name"><%= employees[i].lastName + ', ' + employees[i].firstName %></div>
+          </td>
+          <td><div class="position"><%= employees[i].models.permission.position %></div></td>
+          <td><div class="office">NYC</div></td>
+        </tr>
       <% } %>
-        <div class="4u employee">
-          <a href="/admin/employee/<%= employees[i].id %>">
-            <div class="picture" style="background-image:url('<%= employees[i].picture %>')"></div>
-            <div class="name"><%= employees[i].firstName + ' ' + employees[i].lastName %></div>
-            <div class="position"><%= employees[i].models.permission.position %></div>
-          </a>
-        </div>
-      <% if( rowCount == 3 ) { %>
-      </div>
-      <% rowCount = 0; %>
-      <% } %>
-    <% } %>
+      </tbody>
+    </table>
 
   </div>
 </div>
