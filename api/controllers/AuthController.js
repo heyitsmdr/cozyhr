@@ -67,6 +67,10 @@ module.exports = {
                 };
 
                 var gotCompany = function(err, company) {
+                  if(company.host !== req.rawHost.toLowerCase() || req.rawHost.toLowerCase() != 'local.cozyhr.coma') {
+                    return res.send('user is not part of this company');
+                  }
+
                   Permission.findOne(user.permissionId).done(function(err, perm) {
                     if(!perm) {
                       // Company has no permissions (new company)? Let's set them as an admin
