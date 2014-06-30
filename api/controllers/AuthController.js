@@ -67,7 +67,7 @@ module.exports = {
                 };
 
                 var gotCompany = function(err, company) {
-                  if(company.host !== req.rawHost.toLowerCase() || req.rawHost.toLowerCase() != 'local.cozyhr.com') {
+                  if(company.host != req.rawHost.toLowerCase() || req.rawHost.toLowerCase() != 'local.cozyhr.com') {
                     return res.send('user is not part of this company');
                   }
 
