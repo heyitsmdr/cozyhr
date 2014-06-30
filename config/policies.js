@@ -22,6 +22,10 @@ module.exports.policies = {
   	'*': 'isAuthenticatedRedirect'
   },
 
+  'TimeclockController': {
+    '*': 'isAuthenticatedRedirect'
+  },
+
   'AdminController': {
     '*': ['isAuthenticatedRedirect', 'isCompanyAdmin']
   }
