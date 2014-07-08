@@ -22,6 +22,10 @@ $(document).ready(function(){
 			style: 'qtip-green'
 		});
 	});
+  // Disable right click
+  $(document).bind('contextmenu', function(e) {
+    e.preventDefault();
+  });
 });
 
 function generatePictureDiv(opt, extraClassOptions) {
