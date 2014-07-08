@@ -181,45 +181,65 @@ body {
 /* Section 2: Dashboard */
 
 #mainContainer {
-	.section {
-		background-color: rgba(171, 224, 245, 0.0);
-
-		.box {
-			.boxgradiant;
-			padding: 10px;
-			border-radius: 5px;
-      box-shadow: 0px 0px 1px rgba(50, 50, 50, 0.25);
-      border: 1px solid rgba(30, 30, 30, 0.2);
-      
-			.name {
-				font-size: 15px;
-			}
-
-			.head h3 {
-				margin: 0px;
-				padding: 0px 0px 10px 0px;
-			}
-
-			.position {
-				font-size: 12px;
-			}
-
-			.sep {
-				border-top: 1px solid #ccc;
-				margin: 15px 0px;
-			}
-
-			.info {
-				font-size: 13px;
-
-				.pto { margin-right: 2px; padding: 4px; background-color: rgba(0, 204, 255, 0.32); }
-			}
-		}
-	}
-
 	.sectionYou, .sectionBirthdays {
-		padding: 20px 0 10px 0;
+		padding: 20px 0 15px 0;
 	}
+
+  .sectionYou {
+    .name {
+      font-size: 15px;
+    }
+
+    .head h3 {
+      margin: 0px;
+      padding: 0px 0px 10px 0px;
+    }
+
+    .position {
+      font-size: 12px;
+    }
+
+    .sep {
+      border-top: 1px solid #ccc;
+      margin: 15px 0px;
+    }
+
+    .info {
+      font-size: 13px;
+      height: 32px;
+
+      .pto, .sick, .vaca {
+        text-align: center;
+        text-transform: uppercase;
+        float: left;
+        width: 40px;
+        margin-right: 5px;
+        padding: 4px;
+      }
+
+      .pto { background-color: rgba(0, 204, 255, 0.32); }
+      .sick { background-color: rgba(255, 0, 102, 0.32); }
+      .vaca { background-color: rgba(0, 255, 31, 0.32); }
+
+      .data {
+        padding: 4px;
+
+        .action {
+          color: #888;
+          display: none;
+
+          a {
+            color: #ccc;
+            text-decoration: none;
+
+            &:hover {
+              color: #333;
+            }
+          }
+        }
+      }
+    }
+  }
 
 	.sectionWorkingNow {
 		#subSectionWorkers {

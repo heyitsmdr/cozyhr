@@ -13,6 +13,8 @@ DASHBOARD_UTILS.prototype.init = function() {
 		// Set up bindings
 		$(document).on('mouseover', 'div.specificComment', this.onCommentMouseOver.bind(this));
 		$(document).on('mouseout', 'div.specificComment', this.onCommentMouseOut.bind(this));
+    $('.sectionYou .info').on('mouseover', this.onInfoMouseOver.bind(this));
+    $('.sectionYou .info').on('mouseout', this.onInfoMouseOut.bind(this));
 
 		// Set up timers
 		setInterval(this.updateTimestamps, 60000);
@@ -158,6 +160,14 @@ DASHBOARD_UTILS.prototype.onCommentMouseOver = function(evt) {
 
 DASHBOARD_UTILS.prototype.onCommentMouseOut = function(evt) {
 	$(evt.currentTarget).find('.commentLinks').hide();
+};
+
+DASHBOARD_UTILS.prototype.onInfoMouseOver = function(evt) {
+  $(evt.currentTarget).find('.action').show();
+};
+
+DASHBOARD_UTILS.prototype.onInfoMouseOut = function(evt) {
+  $(evt.currentTarget).find('.action').hide();
 };
 
 DASHBOARD_UTILS.prototype.onWorkersUpdate = function(res) {
