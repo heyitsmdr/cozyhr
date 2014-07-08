@@ -10,15 +10,15 @@
 					<div class="sep"></div>
 					<div class="info">
 						<div class='pto tt' title='Paid Time Off'>PTO</div>
-						<div class="data">50.0 hours <span class="action">- <a href="#">Use Time</a></span></div>
+						<div class="data"><%- req.session.userinfo.counter_pto.toFixed(2) %> hours <span class="action">- <a href="#">Use Time</a></span></div>
 					</div>
 					<div class="info">
 						<div class='sick tt' title='Sick Time'>Sick</div>
-						<div class="data">20.0 hours <span class="action">- <a href="#">Use Time</a></span></div>
+						<div class="data"><%- req.session.userinfo.counter_sick.toFixed(2) %> hours <span class="action">- <a href="#">Use Time</a></span></div>
 					</div>
 					<div class="info">
 						<div class='vaca tt' title='Vacation Time'>Vaca</div>
-						<div class="data">10.0 hours <span class="action">- <a href="#">Use Time</a></span></div>
+						<div class="data"><%- req.session.userinfo.counter_vaca.toFixed(2) %> hours <span class="action">- <a href="#">Use Time</a></span></div>
 					</div>
 				</div>
 			</div>

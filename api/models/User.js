@@ -33,6 +33,18 @@ module.exports = {
 		companyId: 'string',
 		permissionId: 'string',
 		picture: 'string',
+    counter_pto: {
+      type: 'float',
+      defaultsTo: 0
+    },
+    counter_sick: {
+      type: 'float',
+      defaultsTo: 0
+    },
+    counter_vaca: {
+      type: 'float',
+      defaultsTo: 0
+    },
 		generatePicture: function(smallPicture) {
 			return {
 					name: this.fullName(),
