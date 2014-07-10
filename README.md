@@ -23,7 +23,7 @@ You can then install the dependencies:
     
 The server can then be ran using the following:
 
-    sails lift
+    node app.js
     
 The worker app can be ran using:
 
