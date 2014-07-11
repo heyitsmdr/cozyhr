@@ -40,6 +40,26 @@ module.exports = {
     });
   },
 
+  roles: function(req, res) {
+    // Get all the roles for the company
+    Permission.find({ companyId: req.session.userinfo.companyId }, function(e, roles) {
+      // Count the employees asynchonously
+      async.each(roles, function(role, done) {
+        User.find({ permissionId: role.id }, function(e, usrs) {
+          role.employeeCount = usrs.length;
+          done(); // go to next permission/role
+        });
+      }, function() {
+        // Send to view
+        res.view('admin/index', {
+          selectedPage: 'admin',
+          selectedSection: 'roles',
+          roles: roles
+        });
+      });
+    });
+  },
+
   employee: function(req, res) {
     var userId = req.param('id');
 

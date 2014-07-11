@@ -1,0 +1,35 @@
+<div class="section">
+  <div class="content">
+    Manage all of the available roles at <strong><%- req.session.company.name %></strong> from here.
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Roles
+  </div>
+
+  <div class="content">
+
+    <table id="companyRoles" class="display" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th class="left-align">Role Name</th>
+          <th class="center-align" width="15%">Employees</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% for(var i = 0; i < roles.length; i++) { %>
+          <tr>
+            <td><%= roles[i].jobTitle %></td>
+            <td class="center-align"><%= roles[i].employeeCount %></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+
+  </div>
+</div>

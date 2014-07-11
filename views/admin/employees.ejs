@@ -17,7 +17,7 @@
       <thead>
         <tr>
           <th class="left-align" width="50%">Employee</th>
-          <th class="left-align" width="35%">Job Title</th>
+          <th class="left-align" width="35%">Job Title (Role)</th>
           <th width="15%">Office</th>
         </tr>
       </thead>
@@ -29,7 +29,7 @@
             <a href="/admin/employee?id=<%= employees[i].id %>"><div class="picture" style="background-image:url('<%= employees[i].picture %>')"></div></a>
             <div class="name"><%= employees[i].lastName + ', ' + employees[i].firstName %></div>
           </td>
-          <td><div class="position"><%= employees[i].models.permission.position %></div></td>
+          <td><div class="position"><%= employees[i].models.permission.jobTitle %></div></td>
           <td><div class="office">NYC</div></td>
         </tr>
       <% } %>

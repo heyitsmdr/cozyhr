@@ -1,9 +1,9 @@
 /**
  * Permission
  *
- * @module      :: Model
- * @description :: A short summary of how this model works and what it represents.
- * @docs		:: http://sailsjs.org/#!documentation/models
+ * Description: Each job title (role) is assigned a permission to determine
+ * what they can or cannot do.
+ *
  */
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
   attributes: {
 
     companyId: 'string',
-    position: 'string',
+    jobTitle: 'string',
     companyAdmin: 'boolean'
 
   }

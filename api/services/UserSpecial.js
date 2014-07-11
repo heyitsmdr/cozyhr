@@ -16,7 +16,7 @@ function UserSpecial(uid, callback) {
             name: this.fullName(),
             picture: this.picture,
             small: smallPicture,
-            position: this.models.permission.position
+            position: this.models.permission.jobTitle
           };
         };
 
@@ -55,7 +55,7 @@ function UsersSpecial(search, opt, callback) {
               name: this.fullName(),
               picture: this.picture,
               small: smallPicture,
-              position: this.models.permission.position
+              position: this.models.permission.jobTitle
             };
           };
 
