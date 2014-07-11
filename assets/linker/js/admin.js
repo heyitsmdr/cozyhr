@@ -10,8 +10,19 @@ ADMIN_UTILS.prototype.init = function() {
         "pageLength": 50
       });
     } else if ( $('#companyRoles').length > 0 ) {
+      // Init the data table
       $('#companyRoles').dataTable({
         "pageLength": 50
+      });
+      // Init events
+      $('#btnCreateRole').on('click', function(){
+        if( $('#txtNewRole').val().length > 0) {
+          socket.post('/admin/do_create_role', {
+            roleName: $('#txtNewRole').val()
+          }, function(res) {
+
+          });
+        }
       });
     }
   }.bind(ADMIN_UTILS.instance));

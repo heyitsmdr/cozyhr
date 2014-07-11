@@ -28,6 +28,11 @@ module.exports.policies = {
 
   'AdminController': {
     '*': ['isAuthenticatedRedirect', 'isCompanyAdmin']
+  },
+
+  'APIController': {
+    '*': ['isAuthenticatedRedirect'],
+    'role': ['isAuthenticatedRedirect', 'isCompanyAdmin']
   }
 
   /*

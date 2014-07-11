@@ -50,7 +50,7 @@ module.exports.routes = {
   '/admin': {
     controller: 'AdminController',
     action: 'index'
-  }
+  },
 
   /*
   // But what if you want your home page to display
