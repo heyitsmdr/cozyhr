@@ -31,8 +31,9 @@ module.exports.policies = {
   },
 
   'APIController': {
-    '*': ['isAuthenticatedRedirect'],
-    'role': ['isAuthenticatedRedirect', 'isCompanyAdmin']
+    '*': ['isAuthenticatedAPI'],
+    'role': ['isAuthenticatedAPI', 'isCompanyAdmin'],
+    'roles': ['isAuthenticatedAPI', 'isCompanyAdmin']
   }
 
   /*
