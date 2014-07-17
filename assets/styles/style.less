@@ -194,18 +194,42 @@ body {
       font-size: 15px;
     }
 
-    .head h3 {
-      margin: 0px;
-      padding: 0px 0px 10px 0px;
-    }
-
     .position {
       font-size: 12px;
     }
 
     .sep {
       border-top: 1px solid #ccc;
-      margin: 10px 0px;
+      margin-top: 10px;
+    }
+
+    .info-new {
+      .benefit {
+        overflow: auto;
+
+        .amount, .desc {
+          float: left;
+        }
+
+        .amount {
+          width: 50px;
+          text-align: right;
+
+          a {
+            color: #000;
+            text-decoration: none;
+          }
+
+          a:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .desc {
+          padding-left: 10px;
+          color: #888;
+        }
+      }
     }
 
     .info {
@@ -242,6 +266,11 @@ body {
           }
         }
       }
+    }
+
+    .head {
+      font-weight: bold;
+      padding: 5px 0;
     }
   }
 
