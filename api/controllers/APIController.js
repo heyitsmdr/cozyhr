@@ -17,12 +17,43 @@
 
 module.exports = {
 
-  process: function(req, res) {
-    res.send('okay');
+  roles: function(req, res) {
+    if(req.method == 'GET') {
+      // Get all the roles for the company
+      Permission.find({ companyId: req.session.userinfo.companyId }, function(e, roles) {
+        // Count the employees asynchonously
+        async.each(roles, function(role, done) {
+          User.find({ permissionId: role.id }, function(e, usrs) {
+            role.employeeCount = usrs.length;
+            done(); // go to next permission/role
+          });
+        }, function() {
+          // Send to view
+          res.json({"data": roles});
+        });
+      });
+    } else {
+      res.json({
+        "error": "This API method doesn't accept a " + req.method + " request."
+      });
+    }
   },
 
   role: function(req, res) {
-    res.send('role');
+    if(req.method == 'POST') {
+      // Create a new role
+      Permission.create({
+        companyId: req.session.userinfo.companyId,
+        jobTitle: req.param('roleName'),
+        companyAdmin: false
+      }).done(function(err, newRole) {
+        res.json({"success": true, "role": newRole})
+      });
+    } else {
+      res.json({
+        "error": "This API method doesn't accept a " + req.method + " request."
+      });
+    }
   }
 
 };

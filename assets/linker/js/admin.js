@@ -12,15 +12,27 @@ ADMIN_UTILS.prototype.init = function() {
     } else if ( $('#companyRoles').length > 0 ) {
       // Init the data table
       $('#companyRoles').dataTable({
-        "pageLength": 50
+        "pageLength": 50,
+        "ajax": {
+          "url": "/api/roles",
+          "type": "GET"
+        },
+        "columns": [
+          { "data": "jobTitle", "render": function(d,t,r,m) { return "<a href='/admin/role/" + r.id + "'>"+d+"</a>"; } },
+          { "data": "employeeCount" }
+        ]
       });
       // Init events
       $('#btnCreateRole').on('click', function(){
         if( $('#txtNewRole').val().length > 0) {
-          socket.post('/admin/do_create_role', {
+          socket.post('/api/role', {
             roleName: $('#txtNewRole').val()
           }, function(res) {
-
+            if(res.success) {
+              $('#companyRoles').DataTable().ajax.reload();
+            } else {
+              alert(res.error);
+            }
           });
         }
       });
