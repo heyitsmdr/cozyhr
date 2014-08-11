@@ -40,26 +40,6 @@ module.exports = {
     });
   },
 
-  roles: function(req, res) {
-    // Get all the roles for the company
-    Permission.find({ companyId: req.session.userinfo.companyId }, function(e, roles) {
-      // Count the employees asynchonously
-      async.each(roles, function(role, done) {
-        User.find({ permissionId: role.id }, function(e, usrs) {
-          role.employeeCount = usrs.length;
-          done(); // go to next permission/role
-        });
-      }, function() {
-        // Send to view
-        res.view('admin/index', {
-          selectedPage: 'admin',
-          selectedSection: 'roles',
-          roles: roles
-        });
-      });
-    });
-  },
-
   employee: function(req, res) {
     var userId = req.param('id');
 
@@ -86,6 +66,69 @@ module.exports = {
     };
 
     User.findOne(userId).done(gotEmployee);
+  },
+
+  roles: function(req, res) {
+    // Get all the roles for the company
+    Permission.find({ companyId: req.session.userinfo.companyId }, function(e, roles) {
+      // Count the employees asynchonously
+      async.each(roles, function(role, done) {
+        User.find({ permissionId: role.id }, function(e, usrs) {
+          role.employeeCount = usrs.length;
+          done(); // go to next permission/role
+        });
+      }, function() {
+        // Send to view
+        res.view('admin/index', {
+          selectedPage: 'admin',
+          selectedSection: 'roles',
+          roles: roles
+        });
+      });
+    });
+  },
+
+  role: function(req, res) {
+    var roleId = req.param('id');
+
+    if(!roleId) {
+      return res.serverError(new Error('AdminRoleNotSpecifiedException'));
+    }
+
+    Permission.findOne(roleId).done(function(e, role){
+      if(e || !role) {
+        return res.serverError(new Error('AdminRoleNotFoundException'));
+      }
+
+      // same company?
+      if(role.companyId != req.session.userinfo.companyId) {
+        return res.serverError(new Error('AdminRoleCompanyMismatchException'));
+      }
+
+      var validSections = ['info', 'employees'];
+      var selectedSection = req.param('section') || 'info';
+
+      if(validSections.indexOf(selectedSection) == -1) {
+        return res.serverError(new Error('AdminRoleInvalidSectionException'));
+      }
+
+      if(selectedSection == 'info') {
+        res.view('admin/role/edit', {
+          selectedPage: 'admin',
+          selectedSection: 'info',
+          role: role
+        });
+      } else if(selectedSection == 'employees') {
+        UserSpecial.many({companyId: req.session.userinfo.companyId, permissionId: roleId}, {sort: 'lastName ASC'}, function(employees) {
+          res.view('admin/role/edit', {
+            selectedPage: 'admin',
+            selectedSection: 'employees',
+            role: role,
+            employees: employees
+          });
+        });
+      }
+    });
   }
 
 };

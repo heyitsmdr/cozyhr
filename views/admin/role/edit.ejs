@@ -1,0 +1,22 @@
+<div id="pageAdmin" class="row sectionContainer">
+  <div class="-1u 2u sidemenu">
+    <div class="head"><%= role.jobTitle  %></div>
+    <a class="item" href="?section=info"><div class="<% if(selectedSection=="info"){ %>selected<% } %>">Job Information</div></a>
+    <a class="item" href="?section=employees"><div class="<% if(selectedSection=="employees"){ %>selected<% } %>">Employees</div></a>
+  </div>
+  <div class="8u admincontent">
+    <div class="back"><a href="/admin/roles">&lt; Back to Admin / Roles</a></div>
+    <% if(selectedSection=="info"){ %>
+      <%- partial('info') %>
+    <% } %>
+    <% if(selectedSection=="employees"){ %>
+      <%- partial('employees') %>
+    <% } %>
+  </div>
+</div>
+
+<!-- Initialize Script -->
+<script>
+  var _inst = new ADMIN_UTILS();
+  _inst.init();
+</script>

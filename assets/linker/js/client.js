@@ -66,7 +66,13 @@ function fancyDate(a, b, fancyReturn) {
 		return 'Yesterday';
 	}
 	else {
-		return ret.days + 'd ago';
+		if(ret.days > 30 && Math.floor(ret.days / 30) < 12) {
+			return Math.floor(ret.days / 30) + ' months ago';
+		} else if(ret.days > 30 && Math.floor(ret.days / 30) >= 12) {
+			return Math.floor( Math.floor(ret.days / 30) / 12 ) + ' years ago';
+		} else {
+			return ret.days + 'd ago';
+		}
 	}
 };
 

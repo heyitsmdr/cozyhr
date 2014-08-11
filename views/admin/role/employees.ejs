@@ -1,0 +1,28 @@
+<div class="section">
+  <div class="header">
+    Employees in <%= role.jobTitle %>
+  </div>
+
+  <div class="content">
+    <table id="companyEmployees" class="display" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th class="left-align" width="85%">Employee</th>
+          <th width="15%">Office</th>
+        </tr>
+      </thead>
+
+      <tbody>
+      <% for(var i = 0; i < employees.length; i++) { %>
+        <tr>
+          <td data-order="<%= employees[i].lastName + ', ' + employees[i].firstName %>">
+            <a href="/admin/employee/<%= employees[i].id %>"><div class="picture" style="background-image:url('<%= employees[i].picture %>')"></div></a>
+            <a href="/admin/employee/<%= employees[i].id %>"><div class="name"><%= employees[i].lastName + ', ' + employees[i].firstName %></div></a>
+          </td>
+          <td><div class="office">NYC</div></td>
+        </tr>
+      <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

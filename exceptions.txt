@@ -1,0 +1,11 @@
+General:
+- PageNotFoundException
+
+Admin:
+- AdminEmployeeNotSpecifiedException
+- AdminEmployeeNotFoundException
+- AdminEmployeeCompanyMismatchException
+- AdminRoleNotSpecifiedException
+- AdminRoleNotFoundException
+- AdminRoleCompanyMismatchException
+- AdminRoleInvalidSectionException
