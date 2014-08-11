@@ -13,6 +13,7 @@
 /* Section 0: Variables & Mixins */
 
 @highlightcolor: #85e880;
+@topmenuhighlight: #F5F5F5;
 
 .generalfont(@size) {
   font-family: 'Open Sans';
@@ -87,6 +88,10 @@ body {
 		font-weight: 600;
 		color: #fff;
 		text-decoration: none;
+
+    &:hover {
+      color: @topmenuhighlight;
+    }
   }
 
   .menuitem a {
@@ -100,18 +105,11 @@ body {
 
 		&:hover {
       background-color: rgba(14, 99, 173, 0.3) !important;
+      color: @topmenuhighlight;
 		}
 
 		&.selected {
 		  background-color: rgba(14, 99, 173, 0.6);
-		}
-
-		&.admin.selected {
-			background-color: rgba(14, 99, 173, 0.6);
-		}
-
-		&.admin:hover {
-		  background-color: rgba(240, 99, 173, 0.3) !important;
 		}
   }
 }
