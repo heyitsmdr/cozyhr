@@ -65,7 +65,7 @@ module.exports = {
       });
     };
 
-    User.findOne(userId).done(gotEmployee);
+    User.findOne(userId).exec(gotEmployee);
   },
 
   roles: function(req, res) {
@@ -95,7 +95,7 @@ module.exports = {
       return res.serverError(new Error('AdminRoleNotSpecifiedException'));
     }
 
-    Permission.findOne(roleId).done(function(e, role){
+    Permission.findOne(roleId).exec(function(e, role){
       if(e || !role) {
         return res.serverError(new Error('AdminRoleNotFoundException'));
       }

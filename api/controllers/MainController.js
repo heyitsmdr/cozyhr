@@ -1,7 +1,7 @@
 module.exports = {
 
 	home: function(req, res) {
-		User.findOne(req.session.userinfo.id).done(function(e, usr) {
+		User.findOne(req.session.userinfo.id).exec(function(e, usr) {
 			res.view('main/dash', {
 				selectedPage: 'dash',
 				picture: usr.generatePicture(false, req)
@@ -19,11 +19,11 @@ module.exports = {
 
 		feedItems = [];
 
-		CompanyFeed.find({companyId: req.session.userinfo.companyId}).limit(10).sort('createdAt DESC').done(function(err, feeds){
+		CompanyFeed.find({companyId: req.session.userinfo.companyId}).limit(10).sort('createdAt DESC').exec(function(err, feeds){
 			// Iterate through the feeds at this company
 			async.each(feeds, function(feed, callback){
 				// Let's gather the comments (if any)
-				CompanyFeedComments.find({ feedId: feed.id }).limit(15).done(function(err, feedComments){
+				CompanyFeedComments.find({ feedId: feed.id }).limit(15).exec(function(err, feedComments){
 					// Iterate through the feedComments to get the authorName
 					async.each(feedComments, function(comment, cb) {
 						UserSpecial.one(comment.userId, function(commentAuthor) {
@@ -54,7 +54,7 @@ module.exports = {
 		});
 
 		// Subscribe to comments for this company
-		req.listen('dash-cid-' + req.session.userinfo.companyId);
+		req.socket.join('dash-cid-' + req.session.userinfo.companyId);
 	},
 
 	getWorkingNow: function(req, res) {
@@ -86,7 +86,7 @@ module.exports = {
 				feedId: req.param('feedid'),
 				userId: req.session.userinfo.id,
 				content: req.param('comment')
-			}).done(function(err, newComment){
+			}).exec(function(err, newComment){
 				if(err) {
 					res.json({ success: false, error: err });
 				} else {
@@ -124,7 +124,7 @@ module.exports = {
 		if(!req.isSocket)
 			return;
 
-		CompanyFeedComments.findOne(req.param('commentId')).done(function(err, comment) {
+		CompanyFeedComments.findOne(req.param('commentId')).exec(function(err, comment) {
 			if(!err && comment) {
 				// Check if we're allowed to delete this
 				if(comment.userId == req.session.userinfo.id) {

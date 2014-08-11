@@ -19,7 +19,7 @@ module.exports = {
     var action = req.param('btnLogin') || req.param('btnRegister');
     switch(action) {
       case 'Register':
-        User.findOneByEmail(req.param('email').toLowerCase()).done(function(err, user){
+        User.findOneByEmail(req.param('email').toLowerCase()).exec(function(err, user){
           if(!user) {
             // Create the user
             User.create({
@@ -27,11 +27,11 @@ module.exports = {
               lastName: req.param('lastname'),
               email: req.param('email'),
               password: req.param('password')
-            }).done(function(err, user) {
+            }).exec(function(err, user) {
               // Create the company
               Company.create({
                 name: 'Green Leaf, Inc'
-              }).done(function(err, company){
+              }).exec(function(err, company){
                 // Save the company id to the user
                 user.companyId = company.id;
                 user.save(function(err){
@@ -40,7 +40,7 @@ module.exports = {
                     companyId: company.id,
                     userId: user.id,
                     content: 'created a new human resources portal for <strong>' + company.name + '</strong>!'
-                  }).done(function(err, feed){
+                  }).exec(function(err, feed){
                     res.redirect('/auth/signin');
                   });
                 });
@@ -52,7 +52,7 @@ module.exports = {
         });
         break;
       default:
-        User.findOneByEmail(req.param('email')).done(function(err, user){
+        User.findOneByEmail(req.param('email')).exec(function(err, user){
           if(user) {
             bcrypt.compare(req.param('password'), user.password, function (err, match) {
               if(match) {
@@ -67,14 +67,14 @@ module.exports = {
                 };
 
                 var gotCompany = function(err, company) {
-                  if(company.host != req.rawHost.toLowerCase() && req.rawHost.toLowerCase() != 'local.cozyhr.com') {
+                  if(company.host != req.host.toLowerCase() && req.host.toLowerCase() != 'local.cozyhr.com') {
                     return res.send('user is not part of this company');
                   }
 
-                  Permission.findOne(user.permissionId).done(function(err, perm) {
+                  Permission.findOne(user.permissionId).exec(function(err, perm) {
                     if(!perm) {
                       // Company has no permissions (new company)? Let's set them as an admin
-                      Permission.create({ companyId: user.companyId, companyAdmin: true }).done(function(err, newPermission) {
+                      Permission.create({ companyId: user.companyId, companyAdmin: true }).exec(function(err, newPermission) {
                         if(newPermission) {
                           user.permissionId = newPermission.id;
                           user.save(function(err) {
@@ -94,7 +94,7 @@ module.exports = {
                   });
                 };
 
-                Company.findOne(user.companyId).done(gotCompany);
+                Company.findOne(user.companyId).exec(gotCompany);
               } else {
                 res.send('incorrect password');
               }
@@ -119,7 +119,7 @@ module.exports = {
   		lastName: 'Du Russel',
   		email: 'ethryx@me.com',
   		password: 'bunny'
-  	}).done(function(err, user) {
+  	}).exec(function(err, user) {
   		res.send('user created');
   	});
   },

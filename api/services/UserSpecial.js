@@ -1,13 +1,13 @@
 function UserSpecial(uid, callback) {
-  User.findOne(uid).done(function(error, usr) {
+  User.findOne(uid).exec(function(error, usr) {
     usr.models = [];
 
     // Get permissions
-    Permission.findOne(usr.permissionId).done(function(e, permission) {
+    Permission.findOne(usr.permissionId).exec(function(e, permission) {
       usr.models.permission = permission;
 
       // Get company
-      Company.findOne(usr.companyId).done(function(e, company) {
+      Company.findOne(usr.companyId).exec(function(e, company) {
         usr.models.company = company;
 
         // Set up special functions
@@ -42,11 +42,11 @@ function UsersSpecial(search, opt, callback) {
       usr.models = [];
 
       // Get permissions
-      Permission.findOne(usr.permissionId).done(function(e, permission) {
+      Permission.findOne(usr.permissionId).exec(function(e, permission) {
         usr.models.permission = permission;
 
         // Get company
-        Company.findOne(usr.companyId).done(function(e, company) {
+        Company.findOne(usr.companyId).exec(function(e, company) {
           usr.models.company = company;
 
           // Set up special functions

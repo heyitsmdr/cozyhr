@@ -5,10 +5,10 @@ DASHBOARD_UTILS.instance = null;
 DASHBOARD_UTILS.prototype.init = function() {
 	$(document).ready(function(){
 		// Set up listeners
-		socket.on('feedUpdate', this.onFeedUpdate.bind(this));
-		socket.on('newFeedComment', this.onNewFeedComment.bind(this));
-		socket.on('destroyFeedComment', this.onDestroyFeedComment.bind(this));
-		socket.on('workersUpdate', this.onWorkersUpdate.bind(this));
+		io.socket.on('feedUpdate', this.onFeedUpdate.bind(this));
+		io.socket.on('newFeedComment', this.onNewFeedComment.bind(this));
+		io.socket.on('destroyFeedComment', this.onDestroyFeedComment.bind(this));
+		io.socket.on('workersUpdate', this.onWorkersUpdate.bind(this));
 
 		// Set up bindings
 		$(document).on('mouseover', 'div.specificComment', this.onCommentMouseOver.bind(this));
@@ -18,10 +18,10 @@ DASHBOARD_UTILS.prototype.init = function() {
 		setInterval(this.updateTimestamps, 60000);
 
 		// Get news feed items
-		socket.post('/main/getFeed', { start: 0 });
+		io.socket.post('/main/getFeed', { start: 0 });
 
 		// Get employees working now
-		socket.post('/main/getWorkingNow');
+		io.socket.post('/main/getWorkingNow');
 	}.bind(DASHBOARD_UTILS.instance));
 };
 
@@ -117,7 +117,7 @@ DASHBOARD_UTILS.prototype.doWriteComment = function(evt, elem) {
 		$(elem).prop('disabled', true);
 		$(elem).addClass('disabled');
 		// Send away
-		socket.post('/main/writeComment', {
+		io.socket.post('/main/writeComment', {
 			feedid: $(elem).data('feedid'),
 			comment: $(elem).val()
 		}, function(res) {
@@ -141,7 +141,7 @@ DASHBOARD_UTILS.prototype.doDeleteComment = function(elem) {
 		commentId = $(elem).parent().parent().attr('id').split('-')[1] || null;
 
 		if(commentId) {
-			socket.post('/main/removeComment', {
+			io.socket.post('/main/removeComment', {
 				commentId: commentId
 			});
 		}

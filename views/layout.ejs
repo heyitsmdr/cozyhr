@@ -6,57 +6,56 @@
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-    <!-- jQuery -->
-    <script src="/js/vendor/jquery-1.11.1.min.js"></script>
-    <!-- skelJS -->
-    <script src="/js/vendor/skel.0.4.9.min.js">
-    {
-      prefix: '/styles/style',
-      normalizeCSS: true,
-      boxModel: 'border',
-      grid: { gutters: 20 },
-      breakpoints: {
-        wide: { range: "1200-", containers: 1140, grid: { gutters: 20 } },
-        narrow: { range: "481-1199", containers: 960 },
-        mobile: { range: "-480", containers: "fluid", lockViewport: true, grid: { collapse: true } }
-      }
-    }
-    </script>
-    <script src="/js/vendor/skel-panels.0.4.9.min.js">
-    <% if(req.session.authenticated) { %>
-    {
-      overlays: {
-        topMenu: {
-          position: "top-left",
-          width: "100%",
-          height: 41
-        },
-
-        bottomMenu: {
-          position: "bottom-left",
-          width: "100%",
-          height: 41
+    <!-- Configure Skel.js -->
+    <script>
+      /* Skel.js */
+      window._skel_config = {
+        prefix: '/styles/importer',
+        normalizeCSS: true,
+        boxModel: 'border',
+        grid: { gutters: 20 },
+        breakpoints: {
+          wide: { range: "1200-", containers: 1140, grid: { gutters: 20 } },
+          narrow: { range: "481-1199", containers: 960 },
+          mobile: { range: "-480", containers: "fluid", lockViewport: true, grid: { collapse: true } }
         }
       }
-    }
-    <% } %>
+      /* Skel.js Panels */
+      <% if(req.session.authenticated) { %>
+        window._skel_panels_config = {
+          overlays: {
+            topMenu: {
+              position: "top-left",
+              width: "100%",
+              height: 41
+            },
+
+            bottomMenu: {
+              position: "bottom-left",
+              width: "100%",
+              height: 41
+            }
+          }
+        }
+      <% } %>
     </script>
 
-    <!--STYLES-->
-    <link rel="stylesheet" href="/linker/vendor/jquery.datatables.1.10.0/jquery.dataTables.css">
-    <link rel="stylesheet" href="/linker/vendor/jquery.qtip.2.2.0/jquery.qtip.2.2.0.min.css">
-    <!--STYLES END-->
+    <!-- jQuery DataTables Styling -->
+    <link rel="stylesheet" href="/js/vendor/jquery.datatables.1.10.0/jquery.dataTables.css">
 
     <!--SCRIPTS-->
-    <script src="/linker/js/admin.js"></script>
-    <script src="/linker/js/client.js"></script>
-    <script src="/linker/js/dashboard.js"></script>
-    <script src="/linker/js/timeclock.js"></script>
-    <script src="/linker/vendor/jquery.datatables.1.10.0/jquery.dataTables.min.js"></script>
-    <script src="/linker/vendor/jquery.noty.2.2.4/jquery.noty.packaged.2.2.4.min.js"></script>
-    <script src="/linker/vendor/jquery.qtip.2.2.0/jquery.qtip.2.2.0.min.js"></script>
+    <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/dependencies/jquery-1.11.1.min.js"></script>
+    <script src="/js/dependencies/skel.0.4.9.min.js"></script>
+    <script src="/js/admin.js"></script>
+    <script src="/js/client.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/timeclock.js"></script>
+    <script src="/js/vendor/jquery.datatables.1.10.0/jquery.dataTables.min.js"></script>
+    <script src="/js/vendor/jquery.noty.2.2.4/jquery.noty.packaged.2.2.4.min.js"></script>
+    <script src="/js/vendor/jquery.qtip.2.2.0/jquery.qtip.2.2.0.min.js"></script>
+    <script src="/js/vendor/skel-panels.0.4.9/skel-panels.0.4.9.min.js"></script>
     <!--SCRIPTS END-->
-
   </head>
 
   <body>
@@ -71,57 +70,6 @@
     <% if(req.session.authenticated) { %>
       <%- partial('bottombar') %>
     <% } %>
-
-    <!--
-
-      Client-side Javascript
-      ========================
-
-      You can import any js files in your `assets` directory as you would
-      normally: using <script></script> tags.
-
-      Here's an example of importing a few dependencies, in order:
-    -->
-    <!-- Bring in the socket.io client -->
-    <script type="text/javascript" src="/js/socket.io.js"></script>
-    <!-- then beef it up with some convenience logic for talking to Sails.js -->
-    <script type="text/javascript" src="/js/sails.io.js"></script>
-    <!-- listen on socket.io for incoming messages -->
-    <script type="text/javascript" src="/js/app.js"></script>
-
-    <!-- Your scripts here? -->
-    <!-- Your scripts here? -->
-    <!-- Your scripts here? -->
-
-
-    <!--
-
-      Looking for client-side CoffeeScript or TypeScript?
-      ================================================
-
-      CoffeeScript and TypeScript precompilation are not installed by default,
-      but if you'd like to mix those features in, it is straightforward to
-      `npm install` the relevant grunt community modules and modify your Gruntfile
-      to use them.
-
-    -->
-
-
-
-    <!--
-
-      Another way: The Asset Linker
-      ========================
-
-      Sails supports a Grunt-based asset linker, to automatically inject
-      <link> and <script> tags, as well any client-side templates you're using
-      into your HTML layouts and views, respecting dependencies.
-
-      You created this Sails app with the asset linker disabled.
-      If you change your mind, check out the docs on the subject:
-      http://sailsjs.org/#!documentation/asset-management
-
-    -->
 
     <script>
       <% if(req.session.authenticated) { %>
