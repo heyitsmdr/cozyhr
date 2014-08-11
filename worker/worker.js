@@ -1,6 +1,6 @@
 // RabbitMQ
 var amqpConnection = require('amqp').createConnection({ url: "amqp://lu00GelV:-KdaPhbsdrAk70Af8seGdTb5hDglCcWU@furry-willow-20.bigwig.lshift.net:11142/R4MZ5zE8NSMd", clientProperties: { product: 'worker-01' } });
-var exchangeName = 'greenleaf-' + (process.env.NODE_ENV || 'development');
+var exchangeName = 'cozyhr-' + (process.env.NODE_ENV || 'development');
 var exchange;
 
 // Queues (qs)
