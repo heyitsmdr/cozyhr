@@ -29,7 +29,7 @@
             <a href="/admin/employee/<%= employees[i].id %>"><div class="picture" style="background-image:url('<%= employees[i].picture %>')"></div></a>
             <a href="/admin/employee/<%= employees[i].id %>"><div class="name"><%= employees[i].lastName + ', ' + employees[i].firstName %></div></a>
           </td>
-          <td><a href="/admin/role/"><div class="position"><%= employees[i].models.permission.jobTitle %></div></a></td>
+          <td><a href="/admin/role/<%= employees[i].models.permission.id %>"><div class="position"><%= employees[i].models.permission.jobTitle %></div></a></td>
           <td><div class="office">NYC</div></td>
         </tr>
       <% } %>
