@@ -25,5 +25,8 @@
   "main": "app.js",
   "repository": "",
   "author": "",
-  "license": ""
+  "license": "",
+  "engines": {
+    "node": "0.10.x"
+  }
 }
