@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html class="<%= (typeof htmlClass !== 'undefined')?htmlClass:'' %>">
   <head>
     <title>CozyHR</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
+    <% if(typeof noSkelJs === 'undefined') { %>
     <!-- Configure Skel.js -->
     <script>
       /* Skel.js */
@@ -39,6 +40,9 @@
         }
       <% } %>
     </script>
+    <% } else { %>
+    <link rel="stylesheet" href="/styles/importer.css">
+    <% } %>
 
     <!-- jQuery DataTables Styling -->
     <link rel="stylesheet" href="/js/vendor/jquery.datatables.1.10.0/jquery.dataTables.css">
@@ -50,20 +54,28 @@
     <script src="/js/admin.js"></script>
     <script src="/js/client.js"></script>
     <script src="/js/dashboard.js"></script>
+    <script src="/js/signin.js"></script>
     <script src="/js/timeclock.js"></script>
+    <script src="/js/vendor/jquery-ui.1.11.1/jquery-ui.min.js"></script>
     <script src="/js/vendor/jquery.datatables.1.10.0/jquery.dataTables.min.js"></script>
     <script src="/js/vendor/jquery.noty.2.2.4/jquery.noty.packaged.2.2.4.min.js"></script>
     <script src="/js/vendor/jquery.qtip.2.2.0/jquery.qtip.2.2.0.min.js"></script>
     <script src="/js/vendor/skel-panels.0.4.9/skel-panels.0.4.9.min.js"></script>
     <!--SCRIPTS END-->
+
+    <!-- Page-Specific Styles -->
+    <% if(typeof pageStylesheet !== 'undefined') { %>
+    <link rel="stylesheet" href="/styles/<%- pageStylesheet %>">
+    <% } %>
+    <!-- END: Page-Specific Styles -->
   </head>
 
-  <body>
+  <body class="<%= (typeof bodyClass !== 'undefined')?bodyClass:'' %>">
     <% if(req.session.authenticated) { %>
       <%- partial('topbar') %>
     <% } %>
 
-    <div id="mainContainer" class="container">
+    <div id="mainContainer" class="container <%= (typeof extraContainerClass !== 'undefined')?extraContainerClass:'' %>">
       <%- body %>
     </div>
 

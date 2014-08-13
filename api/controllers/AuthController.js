@@ -3,7 +3,24 @@ var bcrypt = require('bcrypt');
 module.exports = {
 
   signin: function(req, res) {
-  	res.view();
+    // check if already signed in
+    if(req.session.authenticated) {
+      return res.redirect('/dash');
+    }
+
+    var fromHost = req.host.toLowerCase();
+
+    if(fromHost.indexOf('.local') > -1) {
+      fromHost = fromHost.replace('.local', '');
+    }
+
+    Company.findOne({ host: fromHost }).exec(function(e, company) {
+      if(e || !company) {
+        res.view({ htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin failed" });
+      } else {
+        res.view({ companyInfo: company, htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin" });
+      }
+    });
   },
 
   register: function(req, res) {
@@ -12,7 +29,7 @@ module.exports = {
 
   do_signin: function(req, res) {
   	if(!req.param('email') || !req.param('password')) {
-  		res.send('bad');
+  		res.json({error: 'bad'});
   		return;
   	}
 
@@ -63,12 +80,12 @@ module.exports = {
                   req.session.permissions = perms
                   req.session.company = company;
                   req.session.globalAdmin = user.admin || false;
-                  res.redirect('/main/home');
+                  res.json({success: true});
                 };
 
                 var gotCompany = function(err, company) {
-                  if(company.host != req.host.toLowerCase() && req.host.toLowerCase() != 'local.cozyhr.com') {
-                    return res.send('user is not part of this company');
+                  if(company.host != req.host.toLowerCase() && req.host.toLowerCase().indexOf('.local') == -1) {
+                    return res.json({error: 'user is not part of this company'});
                   }
 
                   Permission.findOne(user.permissionId).exec(function(err, perm) {
@@ -96,11 +113,11 @@ module.exports = {
 
                 Company.findOne(user.companyId).exec(gotCompany);
               } else {
-                res.send('incorrect password');
+                res.json({error: 'incorrect password'});
               }
             });
           } else {
-            res.send('email not found');
+            res.json({error: 'email not found'});
           }
         });
         break;

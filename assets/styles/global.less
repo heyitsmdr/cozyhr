@@ -14,6 +14,7 @@
 
 @highlightcolor: #86c2f7;
 @topmenuhighlight: #f5f5f5;
+@brandblue: #2990ea;
 
 .generalfont(@size) {
   font-family: 'Open Sans';
@@ -538,4 +539,86 @@ body {
 			background-color: #f3f3f3;
 		}
 	}
+}
+
+/* Section 6: Signin page */
+html.signin {
+  height: 100%;
+  width: 100%;
+}
+
+body.signin {
+  .menugradiant(#53a2e9, #2990ea);
+}
+
+#mainContainer {
+  #signinWrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 260px;
+    margin-top: -130px; /* Half the height */
+    margin-left: -200px; /* Half the width */
+
+    &.failed {
+      width: 400px;
+      height: 100px;
+      margin-top: -50px; /* Half the height */
+      margin-left: -200px; /* Half the width */
+    }
+  }
+}
+
+#mainContainer #pageSignin {
+  .intro {
+    .generalfont(30px);
+    color: #fff !important;
+    text-align: center;
+  }
+
+  .intro-company {
+    .generalfont(14px);
+    color: #fff !important;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .login-form {
+    margin-top: 8px;
+    padding: 10px;
+
+    div {
+      text-align: center;
+      padding: 8px;
+
+      input {
+        width: 250px;
+        height: 25px;
+        border: 2px solid #1b65a7;
+        background-color: #1b65a7;
+        border-radius: 5px;
+        padding: 5px;
+        .generalfont(14px);
+        color: #fff !important;
+
+        &:focus {
+          outline: none;
+          border: 2px solid rgba(25, 25, 25, 0.4);
+        }
+      }
+
+      &.btn {
+        width: 250px;
+        text-align: center;
+        background-color: #1b65a7;
+      }
+    }
+  }
+
+  .press-enter {
+    .generalfont(11px);
+    color: #fff !important;
+    text-align: center;
+  }
 }

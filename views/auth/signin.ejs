@@ -1,7 +1,24 @@
-<form action="/auth/do_signin" method="post">
-	<input type="text" id="email" name="email">
-	<br>
-	<input type="password" id="password" name="password">
-	<br>
-	<input type="submit" name="btnLogin" value="Login">
-</form>
+<div id="signinWrapper">
+  <% if(typeof companyInfo !== 'undefined') { %>
+  <div id="pageSignin">
+    <div class="intro">Welcome to <strong>CozyHR</strong>!</div>
+    <div class="intro-company">Comfortably sign in to <strong><%- companyInfo.name %></strong>.</div>
+    <div class="login-form">
+      <div><input type="text" id="email" placeholder="Company Email"></div>
+      <div><input type="password" id="password" placeholder="Password"></div>
+    </div>
+    <div class="press-enter">Press enter to sign in.</div>
+  </div>
+  <% } else { %>
+  <div id="pageSignin">
+    <div class="intro">Welcome to <strong>CozyHR</strong>!</div>
+    <div class="intro-company">No company exists under this domain.</div>
+  </div>
+  <% } %>
+</div>
+
+<!-- Initialize Script -->
+<script>
+  var _inst = new SIGNIN_UTILS();
+  _inst.init();
+</script>
