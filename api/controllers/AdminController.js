@@ -31,12 +31,60 @@ module.exports = {
   },
 
   employees: function(req, res) {
-    UserSpecial.many({companyId: req.session.userinfo.companyId}, {sort: 'lastName ASC'}, function(employees) {
+    PopUser.many({company: req.session.userinfo.company.id}, {sort: 'lastName ASC'}, function (e, employees) {
       res.view('admin/index', {
           selectedPage: 'admin',
           selectedSection: 'employees',
           employees: employees
         });
+    });
+  },
+
+  do_invite: function(req, res) {
+    if(!req.isSocket)
+      return;
+
+    var invitedEmail = req.param('email');
+
+    if(invitedEmail.indexOf('@') == -1 || invitedEmail.indexOf('@') == -1) {
+      return res.json({ error: "invalid email format" });
+    }
+
+    Invite.findOne({ inviteEmail: invitedEmail.toLowerCase() }).exec(function(e, invites) {
+      if(e || invites) {
+        res.json({ error: "user was already invited" });
+      } else {
+
+        User.findOne({ email: invitedEmail }).exec(function(e, users) {
+          if(e || users) {
+            res.json({ error: "user already exists in db" });
+          } else {
+
+            Invite.create({
+              inviteEmail: invitedEmail.toLowerCase(),
+              invitedBy: req.session.userinfo.id,
+              invitedTo: req.session.userinfo.company.id
+            }).exec(function(e, inviteKey) {
+              // queue up email
+              QueueService.sendEmail({
+                template: 'welcome',
+                templateVars: {},
+                to: invitedEmail,
+                subject: "You've been invited to CozyHR!"
+              });
+              // done
+              res.json({
+                success: true,
+                email: invitedEmail,
+                token: inviteKey,
+                companyName: req.session.userinfo.company.name
+              });
+            });
+
+          }
+        });
+
+      }
     });
   },
 
@@ -47,13 +95,13 @@ module.exports = {
       return res.serverError(new Error('AdminEmployeeNotSpecifiedException'));
     }
 
-    var gotEmployee = function(e, employee) {
+    PopUser.one(userId, function(e, employee) {
       if(e || !employee) {
         return res.serverError(new Error('AdminEmployeeNotFoundException'));
       }
 
       // same company?
-      if(employee.companyId != req.session.userinfo.companyId) {
+      if(employee.company.id != req.session.userinfo.company.id) {
         return res.serverError(new Error('AdminEmployeeCompanyMismatchException'));
       }
 
@@ -63,14 +111,12 @@ module.exports = {
         employee: employee,
         selectedSection: 'basic'
       });
-    };
-
-    User.findOne(userId).exec(gotEmployee);
+    });
   },
 
   roles: function(req, res) {
     // Get all the roles for the company
-    Permission.find({ companyId: req.session.userinfo.companyId }, function(e, roles) {
+    Permission.find({ companyId: req.session.userinfo.company.id }, function(e, roles) {
       // Count the employees asynchonously
       async.each(roles, function(role, done) {
         User.find({ permissionId: role.id }, function(e, usrs) {
@@ -101,7 +147,7 @@ module.exports = {
       }
 
       // same company?
-      if(role.companyId != req.session.userinfo.companyId) {
+      if(role.companyId != req.session.userinfo.company.id) {
         return res.serverError(new Error('AdminRoleCompanyMismatchException'));
       }
 
@@ -119,7 +165,7 @@ module.exports = {
           role: role
         });
       } else if(selectedSection == 'employees') {
-        UserSpecial.many({companyId: req.session.userinfo.companyId, permissionId: roleId}, {sort: 'lastName ASC'}, function(employees) {
+        UserSpecial.many({companyId: req.session.userinfo.company.id, permissionId: roleId}, {sort: 'lastName ASC'}, function(employees) {
           res.view('admin/role/edit', {
             selectedPage: 'admin',
             selectedSection: 'employees',

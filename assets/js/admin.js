@@ -4,10 +4,26 @@ ADMIN_UTILS.instance = null;
 
 ADMIN_UTILS.prototype.init = function() {
   $(document).ready(function(){
-    // Employees page?
     if( $('#companyEmployees').length > 0 ) {
+      // Set up the table
       $('#companyEmployees').dataTable({
-        "pageLength": 50
+        "pageLength": 50,
+        "oLanguage": {
+          "sEmptyTable": "There are no employees to display here."
+        }
+      });
+      // Bind click event to invite a new employee
+      $('#btnInviteEmployee').on('click', function() {
+        if($('#txtNewEmployeeEmail').val().length > 0) {
+          io.socket.post('/admin/do_invite', {
+            email: $('#txtNewEmployeeEmail').val()
+          }, function(res) {
+            if(res.success)
+              alert('You have invited ' + res.email + ' to ' + res.companyName + '!');
+            else
+              alert(res.error);
+          });
+        }
       });
     } else if ( $('#companyRoles').length > 0 ) {
       // Init the data table
@@ -25,7 +41,7 @@ ADMIN_UTILS.prototype.init = function() {
       // Init events
       $('#btnCreateRole').on('click', function(){
         if( $('#txtNewRole').val().length > 0) {
-          socket.post('/api/role', {
+          io.socket.post('/api/role', {
             roleName: $('#txtNewRole').val()
           }, function(res) {
             if(res.success) {

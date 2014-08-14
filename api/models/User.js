@@ -30,7 +30,8 @@ module.exports = {
 			type: 'boolean',
 			defaultsTo: false
 		},
-		companyId: 'string',
+    company: { model: 'Company' },
+    role: { model: 'Permission' },
 		permissionId: 'string',
 		picture: 'string',
     counter_pto: {

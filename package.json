@@ -28,7 +28,8 @@
     "sails-disk": "~0.10.0",
     "sails-mongo": "^0.10.4",
     "sendgrid": "^1.2.0",
-    "sleep": "^1.1.8"
+    "sleep": "^1.1.8",
+    "swig-email-templates": "^1.3.0"
   },
   "scripts": {
     "start": "node app.js",

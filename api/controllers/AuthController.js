@@ -69,55 +69,26 @@ module.exports = {
         });
         break;
       default:
-        User.findOneByEmail(req.param('email')).exec(function(err, user){
-          if(user) {
+        PopUser.one({ email: req.param('email') }, function(e,user) {
+          if(e || !user) {
+            return res.json({error: 'email not found'});
+          } else {
             bcrypt.compare(req.param('password'), user.password, function (err, match) {
-              if(match) {
-                var gotPermissions = function(user, company, perms) {
-                  req.session.userinfo = user;
-                  req.session.userinfo.fullName = user.fullName();
-                  req.session.authenticated = true;
-                  req.session.permissions = perms
-                  req.session.company = company;
-                  req.session.globalAdmin = user.admin || false;
-                  res.json({success: true});
-                };
-
-                var gotCompany = function(err, company) {
-                  if(company.host != req.host.toLowerCase() && req.host.toLowerCase().indexOf('.local') == -1) {
-                    return res.json({error: 'user is not part of this company'});
-                  }
-
-                  Permission.findOne(user.permissionId).exec(function(err, perm) {
-                    if(!perm) {
-                      // Company has no permissions (new company)? Let's set them as an admin
-                      Permission.create({ companyId: user.companyId, companyAdmin: true }).exec(function(err, newPermission) {
-                        if(newPermission) {
-                          user.permissionId = newPermission.id;
-                          user.save(function(err) {
-                            if(err) {
-                              return res.serverError(new Error('AuthPermissionSaveException'));
-                            }
-                            gotPermissions(user, company, newPermission);
-                          });
-                        } else {
-                          return res.serverError(new Error('AuthPermissionCreateException'));
-                        }
-                      });
-                    } else {
-                      // Permission set found. Set session vars and redirect visitor
-                      gotPermissions(user, company, perm);
-                    }
-                  });
-                };
-
-                Company.findOne(user.companyId).exec(gotCompany);
+              if(!match) {
+                return res.json({error: 'incorrect password'});
               } else {
-                res.json({error: 'incorrect password'});
+                // check host
+                if(user.company.host != req.host.toLowerCase() && req.host.toLowerCase().indexOf('.local') == -1) {
+                  return res.json({error: 'user is not part of this company'});
+                }
+                // all good! open the gates |==> <==|
+                req.session.userinfo = user;
+                req.session.userinfo.fullName = user.fullName();
+                req.session.authenticated = true;
+                req.session.globalAdmin = user.admin || false;
+                res.json({success: true});
               }
             });
-          } else {
-            res.json({error: 'email not found'});
           }
         });
         break;

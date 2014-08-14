@@ -1,7 +1,7 @@
 module.exports = function(req, res, next) {
 
   // Check if user is an admin
-  if (req.session.permissions.companyAdmin || req.session.globalAdmin) {
+  if (req.session.userinfo.role.companyAdmin || req.session.globalAdmin) {
     return next();
   }
 

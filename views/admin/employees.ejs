@@ -1,6 +1,20 @@
 <div class="section">
   <div class="content">
-    Manage the employees at <strong><%- req.session.company.name %></strong> from here.
+    Manage the employees at <strong><%- req.session.userinfo.company.name %></strong> from here.
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Invite a New Employee
+  </div>
+
+  <div class="content">
+    Employee Email:&nbsp;
+    <input type="text" id="txtNewEmployeeEmail" placeholder="Employee Email">&nbsp;
+    <input type="submit" id="btnInviteEmployee" value="Invite Employee">
   </div>
 </div>
 
@@ -27,9 +41,9 @@
         <tr>
           <td data-order="<%= employees[i].lastName + ', ' + employees[i].firstName %>">
             <a href="/admin/employee/<%= employees[i].id %>"><div class="picture" style="background-image:url('<%= employees[i].picture %>')"></div></a>
-            <a href="/admin/employee/<%= employees[i].id %>"><div class="name"><%= employees[i].lastName + ', ' + employees[i].firstName %></div></a>
+            <div class="name"><a href="/admin/employee/<%= employees[i].id %>"><%= employees[i].lastName + ', ' + employees[i].firstName %></a><br><span class="email"><%= employees[i].email %></span></div>
           </td>
-          <td><a href="/admin/role/<%= employees[i].models.permission.id %>"><div class="position"><%= employees[i].models.permission.jobTitle %></div></a></td>
+          <td><a href="/admin/role/<%= employees[i].role.id %>"><div class="position"><%= employees[i].role.jobTitle %></div></a></td>
           <td><div class="office">NYC</div></td>
         </tr>
       <% } %>

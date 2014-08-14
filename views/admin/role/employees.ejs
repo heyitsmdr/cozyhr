@@ -17,7 +17,7 @@
         <tr>
           <td data-order="<%= employees[i].lastName + ', ' + employees[i].firstName %>">
             <a href="/admin/employee/<%= employees[i].id %>"><div class="picture" style="background-image:url('<%= employees[i].picture %>')"></div></a>
-            <a href="/admin/employee/<%= employees[i].id %>"><div class="name"><%= employees[i].lastName + ', ' + employees[i].firstName %></div></a>
+            <div class="name"><a href="/admin/employee/<%= employees[i].id %>"><%= employees[i].lastName + ', ' + employees[i].firstName %></a><br><span class="email"><%= employees[i].email %></span></div>
           </td>
           <td><div class="office">NYC</div></td>
         </tr>

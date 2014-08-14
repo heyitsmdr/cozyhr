@@ -15,6 +15,7 @@
 @highlightcolor: #86c2f7;
 @topmenuhighlight: #f5f5f5;
 @brandblue: #2990ea;
+@bordercolor: #c5d0da;
 
 .generalfont(@size) {
   font-family: 'Open Sans';
@@ -149,16 +150,17 @@ body {
 #mainContainer .sectionContainer {
 	.section {
 		background-color: rgba(235,235,235,0.1);
-		border: 1px solid #ddd;
+		border: 1px solid @bordercolor;
 		border-radius: 4px;
 
 		.header {
+      .menugradiant(#d1e8fc, #cbdef0);
 			padding: 8px;
-			background-color: rgba(200,200,200,0.3);
 			font-weight: bold;
 			text-shadow: #fff 0px 1px 0px;
 			font-size: 13px;
-			border-bottom: 1px solid #ddd;
+			border-bottom: 1px solid @bordercolor;
+      
 		}
 
 		.content {
@@ -467,8 +469,13 @@ body {
   		}
 
   		.name {
-  			padding-top: 10px;
+  			
   		}
+
+      .email {
+        color: #999;
+        font-size: 12px;
+      }
 
   		.position {
   			text-align: left;
@@ -502,14 +509,14 @@ body {
 
 .sidemenu {
 	background-color: rgba(180,180,180,0.1);
-	border: 1px solid #ddd;
+	border: 1px solid @bordercolor;
 	border-radius: 3px;
 	padding: 0;
 	margin-top: 20px;
 
 	.head {
 		padding: 8px;
-		background-color: rgba(180,180,180,0.2);
+		.menugradiant(#d1e8fc, #cbdef0);
 		overflow: auto;
 
 		.name {
@@ -529,7 +536,7 @@ body {
 
 		div {
 			&.selected {
-				border-left: 1px solid #0f0;
+				border-left: 2px solid @brandblue;
 				font-weight: bold;
 				background-color: #fefefe;
 			}

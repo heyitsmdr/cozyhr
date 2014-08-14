@@ -19,7 +19,7 @@ module.exports = {
 
 		feedItems = [];
 
-		CompanyFeed.find({companyId: req.session.userinfo.companyId}).limit(10).sort('createdAt DESC').exec(function(err, feeds){
+		CompanyFeed.find({companyId: req.session.userinfo.company.id}).limit(10).sort('createdAt DESC').exec(function(err, feeds){
 			// Iterate through the feeds at this company
 			async.each(feeds, function(feed, callback){
 				// Let's gather the comments (if any)
@@ -54,7 +54,7 @@ module.exports = {
 		});
 
 		// Subscribe to comments for this company
-		req.socket.join('dash-cid-' + req.session.userinfo.companyId);
+		req.socket.join('dash-cid-' + req.session.userinfo.company.id);
 	},
 
 	getWorkingNow: function(req, res) {
@@ -103,7 +103,7 @@ module.exports = {
 					});
 					// Send to everyone listening within this company
 					req.socket
-						.broadcast.to('dash-cid-' + req.session.userinfo.companyId)
+						.broadcast.to('dash-cid-' + req.session.userinfo.company.id)
 							.emit('newFeedComment', {
 								feedId: req.param('feedid'),
 								commentId: newComment.id,
@@ -133,7 +133,7 @@ module.exports = {
 						// Send to you
 						req.socket.emit('destroyFeedComment', { commentId: req.param('commentId') });
 						// Send to everyone listening within this company
-						req.socket.broadcast.to('dash-cid-' + req.session.userinfo.companyId).emit('destroyFeedComment', { commentId: req.param('commentId') });
+						req.socket.broadcast.to('dash-cid-' + req.session.userinfo.company.id).emit('destroyFeedComment', { commentId: req.param('commentId') });
 					});
 				} else {
 					res.json({ success: false, reason: 'user mismatch' });
