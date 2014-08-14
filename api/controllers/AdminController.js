@@ -115,22 +115,9 @@ module.exports = {
   },
 
   roles: function(req, res) {
-    // Get all the roles for the company
-    Permission.find({ companyId: req.session.userinfo.company.id }, function(e, roles) {
-      // Count the employees asynchonously
-      async.each(roles, function(role, done) {
-        User.find({ permissionId: role.id }, function(e, usrs) {
-          role.employeeCount = usrs.length;
-          done(); // go to next permission/role
-        });
-      }, function() {
-        // Send to view
-        res.view('admin/index', {
-          selectedPage: 'admin',
-          selectedSection: 'roles',
-          roles: roles
-        });
-      });
+    res.view('admin/index', {
+      selectedPage: 'admin',
+      selectedSection: 'roles',
     });
   },
 
@@ -165,7 +152,7 @@ module.exports = {
           role: role
         });
       } else if(selectedSection == 'employees') {
-        UserSpecial.many({companyId: req.session.userinfo.company.id, permissionId: roleId}, {sort: 'lastName ASC'}, function(employees) {
+        UserSpecial.many({company: req.session.userinfo.company.id, permissionId: roleId}, {sort: 'lastName ASC'}, function(employees) {
           res.view('admin/role/edit', {
             selectedPage: 'admin',
             selectedSection: 'employees',

@@ -20,7 +20,7 @@ module.exports = {
   roles: function(req, res) {
     if(req.method == 'GET') {
       // Get all the roles for the company
-      Permission.find({ companyId: req.session.userinfo.companyId }, function(e, roles) {
+      Permission.find({ companyId: req.session.userinfo.company.id }, function(e, roles) {
         // Count the employees asynchonously
         async.each(roles, function(role, done) {
           User.find({ permissionId: role.id }, function(e, usrs) {
@@ -43,7 +43,7 @@ module.exports = {
     if(req.method == 'POST') {
       // Create a new role
       Permission.create({
-        companyId: req.session.userinfo.companyId,
+        companyId: req.session.userinfo.company.id,
         jobTitle: req.param('roleName'),
         companyAdmin: false
       }).done(function(err, newRole) {
