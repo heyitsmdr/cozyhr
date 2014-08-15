@@ -10,7 +10,8 @@ module.exports = {
   attributes: {
     inviteEmail: 'string',
     invitedBy: { model: 'User' },
-    invitedTo: { model: 'Company' }
+    invitedTo: { model: 'Company' },
+    invitedRole: { model: 'Permission' }
   }
 };
 

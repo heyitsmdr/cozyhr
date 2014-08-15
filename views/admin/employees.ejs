@@ -14,11 +14,35 @@
   <div class="content">
     Employee Email:&nbsp;
     <input type="text" id="txtNewEmployeeEmail" placeholder="Employee Email">&nbsp;
+    <select id="selNewEmployeeRole">
+      <% for(var i = 0; i < allRoles.length; i++) { %>
+      <option value="<%= allRoles[i].id %>"><%= allRoles[i].jobTitle %></option>
+      <% } %>
+    </select>&nbsp;
     <input type="submit" id="btnInviteEmployee" value="Invite Employee">
   </div>
 </div>
 
 <div class="sectionSpace"></div>
+
+<% if(allInvites.length > 0) { %>
+<div class="section">
+  <div class="header">
+    Invited Employees
+  </div>
+
+  <div class="content">
+    You've invited the following employees:
+    <ul>
+    <% for(var i = 0; i < allInvites.length; i++) { %>
+    <li><%= allInvites[i].inviteEmail %> in <strong><%= allInvites[i].invitedRole.jobTitle %></strong> (<a href="#">resend email</a>) (<a href="/admin/deleteInvite/<%= allInvites[i].id %>">delete invite</a>)</li>
+    <% } %>
+    </ul>
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+<% } %>
 
 <div class="section">
   <div class="header">

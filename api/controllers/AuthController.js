@@ -23,15 +23,15 @@ module.exports = {
     });
   },
 
-  register: function(req, res) {
-    res.view();
-  },
-
   do_signin: function(req, res) {
-  	if(!req.param('email') || !req.param('password')) {
-  		res.json({error: 'bad'});
-  		return;
-  	}
+    if(req.method != 'POST') {
+      return res.json({ error: 'Invalid method.' });
+    }
+
+    if(!req.param('email') || !req.param('password')) {
+      res.json({error: 'bad'});
+      return;
+    }
 
     var action = req.param('btnLogin') || req.param('btnRegister');
     switch(action) {
@@ -93,6 +93,81 @@ module.exports = {
         });
         break;
     }
+  },
+
+  register: function(req, res) {
+    res.view();
+  },
+
+  orgRegistration: function(req, res) {
+    // check if already signed in
+    if(req.session.authenticated) {
+      return res.redirect('/dash');
+    }
+
+    var fromHost = req.host.toLowerCase();
+
+    if(fromHost.indexOf('.local') > -1) {
+      fromHost = fromHost.replace('.local', '');
+    }
+
+    var inviteKey = req.param('key');
+
+    if(!inviteKey){
+      return res.send('No invite key specified.');
+    }
+
+    Invite.findOne(inviteKey).populate('invitedTo').exec(function(e, invite) {
+      if(e || !invite) {
+        return res.send('Invalid invite key.');
+      }
+
+      if(fromHost != invite.invitedTo.host) {
+        return res.send('Invite key not valid for this company.');
+      }
+
+      res.view({ companyInfo: invite.invitedTo, email: invite.inviteEmail, inviteKey: invite.id, htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin" });
+    });
+  },
+
+  do_org_register: function(req, res) {
+    if(req.method != 'POST') {
+      return res.json({ error: 'Invalid method.' });
+    }
+
+    var inviteKey = req.param('key');
+    var firstName = req.param('fn');
+    var lastName = req.param('ln');
+    var password = req.param('password');
+
+    if(!inviteKey){
+      return res.json({ error: 'No invite key specified.' });
+    }
+
+    Invite.findOne(inviteKey).populate('invitedTo').exec(function(e, invite) {
+      if(e || !invite) {
+        return res.json({ error: 'Invalid invite key.' });
+      }
+
+      User.create({
+        firstName: firstName,
+        lastName: lastName,
+        email: invite.inviteEmail,
+        password: password,
+        company: invite.invitedTo.id,
+        role: invite.invitedRole,
+        permissionId: invite.invitedRole,
+        picture: ""
+      }).exec(function(e, newUser) {
+        if(e || !newUser) {
+          return res.json({ error: 'Failed to create a new user.' });
+        }
+
+        Invite.destroy({ id: invite.id }, function(err) {
+          res.json({ success: true });
+        });
+      });
+    });
   },
 
   signout: function(req, res) {

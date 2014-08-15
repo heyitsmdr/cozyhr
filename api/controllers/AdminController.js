@@ -32,11 +32,17 @@ module.exports = {
 
   employees: function(req, res) {
     PopUser.many({company: req.session.userinfo.company.id}, {sort: 'lastName ASC'}, function (e, employees) {
-      res.view('admin/index', {
-          selectedPage: 'admin',
-          selectedSection: 'employees',
-          employees: employees
+      Permission.find({ companyId: req.session.userinfo.company.id }).exec(function(e, roles) {
+        Invite.find({ invitedTo: req.session.userinfo.company.id }).populate('invitedRole').exec(function(e, invites) {
+          res.view('admin/index', {
+            selectedPage: 'admin',
+            selectedSection: 'employees',
+            employees: employees,
+            allRoles: roles,
+            allInvites: invites
+          });
         });
+      });
     });
   },
 
@@ -45,6 +51,7 @@ module.exports = {
       return;
 
     var invitedEmail = req.param('email');
+    var invitedRole = req.param('role');
 
     if(invitedEmail.indexOf('@') == -1 || invitedEmail.indexOf('@') == -1) {
       return res.json({ error: "invalid email format" });
@@ -60,31 +67,67 @@ module.exports = {
             res.json({ error: "user already exists in db" });
           } else {
 
-            Invite.create({
-              inviteEmail: invitedEmail.toLowerCase(),
-              invitedBy: req.session.userinfo.id,
-              invitedTo: req.session.userinfo.company.id
-            }).exec(function(e, inviteKey) {
-              // queue up email
-              QueueService.sendEmail({
-                template: 'welcome',
-                templateVars: {},
-                to: invitedEmail,
-                subject: "You've been invited to CozyHR!"
-              });
-              // done
-              res.json({
-                success: true,
-                email: invitedEmail,
-                token: inviteKey,
-                companyName: req.session.userinfo.company.name
-              });
+            Permission.findOne(invitedRole).exec(function(e, role) {
+              if(e || !role) {
+                res.json({ error: "role doesn't exist" });
+              } else if(role.companyId != req.session.userinfo.company.id) {
+                res.json({ error: "role doesn't belong to your company" });
+              } else {
+                Invite.create({
+                  inviteEmail: invitedEmail.toLowerCase(),
+                  invitedBy: req.session.userinfo.id,
+                  invitedTo: req.session.userinfo.company.id,
+                  invitedRole: invitedRole
+                }).exec(function(e, inviteKey) {
+                  // queue up email
+                  QueueService.sendEmail({
+                    template: 'welcome',
+                    templateVars: {
+                      invitedBy: req.session.userinfo.fullName,
+                      inviteKey: inviteKey.id,
+                      companyName: req.session.userinfo.company.name,
+                      companyHost: req.session.userinfo.company.host
+                    },
+                    to: invitedEmail,
+                    subject: "You've been invited to CozyHR!"
+                  });
+                  // done
+                  res.json({
+                    success: true,
+                    email: invitedEmail,
+                    token: inviteKey,
+                    companyName: req.session.userinfo.company.name
+                  });
+                });
+              }
             });
 
           }
         });
 
       }
+    });
+  },
+
+  deleteInvite: function(req, res) {
+    var inviteKey = req.param('id');
+
+    Invite.findOne(inviteKey).exec(function(e, ikey) {
+      if(e || !ikey) {
+        return res.send('Invalid invite key.');
+      }
+
+      if(ikey.invitedTo != req.session.userinfo.company.id) {
+        return res.send('Invite doesn\'t belong to this company.');
+      }
+
+      Invite.destroy({ id: inviteKey }).exec(function(e) {
+        if(e) {
+          return res.send('Error deleting invite key.');
+        }
+
+        res.redirect('/admin/employees');
+      });
     });
   },
 

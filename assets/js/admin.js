@@ -16,10 +16,11 @@ ADMIN_UTILS.prototype.init = function() {
       $('#btnInviteEmployee').on('click', function() {
         if($('#txtNewEmployeeEmail').val().length > 0) {
           io.socket.post('/admin/do_invite', {
-            email: $('#txtNewEmployeeEmail').val()
+            email: $('#txtNewEmployeeEmail').val(),
+            role: $('#selNewEmployeeRole').val()
           }, function(res) {
             if(res.success)
-              alert('You have invited ' + res.email + ' to ' + res.companyName + '!');
+              document.location = "/admin/employees";
             else
               alert(res.error);
           });

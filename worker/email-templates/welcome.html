@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-Some content here..<b>Bold!</b>
+Hey there,
+<br><br>
+You've been invited by <strong>{{invitedBy}}</strong> to join <strong>CozyHR</strong> at <strong>{{companyName}}</strong>.
+<br><br>
+CozyHR is a human resources portal for your company. To accept this invite, click here:
+<br><br>
+http://{{companyHost}}/auth/orgRegistration?key={{inviteKey}}
+<br><br>
+Thanks,
+<br>
+CozyHR Team
 {% endblock %}
