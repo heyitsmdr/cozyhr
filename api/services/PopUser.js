@@ -1,14 +1,16 @@
 function UserPopulated(search, callback) {
   User.findOne(search).populate('company').populate('role').exec(function(e, user) {
-    // Set up special functions
-    user.genPicture = function(smallPicture) {
-      return {
-        name: this.fullName(),
-        picture: this.picture,
-        small: smallPicture,
-        position: this.models.permission.jobTitle
+    if(!e && user) {
+      // Set up special functions
+      user.genPicture = function(smallPicture) {
+        return {
+          name: this.fullName(),
+          picture: this.picture,
+          small: smallPicture,
+          position: this.models.permission.jobTitle
+        };
       };
-    };
+    }
 
     callback( e, user );
   });
