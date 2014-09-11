@@ -71,15 +71,15 @@ module.exports = {
       default:
         PopUser.one({ email: req.param('email') }, function(e,user) {
           if(e || !user) {
-            return res.json({error: 'email not found'});
+            return res.json({error: 'The email address has not been found.'});
           } else {
             bcrypt.compare(req.param('password'), user.password, function (err, match) {
               if(!match) {
-                return res.json({error: 'incorrect password'});
+                return res.json({error: 'The password for this account is not correct.'});
               } else {
                 // check host
                 if(user.company.host != req.host.toLowerCase() && req.host.toLowerCase().indexOf('.local') == -1) {
-                  return res.json({error: 'user is not part of this company'});
+                  return res.json({error: 'The email address does not belong to this company.'});
                 }
                 // all good! open the gates |==> <==|
                 req.session.userinfo = user;
