@@ -1,0 +1,6 @@
+# Files we don't want in the app slug but do want in the git repo
+Vagrantfile
+test/
+bootstrap.sh
+exceptions.txt
+README.md
