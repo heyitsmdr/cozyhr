@@ -2,5 +2,6 @@
 Vagrantfile
 test/
 bootstrap.sh
+bootstrapMongo.js
 exceptions.txt
 README.md

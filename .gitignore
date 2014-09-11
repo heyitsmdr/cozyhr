@@ -1,4 +1,10 @@
+# Node.js / Misc
 .tmp/
 node_modules/
+.vagrant/
+
+# Sublime
 *.sublime-workspace
+
+# Sails
 config/local.js
