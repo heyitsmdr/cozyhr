@@ -1,9 +1,28 @@
-var SIGNIN_UTILS = function() { SIGNIN_UTILS.instance = this; };
+var SIGNIN_UTILS = function() {
+  SIGNIN_UTILS.instance = this;
+
+  // Create a function that will bounce requests more frequent than 500ms
+  this._attemptLogin = _.debounce(function() {
+    $.post('/auth/do_signin', { email: $('#email').val(), password: $('#password').val() }, function(d) {
+      if(d.success) {
+        $('#signinWrapper').fadeOut(function() {
+          document.location = "/dash";
+        });
+      } else {
+        $('.press-enter').fadeOut(function() {
+          $('.press-enter').removeClass('alert').addClass('alert').html(d.error).fadeIn();
+        });
+      }
+    });
+  }, 500, true);
+};
 
 SIGNIN_UTILS.instance = null;
 
 SIGNIN_UTILS.prototype.init = function() {
   $(document).ready(function(){
+    $('#pageSignin').fadeIn();
+
     if($('.authSignin').length > 0) {
       var doSignin = function(e) {
         if(e.which == 13) {
@@ -17,17 +36,9 @@ SIGNIN_UTILS.prototype.init = function() {
             return;
           }
 
-          $.post('/auth/do_signin', { email: $('#email').val(), password: $('#password').val() }, function(d) {
-            if(d.success) {
-              $('#signinWrapper').fadeOut(function() {
-                document.location = "/dash";
-              });
-            } else {
-              alert(d.error);
-            }
-          });
+          this._attemptLogin();
         }
-      };
+      }.bind(this);
       $('#email').keyup(doSignin);
       $('#password').keyup(doSignin);
 
