@@ -38,7 +38,7 @@ _admin.prototype.initRoles = function() {
   }.bind(this));
 };
 
-_admin.prototype.initRoleEmployees = function() {
+_admin.prototype.initEmployees = function() {
   $(document).ready(function(){
     // Set up the table
     $('#companyEmployees').dataTable({
