@@ -32,8 +32,27 @@ $(document).ready(function(){
 CozyHR = { };
 CozyHR.pageHelpers = {};
 CozyHR.pageHelper = {};
+CozyHR.notifications = [];
 CozyHR.pageHelper.init = function(pageHelper) {
 	CozyHR.pageHelper = new pageHelper().init();
+	console.log('Page helper initialized.');
+};
+
+CozyHR.notify = function(content, options) {
+	if(options === undefined)
+		options = {};
+
+	CozyHR.notifications.push(
+		new jBox('Notice', {
+		  content: content,
+		  autoClose: 5000,
+			animation: {open: 'flip', close: 'flip'},
+			color: (options.color || 'black'),
+			audio: ((options.sound===true)?'/sounds/beep1':'')
+		})
+	);
+
+	return CozyHR.notifications[CozyHR.notifications.length - 1]; // Return jBox instance
 };
 
 function generatePictureDiv(opt, extraClassOptions) {

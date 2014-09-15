@@ -1,8 +1,7 @@
-var SIGNIN_UTILS = function() {
-  SIGNIN_UTILS.instance = this;
+var _signin = CozyHR.pageHelpers.signin = function() { };
 
-  // Create a function that will bounce requests more frequent than 500ms
-  this._attemptLogin = _.debounce(function() {
+_signin.prototype.init = function() {
+  this.attemptLogin = _.debounce(function() {
     $.post('/auth/do_signin', { email: $('#email').val(), password: $('#password').val() }, function(d) {
       if(d.success) {
         $('#signinWrapper').fadeOut(function() {
@@ -15,11 +14,7 @@ var SIGNIN_UTILS = function() {
       }
     });
   }, 500, true);
-};
 
-SIGNIN_UTILS.instance = null;
-
-SIGNIN_UTILS.prototype.init = function() {
   $(document).ready(function(){
     $('#pageSignin').fadeIn();
 
@@ -36,7 +31,7 @@ SIGNIN_UTILS.prototype.init = function() {
             return;
           }
 
-          this._attemptLogin();
+          this.attemptLogin();
         }
       }.bind(this);
       $('#email').keyup(doSignin);
@@ -85,5 +80,5 @@ SIGNIN_UTILS.prototype.init = function() {
 
       $('#nameFirst').focus();
     }
-  }.bind(SIGNIN_UTILS.instance));
+  }.bind(this));
 };
