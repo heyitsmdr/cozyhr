@@ -407,44 +407,19 @@ body {
     }
   }
 
-	.day {
-    border-top: 1px solid #eee;
+	.sectionTimeclock {
+    .content {
+      padding: 8px;
 
-		.name {
-			padding: 8px;
-			border-right: 1px solid #ddd;
-			width: 100px;
-			text-align: center;
-		}
+      rect.now {
+        stroke: #000;
+      }
+    }
+  }
 
-		.daycontent .bar {
-			height: 34px;
-		}
-
-		.shifts {
-			border-top: 1px solid #ddd;
-
-			.shiftContainer {
-				.head, .shift {
-					float: left;
-					width: 25%;
-					padding: 4px;
-					font-size: 12px;
-				}
-
-				.head {
-					background-color: rgba(200,200,200,0.2);
-				}
-
-				.shift {
-					.indicator {
-						background-color: #f00;
-						margin-right: 5px;
-					}
-				}
-			}
-		}
-	}
+  #timeclockDay {
+    display: none;
+  }
 }
 
 /* Section 4: Admin */
