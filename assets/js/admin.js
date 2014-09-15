@@ -48,6 +48,10 @@ _admin.prototype.initEmployees = function() {
       }
     });
     // Bind click event to invite a new employee
+    if($('#selNewEmployeeRole')) {
+      $('#selNewEmployeeRole').chosen({width:'200px'});
+    }
+
     $('#btnInviteEmployee').on('click', function() {
       if($('#txtNewEmployeeEmail').val().length > 0) {
         io.socket.post('/admin/do_invite', {
