@@ -223,6 +223,44 @@ module.exports = {
         });
       }
     });
-  }
+  },
 
+  offices: function(req, res) {
+    res.view('admin/index', {
+      selectedPage: 'admin',
+      selectedSection: 'offices',
+    });
+  },
+
+  getOffices: function(req, res) {
+    if(req.method == 'GET') {
+      // Get all the offices for the company
+      Office.find({ company: req.session.userinfo.company.id }, function(e, offices) {
+        // Count the positions at each office asynchonously
+        async.each(offices, function(office, done) {
+          office.positionCount = 0;
+          done();
+        }, function() {
+          // Send to view
+          res.json({"data": offices});
+        });
+      });
+    } else {
+      return res.json({'error':'Invalid request type. Expected GET.'});
+    }
+  },
+
+  newOffice: function(req, res) {
+    if(req.isSocket && req.method == 'POST') {
+      // Create a new role
+      Office.create({
+        company: req.session.userinfo.company.id,
+        name: req.param('officeName')
+      }).exec(function(err, newOffice) {
+        res.json({"success": true, "office": newOffice})
+      });
+    } else {
+      return res.json({'error':'Invalid request type. Expected POST via socket.'});
+    }
+  },
 };

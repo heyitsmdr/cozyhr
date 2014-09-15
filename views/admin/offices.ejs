@@ -1,0 +1,48 @@
+<div class="section">
+  <div class="content">
+    Manage all of the offices and their associated positions at <strong><%- req.session.userinfo.company.name %></strong> from here.
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Construct a New Office
+  </div>
+
+  <div class="content">
+    Office Name:&nbsp;
+    <input type="text" id="txtNewOffice" placeholder="Office Name">&nbsp;
+    <input type="submit" id="btnConstructOffice" value="Construct Office">
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Offices
+  </div>
+
+  <div class="content">
+
+    <table id="companyOffices" class="display" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th class="left-align">Office Name</th>
+          <th class="center-align" width="15%">Positions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- Data will load via AJAX -->
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<script>
+  CozyHR.pageHelper.queue( 'CozyHR.pageHelper.instance.initOffices()' );
+</script>

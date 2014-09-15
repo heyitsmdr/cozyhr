@@ -67,3 +67,40 @@ _admin.prototype.initEmployees = function() {
     });
   }.bind(this));
 };
+
+_admin.prototype.initOffices = function() {
+  $(document).ready(function(){
+    // Init the data table
+    $('#companyOffices').dataTable({
+      "pageLength": 50,
+      "oLanguage": {
+        "sEmptyTable": "No offices have been constructed (created) yet."
+      },
+      "ajax": {
+        "url": "/admin/getOffices",
+        "type": "GET"
+      },
+      "columns": [
+        { "data": "name", "render": function(d,t,r,m) { return "<a href='/admin/office/" + r.id + "'>"+d+"</a>"; } },
+        { "data": "positionCount" }
+      ]
+    });
+
+    // Bind click
+    $('#btnConstructOffice').on('click', _.debounce(function(){
+      if( $('#txtNewOffice').val().length > 0) {
+        io.socket.post('/admin/newOffice', {
+          officeName: $('#txtNewOffice').val()
+        }, function(res) {
+          if(res.success) {
+            $('#txtNewOffice').val('');
+            $('#companyOffices').DataTable().ajax.reload();
+            CozyHR.notify('Your new office has been constructed.', {color: 'green', sound: true});
+          } else {
+            alert(res.error);
+          }
+        });
+      }
+    }, 500, true));
+  }.bind(this));
+};
