@@ -147,6 +147,41 @@ module.exports = {
     });
   },
 
+  getRoles: function(req, res) {
+    if(req.method == 'GET') {
+      // Get all the roles for the company
+      Permission.find({ companyId: req.session.userinfo.company.id }, function(e, roles) {
+        // Count the employees asynchonously
+        async.each(roles, function(role, done) {
+          User.find({ permissionId: role.id }, function(e, usrs) {
+            role.employeeCount = usrs.length;
+            done(); // go to next permission/role
+          });
+        }, function() {
+          // Send to view
+          res.json({"data": roles});
+        });
+      });
+    } else {
+      return res.json({'error':'Invalid request type. Expected GET.'});
+    }
+  },
+
+  newRole: function(req, res) {
+    if(req.method == 'POST') {
+      // Create a new role
+      Permission.create({
+        companyId: req.session.userinfo.company.id,
+        jobTitle: req.param('roleName'),
+        companyAdmin: false
+      }).done(function(err, newRole) {
+        res.json({"success": true, "role": newRole})
+      });
+    } else {
+      return res.json({'error':'Invalid request type. Expected POST.'});
+    }
+  },
+
   role: function(req, res) {
     var roleId = req.param('id');
 

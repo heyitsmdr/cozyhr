@@ -31,7 +31,7 @@ ADMIN_UTILS.prototype.init = function() {
       $('#companyRoles').dataTable({
         "pageLength": 50,
         "ajax": {
-          "url": "/api/roles",
+          "url": "/admin/getRoles",
           "type": "GET"
         },
         "columns": [
@@ -42,7 +42,7 @@ ADMIN_UTILS.prototype.init = function() {
       // Init events
       $('#btnCreateRole').on('click', function(){
         if( $('#txtNewRole').val().length > 0) {
-          io.socket.post('/api/role', {
+          io.socket.post('/admin/newRole', {
             roleName: $('#txtNewRole').val()
           }, function(res) {
             if(res.success) {

@@ -1,14 +1,14 @@
-var TIMECLOCK_UTILS = function() { TIMECLOCK_UTILS.instance = this; };
+var _timeclock = CozyHR.pageHelpers.timeclock = function() { };
 
-TIMECLOCK_UTILS.instance = null;
-
-TIMECLOCK_UTILS.prototype.init = function() {
+_timeclock.prototype.init = function() {
 	$(document).ready(function(){
+		$('#selOffice').chosen();
+
 		this.demo();
-	}.bind(TIMECLOCK_UTILS.instance));
+	}.bind(this));
 };
 
-TIMECLOCK_UTILS.prototype.demo = function() {
+_timeclock.prototype.demo = function() {
 	$('.barshift').each(function(i, elem) {
 		var barWidth = $(elem).width();
 		var barStart = parseInt($(elem).data('start'));
