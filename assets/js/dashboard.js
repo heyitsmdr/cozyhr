@@ -1,8 +1,6 @@
-var DASHBOARD_UTILS = function() { DASHBOARD_UTILS.instance = this; };
+var _dashboard = CozyHR.pageHelpers.dashboard = function() { };
 
-DASHBOARD_UTILS.instance = null;
-
-DASHBOARD_UTILS.prototype.init = function() {
+_dashboard.prototype.init = function() {
 	$(document).ready(function(){
 		// Set up listeners
 		io.socket.on('feedUpdate', this.onFeedUpdate.bind(this));
@@ -22,10 +20,10 @@ DASHBOARD_UTILS.prototype.init = function() {
 
 		// Get employees working now
 		io.socket.post('/main/getWorkingNow');
-	}.bind(DASHBOARD_UTILS.instance));
+	}.bind(this));
 };
 
-DASHBOARD_UTILS.prototype.updateTimestamps = function() {
+_dashboard.prototype.updateTimestamps = function() {
 	$('.specificComment').each(function(index, comment){
 		var creationDate = new Date($(comment).data('timestamp'));
 		var nowDate = new Date();
@@ -36,7 +34,7 @@ DASHBOARD_UTILS.prototype.updateTimestamps = function() {
 	});
 };
 
-DASHBOARD_UTILS.prototype.onNewFeedComment = function(res) {
+_dashboard.prototype.onNewFeedComment = function(res) {
 	var _commentItem = [];
 	_commentItem.push('<div id="cid-' + res.commentId + '" data-timestamp="%TIMESTAMP%" class="specificComment" style="display:none;">');
 	_commentItem.push('    %PICTURE%<div class="commentText">%COMMENT%</div><span class="commentTime">Just now</span><span class="commentLinks">%LINKS%</span>');
@@ -52,13 +50,13 @@ DASHBOARD_UTILS.prototype.onNewFeedComment = function(res) {
 			.replace('%NAME%', res.authorName)
 			.replace('%TIMESTAMP%', res.timestamp)
 			.replace('%PICTURE%', generatePictureDiv(res.picture))
-			.replace('%LINKS%', ((res.authorId==APP.USERID)?' - <a href="#" onclick="DASHBOARD_UTILS.instance.doDeleteComment(this)">Delete</a>':''))
+			.replace('%LINKS%', ((res.authorId==CozyHR.userId)?' - <a href="#" onclick="DASHBOARD_UTILS.instance.doDeleteComment(this)">Delete</a>':''))
 	);
 
 	$('#cid-' + res.commentId).fadeIn(400);
 };
 
-DASHBOARD_UTILS.prototype.onFeedUpdate = function(res) {
+_dashboard.prototype.onFeedUpdate = function(res) {
 	var html = [], commenthtml = [], _feedItem = [], _commentItem = [];
 	_feedItem.push('<div id="fid-%FEEDID%" class="feeditem">');
 	_feedItem.push('	%PICTURE%');
@@ -82,7 +80,7 @@ DASHBOARD_UTILS.prototype.onFeedUpdate = function(res) {
 				.replace('%NAME%', comment.authorName)
 				.replace('%TIMESTAMP%', comment.createdAt)
 				.replace('%PICTURE%', generatePictureDiv(comment.picture))
-				.replace('%LINKS%', ((comment.userId==APP.USERID)?' - <a href="#" onclick="DASHBOARD_UTILS.instance.doDeleteComment(this)">Delete</a>':''))
+				.replace('%LINKS%', ((comment.userId==CozyHR.userId)?' - <a href="#" onclick="DASHBOARD_UTILS.instance.doDeleteComment(this)">Delete</a>':''))
 			);
 		});
 		// Assemble html
@@ -106,11 +104,11 @@ DASHBOARD_UTILS.prototype.onFeedUpdate = function(res) {
 	}.bind(this));
 };
 
-DASHBOARD_UTILS.prototype.onDestroyFeedComment = function(res) {
+_dashboard.prototype.onDestroyFeedComment = function(res) {
 	$('#cid-' + res.commentId).fadeOut(400);
 };
 
-DASHBOARD_UTILS.prototype.doWriteComment = function(evt, elem) {
+_dashboard.prototype.doWriteComment = function(evt, elem) {
 	var charCode = (typeof evt.which === "number") ? evt.which : evt.keyCode;
 	if(charCode == 13 && $(elem).val().length > 1) {
 		// Disable the comment box
@@ -134,7 +132,7 @@ DASHBOARD_UTILS.prototype.doWriteComment = function(evt, elem) {
 	}
 };
 
-DASHBOARD_UTILS.prototype.doDeleteComment = function(elem) {
+_dashboard.prototype.doDeleteComment = function(elem) {
 	var commentId;
 
 	try {
@@ -152,15 +150,15 @@ DASHBOARD_UTILS.prototype.doDeleteComment = function(elem) {
 	}
 };
 
-DASHBOARD_UTILS.prototype.onCommentMouseOver = function(evt) {
+_dashboard.prototype.onCommentMouseOver = function(evt) {
 	$(evt.currentTarget).find('.commentLinks').show();
 };
 
-DASHBOARD_UTILS.prototype.onCommentMouseOut = function(evt) {
+_dashboard.prototype.onCommentMouseOut = function(evt) {
 	$(evt.currentTarget).find('.commentLinks').hide();
 };
 
-DASHBOARD_UTILS.prototype.onWorkersUpdate = function(res) {
+_dashboard.prototype.onWorkersUpdate = function(res) {
 	var _html = "";
 
 	res.forEach(function(worker) {

@@ -46,9 +46,10 @@
     <link rel="stylesheet" href="/styles/importer.css">
     <% } %>
 
-    <!-- jQuery DataTables & qTip Styling -->
+    <!-- Vendor-specific styling -->
     <link rel="stylesheet" href="/js/vendor/jquery.datatables.1.10.0/jquery.dataTables.css">
     <link rel="stylesheet" href="/js/vendor/jquery.qtip.2.2.0/jquery.qtip.2.2.0.min.css">
+    <link rel="stylesheet" href="/js/vendor/jbox.0.3.1/jBox.css">
 
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
@@ -59,6 +60,7 @@
     <script src="/js/dashboard.js"></script>
     <script src="/js/signin.js"></script>
     <script src="/js/timeclock.js"></script>
+    <script src="/js/vendor/jbox.0.3.1/jBox.js"></script>
     <script src="/js/vendor/jquery-ui.1.11.1/jquery-ui.min.js"></script>
     <script src="/js/vendor/jquery.datatables.1.10.0/jquery.dataTables.min.js"></script>
     <script src="/js/vendor/jquery.noty.2.2.4/jquery.noty.packaged.2.2.4.min.js"></script>
@@ -89,9 +91,7 @@
 
     <script>
       <% if(req.session.authenticated) { %>
-        APP = {
-          USERID: "<%- req.session.userinfo.id %>"
-        }
+        CozyHR.userId = "<%- req.session.userinfo.id %>";
       <% } %>
     </script>
     </body>

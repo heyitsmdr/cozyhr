@@ -28,6 +28,14 @@ $(document).ready(function(){
   });
 });
 
+// Create the CozyHR namespace
+CozyHR = { };
+CozyHR.pageHelpers = {};
+CozyHR.pageHelper = {};
+CozyHR.pageHelper.init = function(pageHelper) {
+	CozyHR.pageHelper = new pageHelper().init();
+};
+
 function generatePictureDiv(opt, extraClassOptions) {
 	var lines = [];
 	lines.push("<span class=\"name\">" + opt.name + "</span>");
