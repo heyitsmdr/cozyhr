@@ -28,14 +28,44 @@ $(document).ready(function(){
   });
 });
 
+// Underscore mixins
+_.mixin({
+  clearArray: function(array) {
+    while (array.length > 0) {
+      array.pop();
+    }
+  }
+});
+
 // Create the CozyHR namespace
 CozyHR = { };
 CozyHR.pageHelpers = {};
-CozyHR.pageHelper = {};
+CozyHR.pageHelper = { queueStatements: [] };
 CozyHR.notifications = [];
 CozyHR.pageHelper.init = function(pageHelper) {
-	CozyHR.pageHelper = new pageHelper().init();
+	if(CozyHR.pageHelper.instance)
+		return console.error('Page helper attempted to be initialized twice.');
+
+	CozyHR.pageHelper.instance = new pageHelper().init();
+
 	console.log('Page helper initialized.');
+
+	// Anything in the eval queue?
+	if(CozyHR.pageHelper.queueStatements.length >= 1) {
+		console.log('Evaluating page helper queue.');
+		CozyHR.pageHelper.queueStatements.forEach(function(eStatement) {
+			eval(eStatement);
+		});
+		_.clearArray( CozyHR.pageHelper.queueStatements );
+	}
+};
+
+CozyHR.pageHelper.queue = function(evalStatement) {
+	if(CozyHR.pageHelper.instance) {
+		eval(evalStatement);
+	} else {
+		CozyHR.pageHelper.queueStatements.push( evalStatement );
+	}
 };
 
 CozyHR.notify = function(content, options) {

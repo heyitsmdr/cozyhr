@@ -21,6 +21,8 @@ _dashboard.prototype.init = function() {
 		// Get employees working now
 		io.socket.post('/main/getWorkingNow');
 	}.bind(this));
+
+	return this;
 };
 
 _dashboard.prototype.updateTimestamps = function() {

@@ -174,7 +174,7 @@ module.exports = {
         companyId: req.session.userinfo.company.id,
         jobTitle: req.param('roleName'),
         companyAdmin: false
-      }).done(function(err, newRole) {
+      }).exec(function(err, newRole) {
         res.json({"success": true, "role": newRole})
       });
     } else {

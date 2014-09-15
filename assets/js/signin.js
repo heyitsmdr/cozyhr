@@ -81,4 +81,6 @@ _signin.prototype.init = function() {
       $('#nameFirst').focus();
     }
   }.bind(this));
+
+  return this;
 };
