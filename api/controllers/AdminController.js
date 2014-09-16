@@ -255,8 +255,10 @@ module.exports = {
       Office.find({ company: req.session.userinfo.company.id }, function(e, offices) {
         // Count the positions at each office asynchonously
         async.each(offices, function(office, done) {
-          office.positionCount = 0;
-          done();
+          Position.find({ office: office.id }, function(e, positions) {
+            office.positionCount = positions.length;
+            done();
+          })
         }, function() {
           // Send to view
           res.json({"data": offices});
