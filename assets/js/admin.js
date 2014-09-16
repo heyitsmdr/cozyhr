@@ -144,13 +144,26 @@ _admin.prototype.initPositions = function() {
       }
     }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
 
-    // Bind delete
+    // Bind delete position
     $(document).on('click', '.delete-position', _.debounce(function() {
       io.socket.post('/admin/deleteOfficePosition', {
         positionId: $(this).data('id')
       }, function(res) {
         if(res.success) {
           $('#companyOfficePositions').DataTable().ajax.reload();
+        } else {
+          CozyHR.notify(res.error, {color: 'red', sound: true});
+        }
+      });
+    }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
+
+    // Bind delete office
+    $('#btnDeleteOffice').on('click', _.debounce(function() {
+      io.socket.post('/admin/deleteOffice', {
+        officeId: CozyHR.officeId
+      }, function(res) {
+        if(res.success) {
+          document.location = "/admin/offices";
         } else {
           CozyHR.notify(res.error, {color: 'red', sound: true});
         }

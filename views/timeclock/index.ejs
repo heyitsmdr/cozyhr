@@ -17,24 +17,9 @@
 						</select>
 					</div>
 					<div class="label">What are you working on?</div>
-					<!-- Example Row -->
-					<div class="row flush">
-						<div class="6u position"><a href="#"><div>Something</div></a></div>
-						<div class="6u position"><a href="#"><div>Something</div></a></div>
+					<div id="sectionClockablePositions">
+						<!-- Loaded via Mustache -->
 					</div>
-					<!-- End Example Row -->
-					<!-- Example Row -->
-					<div class="row flush">
-						<div class="6u position"><a href="#"><div>Something</div></a></div>
-						<div class="6u position"><a href="#"><div>Something</div></a></div>
-					</div>
-					<!-- End Example Row -->
-					<!-- Example Row -->
-					<div class="row flush">
-						<div class="6u position"><a href="#"><div>Something</div></a></div>
-						<div class="6u position"><a href="#"><div>Something</div></a></div>
-					</div>
-					<!-- End Example Row -->
 				</div>
 
 			</div>
@@ -70,6 +55,15 @@
 		</tr>
 		{{/clocks}}
 	</table>
+</script>
+
+<!-- Mustache Template for Available Positions at Office -->
+<script id="clockPositionsPopup" type="x-tmpl-mustache">
+	<div class="row flush">
+		{{#positions}}
+		<div class="6u position"><a href="#"><div>{{name}}</div></a></div>
+		{{/positions}}
+	</div>
 </script>
 
 <!-- Initialize Script -->

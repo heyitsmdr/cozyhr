@@ -71,7 +71,7 @@
   }
 }
 
-.input-btn {
+.input-btn-gray {
   .menugradiant(#fff, #eee);
   border: 1px solid #dbdbdb;
   border-radius: 4px;
@@ -84,6 +84,27 @@
   &:active {
     .menugradiant(#e4e2e2, #fff);
     border: 1px solid #ccc9c9;
+    box-shadow: inset 0px 0px 5px #B4B1B1;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.input-btn-red {
+  .menugradiant(#f8efef, #fccdcd);
+  border: 1px solid #d1acac;
+  border-radius: 4px;
+
+  &:hover {
+    .menugradiant(#f8efef, #f6bcbc);
+    border: 1px solid #C49696;
+  }
+
+  &:active {
+    .menugradiant(#f6bcbc, #f8efef);
+    border: 1px solid #C49696;
     box-shadow: inset 0px 0px 5px #B4B1B1;
   }
 
@@ -193,6 +214,10 @@ body {
 			font-size: 13px;
 			border-bottom: 1px solid @bordercolor;
 
+      &.red {
+        .menugradiant(#fcd1d1, #f0cbcb);
+        color: #b90000;
+      }
 		}
 
 		.content {
@@ -486,7 +511,15 @@ body {
   }
 
   input[type=submit] {
-    .input-btn;
+    .input-btn-gray;
+  }
+
+  input[type=button] {
+    .input-btn-gray;
+
+    &.red {
+      .input-btn-red;
+    }
   }
 
 	.admincontent {
@@ -573,6 +606,14 @@ body {
 				font-weight: bold;
 				background-color: #fefefe;
 			}
+
+      &.delete {
+        background-color: rgba(255, 226, 226, 0.41);
+
+        &:hover {
+          background-color: rgba(255, 226, 226, 0.8);
+        }
+      }
 		}
 
 		div:hover {

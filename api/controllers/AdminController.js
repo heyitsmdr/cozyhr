@@ -328,6 +328,45 @@ module.exports = {
     });
   },
 
+  deleteOffice: function(req, res) {
+    if(req.method == 'POST') {
+      var officeId = req.param('officeId');
+
+      if(!officeId) {
+        return res.serverError(new Error('InvalidParameterException'));
+      }
+
+      Office.findOne(officeId).exec(function(e, office){
+        if(e || !office) {
+          return res.serverError(new Error('ParameterNotFoundInDatabaseException'));
+        }
+
+        // same company?
+        if(office.company != req.session.userinfo.company.id) {
+          return res.serverError(new Error('ParameterCompanyMismatchException'));
+        }
+
+        // Destroy positions associated with office
+        Position.destroy({ office: office.id }, function(e) {
+          if(e) {
+            return res.json({'error': 'Error deleting positions associated with office.'});
+          }
+
+          // Destroy office
+          Office.destroy({ id: office.id }, function(e) {
+            if(e) {
+              res.json({'error': 'Something went wrong. Try again.'});
+            } else {
+              res.json({'success': true});
+            }
+          });
+        });
+      });
+    } else {
+      return res.json({'error':'Invalid request type. Expected POST.'});
+    }
+  },
+
   getOfficePositions: function(req, res) {
     if(req.method == 'GET') {
       var officeId = req.param('officeId');
