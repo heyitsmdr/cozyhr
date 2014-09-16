@@ -2,14 +2,16 @@ module.exports = {
 
   index: function(req, res) {
     res.view({
-      selectedPage: 'admin'
+      selectedPage: 'admin',
+      breadcrumbs: [ { name: 'General' } ]
     });
   },
 
   general: function(req, res) {
     res.view('admin/index', {
       selectedPage: 'admin',
-      selectedSection: 'general'
+      selectedSection: 'general',
+      breadcrumbs: [ { name: 'General' } ]
     });
   },
 
@@ -20,6 +22,7 @@ module.exports = {
           res.view('admin/index', {
             selectedPage: 'admin',
             selectedSection: 'employees',
+            breadcrumbs: [ { name: 'Employees' } ],
             employees: employees,
             allRoles: roles,
             allInvites: invites
@@ -135,7 +138,11 @@ module.exports = {
       res.view('admin/employee/edit', {
         selectedPage: 'admin',
         employee: employee,
-        selectedSection: 'basic'
+        selectedSection: 'basic',
+        breadcrumbs: [
+          { name: 'Employees', href: '/admin/employees' },
+          { name: employee.fullName() }
+        ],
       });
     });
   },
@@ -144,6 +151,7 @@ module.exports = {
     res.view('admin/index', {
       selectedPage: 'admin',
       selectedSection: 'roles',
+      breadcrumbs: [ { name: 'Roles' } ]
     });
   },
 
@@ -207,16 +215,24 @@ module.exports = {
       }
 
       if(selectedSection == 'info') {
-        res.view('admin/role/edit', {
+        res.view('admin/role/index', {
           selectedPage: 'admin',
           selectedSection: 'info',
+          breadcrumbs: [
+              { name: 'Roles', href: '/admin/roles' },
+              { name: role.jobTitle }
+            ],
           role: role
         });
       } else if(selectedSection == 'employees') {
         UserSpecial.many({company: req.session.userinfo.company.id, permissionId: roleId}, {sort: 'lastName ASC'}, function(employees) {
-          res.view('admin/role/edit', {
+          res.view('admin/role/index', {
             selectedPage: 'admin',
             selectedSection: 'employees',
+            breadcrumbs: [
+              { name: 'Roles', href: '/admin/roles' },
+              { name: role.jobTitle }
+            ],
             role: role,
             employees: employees
           });
@@ -229,6 +245,7 @@ module.exports = {
     res.view('admin/index', {
       selectedPage: 'admin',
       selectedSection: 'offices',
+      breadcrumbs: [ { name: 'Offices & Positions' } ]
     });
   },
 
@@ -252,15 +269,145 @@ module.exports = {
 
   newOffice: function(req, res) {
     if(req.isSocket && req.method == 'POST') {
-      // Create a new role
-      Office.create({
-        company: req.session.userinfo.company.id,
-        name: req.param('officeName')
-      }).exec(function(err, newOffice) {
-        res.json({"success": true, "office": newOffice})
+      Office.find({ name: req.param('officeName'), company: req.session.userinfo.company.id }, function(e, offices) {
+        if(offices.length == 0) {
+          // Create a new role
+          Office.create({
+            company: req.session.userinfo.company.id,
+            name: req.param('officeName')
+          }).exec(function(err, newOffice) {
+            res.json({"success": true, "office": newOffice})
+          });
+        } else {
+          res.json({'error': 'You already have an office with the same name. Pick another.'});
+        }
       });
     } else {
       return res.json({'error':'Invalid request type. Expected POST via socket.'});
     }
   },
+
+  office: function(req, res) {
+    var officeId = req.param('id');
+
+    if(!officeId) {
+      return res.serverError(new Error('AdminOfficeNotSpecifiedException'));
+    }
+
+    Office.findOne(officeId).exec(function(e, office){
+      if(e || !office) {
+        return res.serverError(new Error('AdminOfficeNotFoundException'));
+      }
+
+      // same company?
+      if(office.company != req.session.userinfo.company.id) {
+        return res.serverError(new Error('AdminOfficeCompanyMismatchException'));
+      }
+
+      var validSections = ['positions'];
+      var selectedSection = req.param('section') || 'positions';
+
+      if(validSections.indexOf(selectedSection) == -1) {
+        return res.serverError(new Error('AdminOfficeInvalidSectionException'));
+      }
+
+      if(selectedSection == 'positions') {
+        Position.find({ office: office.id }, function(e, positions) {
+          res.view('admin/office/index', {
+            selectedPage: 'admin',
+            selectedSection: 'positions',
+            breadcrumbs: [
+              { name: 'Offices & Positions', href: '/admin/offices' },
+              { name: office.name }
+            ],
+            office: office,
+            positions: positions
+          });
+        });
+      }
+    });
+  },
+
+  getOfficePositions: function(req, res) {
+    if(req.method == 'GET') {
+      var officeId = req.param('officeId');
+
+      if(!officeId) {
+        return res.serverError(new Error('AdminOfficePositionsNotSpecifiedException'));
+      }
+
+      Office.findOne(officeId).exec(function(e, office){
+        if(e || !office) {
+          return res.serverError(new Error('AdminOfficePositionsNotFoundException'));
+        }
+
+        // same company?
+        if(office.company != req.session.userinfo.company.id) {
+          return res.serverError(new Error('AdminOfficePositionsCompanyMismatchException'));
+        }
+
+        // Get all the positions for the company's location
+        Position.find({ office: officeId }, function(e, positions) {
+          positions.forEach(function(_position) {
+            _position.delete = _position.id;
+          });
+          res.json({"data": positions});
+        });
+      });
+    } else {
+      return res.json({'error':'Invalid request type. Expected GET.'});
+    }
+  },
+
+  newOfficePosition: function(req, res) {
+    if(req.isSocket && req.method == 'POST') {
+      Office.findOne({ id: req.param('officeId') }, function(e, office) {
+        if(e || !office) {
+          return res.json({'error': 'Something went wrong.'});
+        }
+        if(office.company != req.session.userinfo.company.id) {
+          return res.json({'error': 'This office does not belong to your company. Hmm..'});
+        }
+        Position.find({ office: office.id, name: req.param('positionName') }, function(e, positions) {
+          if(positions.length > 0) {
+            return res.json({'error': 'This location already contains a position with that name. Pick another.'});
+          }
+
+          // Create a new position at this office
+          Position.create({
+            office: office.id,
+            company: req.session.userinfo.company.id,
+            name: req.param('positionName')
+          }).exec(function(err, newPosition) {
+            res.json({"success": true, "position": newPosition})
+          });
+        });
+      });
+    } else {
+      return res.json({'error':'Invalid request type. Expected POST via socket.'});
+    }
+  },
+
+  deleteOfficePosition: function(req, res) {
+    if(req.isSocket && req.method == 'POST') {
+      Position.findOne({ id: req.param('positionId') }, function(e, position) {
+        if(e || !position) {
+          return res.json({'error': 'The position does not exist.'});
+        }
+        if(position.company != req.session.userinfo.company.id) {
+          return res.json({'error': 'This position belongs to another company. Hmm..'});
+        }
+
+        Position.destroy({ id: req.param('positionId')}, function(e) {
+          if(e) {
+            res.json({"error": 'An unknown error has occurred. Try again.'});
+          } else {
+            res.json({"success": true});
+          }
+        });
+      });
+    } else {
+      return res.json({'error':'Invalid request type. Expected POST via socket.'});
+    }
+  }
 };

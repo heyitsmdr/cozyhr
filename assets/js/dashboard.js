@@ -52,7 +52,7 @@ _dashboard.prototype.onNewFeedComment = function(res) {
 			.replace('%NAME%', res.authorName)
 			.replace('%TIMESTAMP%', res.timestamp)
 			.replace('%PICTURE%', generatePictureDiv(res.picture))
-			.replace('%LINKS%', ((res.authorId==CozyHR.userId)?' - <a href="#" onclick="DASHBOARD_UTILS.instance.doDeleteComment(this)">Delete</a>':''))
+			.replace('%LINKS%', ((res.authorId==CozyHR.userId)?' - <a href="#" onclick="CozyHR.pageHelper.instance.doDeleteComment(this)">Delete</a>':''))
 	);
 
 	$('#cid-' + res.commentId).fadeIn(400);
@@ -65,7 +65,7 @@ _dashboard.prototype.onFeedUpdate = function(res) {
 	_feedItem.push('	<div class="action">%CONTENT%</div>');
 	_feedItem.push('	<div class="date">%DATE%</div>');
 	_feedItem.push('	<div class="comments">%COMMENTS%</div>');
-	_feedItem.push('	<div class="comment"><div class="picture small" style="background-image:url(%YOURPICTURE%)"></div><input type="text" data-feedid="%FEEDID%" placeholder="Write a comment.." onkeyup="DASHBOARD_UTILS.instance.doWriteComment(event, this)"></div>');
+	_feedItem.push('	<div class="comment"><div class="picture small" style="background-image:url(%YOURPICTURE%)"></div><input type="text" data-feedid="%FEEDID%" placeholder="Write a comment.." onkeyup="CozyHR.pageHelper.instance.doWriteComment(event, this)"></div>');
 	_feedItem.push('</div>');
 	_commentItem.push('<div id="cid-%COMMENTID%" data-timestamp="%TIMESTAMP%" class="specificComment">');
 	_commentItem.push('    %PICTURE%<div class="commentText">%COMMENT%</div><span class="commentTime">now</span><span class="commentLinks">%LINKS%</span>');
@@ -82,7 +82,7 @@ _dashboard.prototype.onFeedUpdate = function(res) {
 				.replace('%NAME%', comment.authorName)
 				.replace('%TIMESTAMP%', comment.createdAt)
 				.replace('%PICTURE%', generatePictureDiv(comment.picture))
-				.replace('%LINKS%', ((comment.userId==CozyHR.userId)?' - <a href="#" onclick="DASHBOARD_UTILS.instance.doDeleteComment(this)">Delete</a>':''))
+				.replace('%LINKS%', ((comment.userId==CozyHR.userId)?' - <a href="#" onclick="CozyHR.pageHelper.instance.doDeleteComment(this)">Delete</a>':''))
 			);
 		});
 		// Assemble html

@@ -11,7 +11,9 @@
 					<!-- Office Selection -->
 					<div class="office">
 						<select id="selOffice">
-							<option value="jduf12323">NYC</option>
+							<% for(var i = 0; i < offices.length; i++) { %>
+							<option value="<%= offices[i].id %>"><%= offices[i].name %></option>
+							<% } %>
 						</select>
 					</div>
 					<div class="label">What are you working on?</div>
@@ -52,9 +54,23 @@
 
 </div>
 
-<div id="timeclockDay">
-
-</div>
+<!-- Mustache Template for Timeclock Popup -->
+<script id="timeclockPopup" type="x-tmpl-mustache">
+	<table id="clockedTable">
+		{{#clocks}}
+		<tr>
+			<th rowspan="2" class="position">
+				<div class="name">{{position}}</div>
+				<div class="location">at <strong>{{location}}</strong></div>
+			</th>
+		  <th class='times'><strong>In:</strong>&nbsp;{{time_in}}</th>
+		</tr>
+		<tr>
+			<td class='times'><strong>Out:</strong>&nbsp;{{time_out}}</td>
+		</tr>
+		{{/clocks}}
+	</table>
+</script>
 
 <!-- Initialize Script -->
 <script>

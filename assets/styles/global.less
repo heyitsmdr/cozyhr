@@ -2,7 +2,7 @@
 
 /*
 	Table of Contents:
-	- Section 0: Variables & Mixins
+	- Section 0: Global Variables & Mixins
 	- Section 1: General
 	- Section 2: Dashboard
 	- Section 3: Timeclock
@@ -10,7 +10,7 @@
 	- Section 5: Sidemenu
 */
 
-/* Section 0: Variables & Mixins */
+/* Section 0: Global Variables & Mixins */
 
 @highlightcolor: #86c2f7;
 @topmenuhighlight: #f5f5f5;
@@ -58,6 +58,38 @@
   background: -ms-linear-gradient(top,  rgba(245,245,245,1) 0%,rgba(236,236,236,1) 100%); /* IE10+ */
   background: linear-gradient(to bottom,  rgba(245,245,245,1) 0%,rgba(236,236,236,1) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#ececec',GradientType=0 ); /* IE6-9 */
+}
+
+.input-text {
+  padding: 3px;
+  border: 1px solid #bac0c7;
+
+  &:focus {
+    outline: 0;
+    border: 1px solid #8BADD4;
+    box-shadow: 0px 0px 5px #66B5F3;
+  }
+}
+
+.input-btn {
+  .menugradiant(#fff, #eee);
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+
+  &:hover {
+    .menugradiant(#fff, #e4e2e2);
+    border: 1px solid #ccc9c9;
+  }
+
+  &:active {
+    .menugradiant(#e4e2e2, #fff);
+    border: 1px solid #ccc9c9;
+    box-shadow: inset 0px 0px 5px #B4B1B1;
+  }
+
+  &:focus {
+    outline: 0;
+  }
 }
 
 /* Section 1: General */
@@ -417,14 +449,46 @@ body {
     }
   }
 
-  #timeclockDay {
+}
+
+#clockedTable {
+  @border: 1px solid #ebebeb;
+  width: 100%;
+
+  .template.invisible {
     display: none;
+  }
+
+  .position {
+    font-weight: normal;
+    border: @border;
+    padding: 5px;
+
+    .location {
+      font-size: 11px;
+    }
+  }
+
+  .times {
+    width: 40%;
+    font-weight: normal;
+    color: #666;
+    padding: 9px;
+    border: @border;
   }
 }
 
 /* Section 4: Admin */
 
 #mainContainer #pageAdmin {
+  input[type=text] {
+    .input-text;
+  }
+
+  input[type=submit] {
+    .input-btn;
+  }
+
 	.admincontent {
 		margin-top: 20px;
 
@@ -474,7 +538,7 @@ body {
   }
 }
 
-/* Section 5: Sidemenu */
+/* Section 5: Sidemenu & Breadcrumbs */
 
 .sidemenu {
 	background-color: rgba(180,180,180,0.1);
@@ -515,6 +579,29 @@ body {
 			background-color: #f3f3f3;
 		}
 	}
+}
+
+.breadcrumbs {
+  background-color: #F8F8F8;
+  border: 1px solid #E9E0E0;
+  border-radius: 4px;
+  margin-top: 10px;
+  padding-left: 4px;
+
+  div {
+    font-size: 12px;
+    padding: 4px;
+    color: #555;
+
+    a {
+      color: #333;
+      text-decoration: none;
+
+      &:hover {
+        color:#111;
+      }
+    }
+  }
 }
 
 /* Section 6: Signin page */

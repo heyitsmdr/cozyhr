@@ -9,3 +9,10 @@ Admin:
 - AdminRoleNotFoundException
 - AdminRoleCompanyMismatchException
 - AdminRoleInvalidSectionException
+- AdminOfficeNotSpecifiedException
+- AdminOfficeNotFoundException
+- AdminOfficeCompanyMismatchException
+- AdminOfficeInvalidSectionException
+- AdminOfficePositionsNotFoundException
+- AdminOfficePositionsCompanyMismatchException
+- AdminOfficePositionsInvalidSectionException

@@ -37,11 +37,38 @@ _.mixin({
   }
 });
 
+// jQuery mixins
+$.fn.enterKey = function (fnc) {
+	return this.each(function () {
+    $(this).keypress(function (ev) {
+      var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+      if (keycode == '13') {
+        fnc.call(this, ev);
+      }
+    })
+	})
+};
+$.fn.txtSubmit = function(btn, fnc) {
+	return this.each(function() {
+		$(this).enterKey(function(ev) {
+			fnc.call(this, 'btn');
+		});
+		$(btn).on('click', function() {
+			fnc.call(this, 'txt');
+		});
+	});
+};
+
 // Create the CozyHR namespace
 CozyHR = { };
 CozyHR.pageHelpers = {};
 CozyHR.pageHelper = { queueStatements: [] };
 CozyHR.notifications = [];
+CozyHR.templates = [];
+CozyHR.globals = {
+	DEFAULT_DEBOUNCE_TIMEOUT: 500
+};
+
 CozyHR.pageHelper.init = function(pageHelper) {
 	if(CozyHR.pageHelper.instance)
 		return console.error('Page helper attempted to be initialized twice.');
@@ -68,6 +95,7 @@ CozyHR.pageHelper.queue = function(evalStatement) {
 	}
 };
 
+// Create a notification
 CozyHR.notify = function(content, options) {
 	if(options === undefined)
 		options = {};
@@ -78,11 +106,21 @@ CozyHR.notify = function(content, options) {
 		  autoClose: 5000,
 			animation: {open: 'flip', close: 'flip'},
 			color: (options.color || 'black'),
-			audio: ((options.sound===true)?'/sounds/beep1':'')
+			audio: ((options.sound===true)?'/sounds/boop3':'')
 		})
 	);
 
 	return CozyHR.notifications[CozyHR.notifications.length - 1]; // Return jBox instance
+};
+
+// Load page-specific Mustache template(s)
+CozyHR.loadPageTemplates = function() {
+	$('script[type=x-tmpl-mustache]').each(function(index, elem) {
+		var _html = $(elem).html().trim();
+		Mustache.parse($(elem).html()); // Speeds up future renders
+		this.templates[elem.id] = _html;
+		console.log('Loaded Mustache Template: ' + elem.id);
+	}.bind(this));
 };
 
 function generatePictureDiv(opt, extraClassOptions) {

@@ -1,4 +1,5 @@
 <div id="pageAdmin" class="row sectionContainer">
+  <%- partial('../breadcrumbs') %>
   <div class="-1u 2u sidemenu">
     <div class="head"><div class="picture small" style="background-image:url('<%= employee.picture %>')"></div><div class="name"><%= employee.firstName + ' ' + employee.lastName %></div></div>
     <a class="item" href="?section=basic"><div class="<% if(selectedSection=="basic"){ %>selected<% } %>">Basic Information</div></a>

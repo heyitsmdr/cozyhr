@@ -1,9 +1,12 @@
 module.exports = {
 
 	index: function(req, res) {
-		res.view({
-			selectedPage: 'timeclock'
-		});
+    Office.find({ company: req.session.userinfo.company.id }, function(e, offices) {
+      res.view({
+        selectedPage: 'timeclock',
+        offices: offices
+      });
+    })
 	},
 
   getTimeclockData: function(req, res) {

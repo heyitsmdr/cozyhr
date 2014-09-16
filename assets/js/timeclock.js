@@ -1,8 +1,13 @@
 var _timeclock = CozyHR.pageHelpers.timeclock = function() { };
 
+_timeclock.prototype.templates = [];
+
 _timeclock.prototype.init = function() {
 	$(document).ready(function(){
 		$('#selOffice').chosen();
+
+		// Load Mustache Template
+		CozyHR.loadPageTemplates();
 
 		// Timeclock Heatmap
 		var now = new Date();
@@ -31,17 +36,25 @@ _timeclock.prototype.init = function() {
 				if(!value)
 					return;
 
-				new jBox('Modal', {
+				var _jbox = new jBox('Modal', {
 					width: 400,
-					height: 300,
-					attach: $('#timeclockDay'),
+					height: 'auto',
+					minHeight: 50,
 					title: '<strong>Timeclock Data:</strong> ' + date.toLocaleString(),
 					animation: {open: 'flip', close: 'flip'},
 					ajax: {
 						url: "/timeclock/getDailyTimeclockData",
 						data: 'ts=' + date.getTime(),
 						spinner: true,
-						setContent: true
+						setContent: false,
+						success: function(resp) {
+							_jbox.setContent( Mustache.render(CozyHR.templates['timeclockPopup'], {
+								clocks: [
+									{ position: "Email", location: "NYC", time_in: "12:00 PM", time_out: "2:00 PM" },
+									{ position: "Live Chat", location: "NYC", time_in: "3:00 PM", time_out: "5:00 PM" }
+								]
+							}) );
+						}
 					}
 				}).open();
 			}

@@ -1,0 +1,47 @@
+<div class="section">
+  <div class="content">
+    Manage all of the clockable positions at the <strong><%- office.name %></strong> office from here.
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Create a New Position for <%- office.name %>
+  </div>
+
+  <div class="content">
+    Position Name:&nbsp;
+    <input type="text" id="txtNewPosition" placeholder="Position Name">&nbsp;
+    <input type="submit" id="btnNewPosition" value="Create Position">
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Positions at <%- office.name %>
+  </div>
+
+  <div class="content">
+    <table id="companyOfficePositions" class="display" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th class="left-align">Position Name</th>
+          <th class="center-align" width="2%"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- Data will load via AJAX -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  CozyHR.officeId = "<%- office.id %>";
+  CozyHR.pageHelper.queue('CozyHR.pageHelper.instance.initPositions()');
+</script>
