@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,700,600,800,300);
+@import url(http://fonts.googleapis.com/css?family=Sniglet);
 
 /*
 	Table of Contents:
@@ -8,6 +9,7 @@
 	- Section 3: Timeclock
 	- Section 4: Admin
 	- Section 5: Sidemenu
+  - Section 6: Signin
 */
 
 /* Section 0: Global Variables & Mixins */
@@ -22,6 +24,14 @@
   font-size: @size;
   font-weight: 400;
   color: #000;
+}
+
+.altfont(@size, @color:#000) {
+  font-family: 'Sniglet';
+  font-size: @size;
+  font-weight: 400;
+  color: @color;
+  -webkit-font-smoothing: antialiased;
 }
 
 .menugradiant(@start, @end) {
@@ -127,6 +137,7 @@ body {
   background: #fff;
   color: #b2b9bC;
   padding-top: 46px;
+  padding-bottom: 46px;
   .generalfont(14px);
 }
 
@@ -652,7 +663,10 @@ html.signin {
 }
 
 body.signin {
-  .menugradiant(#53a2e9, #2990ea);
+  height: 100%;
+  background: url(../images/signin/bg@2x.png);
+  background-repeat: repeat;
+  background-size: 300px 295px;
 }
 
 #mainContainer {
@@ -671,27 +685,35 @@ body.signin {
       margin-top: -50px; /* Half the height */
       margin-left: -200px; /* Half the width */
     }
+
+    #logo {
+      width: 150px;
+      height: 57.5px;
+      background: url(../images/logo.png);
+      background-size: 150px 57.5px;
+      position: fixed;
+      z-index: 100;
+      top: 20px;
+      left: 20px;
+    }
   }
 }
 
 #mainContainer #pageSignin {
   display: none;
 
-  .intro {
-    .generalfont(30px);
-    color: #fff !important;
+  .intro-company {
+    .altfont(33px, #fff);
     text-align: center;
   }
 
-  .intro-company {
-    .generalfont(14px);
-    color: #fff !important;
+  .intro-nocompany {
+    .altfont(28px, #fff);
+    padding-top: 80px;
     text-align: center;
-    margin-top: 10px;
   }
 
   .login-form {
-    margin-top: 8px;
     padding: 10px;
 
     div {
@@ -701,8 +723,8 @@ body.signin {
       input {
         width: 250px;
         height: 25px;
-        border: 2px solid #1b65a7;
-        background-color: #1b65a7;
+        border: 1px solid rgba(40, 40, 40, 1);
+        background-color: rgba(40, 40, 40, 0.4);
         border-radius: 5px;
         padding: 5px;
         .generalfont(14px);
@@ -710,7 +732,7 @@ body.signin {
 
         &:focus {
           outline: none;
-          border: 2px solid rgba(25, 25, 25, 0.4);
+          border: 1px solid rgba(100, 100, 100, 1);
         }
 
         &.disabled {

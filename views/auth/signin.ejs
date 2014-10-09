@@ -1,8 +1,8 @@
 <div id="signinWrapper" class="authSignin">
+  <a href="http://www.cozyhr.com"><div id="logo"></div></a>
   <% if(typeof companyInfo !== 'undefined') { %>
   <div id="pageSignin">
-    <div class="intro">Sign in to <strong>CozyHR</strong>!</div>
-    <div class="intro-company">Comfortably log in to <strong><%- companyInfo.name %></strong>.</div>
+    <div class="intro-company"><%- companyInfo.name %></div>
     <div class="login-form">
       <div><input type="text" id="email" placeholder="Company Email"></div>
       <div><input type="password" id="password" placeholder="Password"></div>
@@ -11,8 +11,7 @@
   </div>
   <% } else { %>
   <div id="pageSignin">
-    <div class="intro">Welcome to <strong>CozyHR</strong>!</div>
-    <div class="intro-company">No company exists under this domain.</div>
+    <div class="intro-nocompany">No company exists under this domain.</div>
   </div>
   <% } %>
 </div>

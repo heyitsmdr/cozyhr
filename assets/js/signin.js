@@ -16,6 +16,10 @@ _signin.prototype.init = function() {
   }, 500, true);
 
   $(document).ready(function(){
+    // Drop-down-fade-in logo
+    $('#logo').hide().toggle('drop', { direction: 'up' });
+
+    // Fade in content
     $('#pageSignin').fadeIn();
 
     if($('.authSignin').length > 0) {
