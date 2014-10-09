@@ -7,3 +7,21 @@
     The job information will be here.
   </div>
 </div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header red">
+    Danger Zone
+  </div>
+
+  <div class="content">
+    <div>If you would like to delete the role entirely, you can click the button below. <strong>There is no way to undo this action.</strong></div>
+    <div style="padding-top:5px;"><input type="button" id="btnDeleteRole" class="red" value="Delete Role"></div>
+  </div>
+</div>
+
+<script>
+  CozyHR.roleId = "<%- role.id %>";
+  CozyHR.pageHelper.queue('CozyHR.pageHelper.instance.initEmployee()');
+</script>

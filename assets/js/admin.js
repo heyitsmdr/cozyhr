@@ -171,3 +171,20 @@ _admin.prototype.initPositions = function() {
     }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
   }.bind(this));
 };
+
+_admin.prototype.initEmployee = function() {
+  $(document).ready(function() {
+    // Bind delete role
+    $('#btnDeleteRole').on('click', _.debounce(function() {
+      io.socket.post('/admin/deleteRole', {
+        roleId: CozyHR.roleId
+      }, function(res) {
+        if(res.success) {
+          document.location = "/admin/roles";
+        } else {
+          CozyHR.notify(res.error, {color: 'red', sound: true});
+        }
+      });
+    }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
+  }.bind(this));
+};

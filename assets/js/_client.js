@@ -8,7 +8,7 @@ $(document).ready(function(){
 				ready: true
 			},
 			position: {target: 'mouse'},
-			style: 'qtip-green'
+			style: 'qtip-dark'
 		});
 	});
 	// Set up person tooltips
@@ -19,7 +19,7 @@ $(document).ready(function(){
 				event: event.type,
 				ready: true
 			},
-			style: 'qtip-green'
+			style: 'qtip-dark'
 		});
 	});
   // Disable right click

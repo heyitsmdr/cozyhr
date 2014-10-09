@@ -241,6 +241,10 @@ module.exports = {
     });
   },
 
+  deleteRole: function(req, res) {
+    return res.json({'error':'Not implemented yet.'});
+  },
+
   offices: function(req, res) {
     res.view('admin/index', {
       selectedPage: 'admin',
