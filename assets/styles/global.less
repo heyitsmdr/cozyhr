@@ -196,6 +196,16 @@ body {
 
 	.linkInfo {
 		text-align: right;
+
+    a {
+      color: #333;
+      text-decoration: none;
+      padding-right: 8px;
+
+      &:hover {
+        color: #666;
+      }
+    }
 	}
 }
 
@@ -226,8 +236,12 @@ body {
 			border-bottom: 1px solid @bordercolor;
 
       &.red {
-        .menugradiant(#fcd1d1, #f0cbcb);
+        .menugradiant(#fcd1d1, #f0cbcb) !important;
         color: #b90000;
+      }
+
+      &.green {
+        .menugradiant(#4e9127, #41801d) !important;
       }
 		}
 
@@ -238,6 +252,10 @@ body {
 			&.no-padding {
 				padding: 0px;
 			}
+
+      &.green {
+        background-color: #f4f7f5;
+      }
 		}
 	}
 
