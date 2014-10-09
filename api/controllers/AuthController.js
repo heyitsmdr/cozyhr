@@ -12,8 +12,8 @@ module.exports = {
 
     var fromHost = req.host.toLowerCase();
 
-    if(fromHost.indexOf('.local') > -1) {
-      fromHost = fromHost.replace('.local', '');
+    if(fromHost.indexOf('.dev') > -1) {
+      fromHost = fromHost.replace('.dev', '');
     }
 
     Company.findOne({ host: fromHost }).exec(function(e, company) {
@@ -77,10 +77,10 @@ module.exports = {
           } else {
             bcrypt.compare(req.param('password'), user.password, function (err, match) {
               if(!match) {
-                return res.json({error: 'The password for this account is not correct.'});
+                return res.json({error: 'The password for this account is not correct.<br><br><a href="/auth/recover">Did you forget your password?</a>'});
               } else {
                 // check host
-                if(user.company.host != req.host.toLowerCase() && req.host.toLowerCase().indexOf('.local') == -1) {
+                if(user.company.host != req.host.toLowerCase() && req.host.toLowerCase().indexOf('.dev') == -1) {
                   return res.json({error: 'The email address does not belong to this company.'});
                 }
                 // all good! open the gates |==> <==|
@@ -109,8 +109,8 @@ module.exports = {
 
     var fromHost = req.host.toLowerCase();
 
-    if(fromHost.indexOf('.local') > -1) {
-      fromHost = fromHost.replace('.local', '');
+    if(fromHost.indexOf('.dev') > -1) {
+      fromHost = fromHost.replace('.dev', '');
     }
 
     var inviteKey = req.param('key');

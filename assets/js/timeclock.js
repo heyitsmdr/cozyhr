@@ -12,7 +12,7 @@ _timeclock.prototype.init = function() {
 				officeId: officeId
 			}, function(res) {
 				if(res.positions) {
-					$('#sectionClockablePositions').html( Mustache.render(CozyHR.templates['clockPositionsPopup'], {
+					$('#sectionClockablePositions').html( Mustache.render(CozyHR.templates['clockPositionsFillin'], {
 						positions: res.positions
 					}) );
 				}
