@@ -14,10 +14,10 @@
 
 /* Section 0: Global Variables & Mixins */
 
-@highlightcolor: #86c2f7;
+@highlightcolor: #000;
 @topmenuhighlight: #f5f5f5;
 @brandblue: #2990ea;
-@bordercolor: #c5d0da;
+@bordercolor: #e2e1e1;
 
 .generalfont(@size) {
   font-family: 'Open Sans';
@@ -142,8 +142,8 @@ body {
 }
 
 #topMenu {
-  .menugradiant(#53a2e9, #2990ea);
-  border-bottom: 1px solid rgb(229, 229, 229);
+  .menugradiant(#383838, #222);
+  box-shadow: 0px 0px 5px #000;
 
   .menulogo a {
   	height: 40px;
@@ -169,12 +169,12 @@ body {
 		text-decoration: none;
 
 		&:hover {
-      background-color: rgba(14, 99, 173, 0.3) !important;
+      background-color: rgba(80, 80, 80, 0.3) !important;
       color: @topmenuhighlight;
 		}
 
 		&.selected {
-		  background-color: rgba(14, 99, 173, 0.6);
+		  background-color: rgba(80, 80, 80, 0.6);
 		}
   }
 }
@@ -218,11 +218,10 @@ body {
 		border-radius: 4px;
 
 		.header {
-      .menugradiant(#d1e8fc, #cbdef0);
+      .menugradiant(#454545, #2E2E2E);
+      .altfont(14px, #fff);
 			padding: 8px;
-			font-weight: bold;
-			text-shadow: #fff 0px 1px 0px;
-			font-size: 13px;
+			text-shadow: #000 0px 1px 0px;
 			border-bottom: 1px solid @bordercolor;
 
       &.red {
@@ -593,7 +592,8 @@ body {
 
 	.head {
 		padding: 8px;
-		.menugradiant(#d1e8fc, #cbdef0);
+		.menugradiant(#454545, #2E2E2E);
+    .altfont(14px, #fff);
 		overflow: auto;
 
 		.name {
@@ -613,7 +613,7 @@ body {
 
 		div {
 			&.selected {
-				border-left: 2px solid @brandblue;
+				border-left: 2px solid #000;
 				font-weight: bold;
 				background-color: #fefefe;
 			}
