@@ -8,6 +8,8 @@ module.exports = {
       return res.redirect('/dash');
     }
 
+    MetricService.writeRawMetric('blah.foo 123');
+
     var fromHost = req.host.toLowerCase();
 
     if(fromHost.indexOf('.local') > -1) {
