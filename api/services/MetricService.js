@@ -75,5 +75,5 @@ module.exports = {
     }
 
     QUEUE.push({ metric: metric, value: value });
-  };
+  }
 };
