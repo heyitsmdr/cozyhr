@@ -8,8 +8,6 @@ module.exports = {
       return res.redirect('/dash');
     }
 
-    MetricService.writeRawMetric('blah.foo 123');
-
     var fromHost = req.host.toLowerCase();
 
     if(fromHost.indexOf('.dev') > -1) {
@@ -73,17 +71,21 @@ module.exports = {
       default:
         PopUser.one({ email: req.param('email') }, function(e, user) {
           if(e || !user) {
+            MetricService.increment('signin.failed');
             return res.json({error: 'The email address has not been found.'});
           } else {
             bcrypt.compare(req.param('password'), user.password, function (err, match) {
               if(!match) {
+                MetricService.increment('signin.failed');
                 return res.json({error: 'The password for this account is not correct.<br><br><a href="/auth/recover">Did you forget your password?</a>'});
               } else {
                 // check host
                 if(user.company.host != req.host.toLowerCase() && req.host.toLowerCase().indexOf('.dev') == -1) {
+                  MetricService.increment('signin.failed');
                   return res.json({error: 'The email address does not belong to this company.'});
                 }
                 // all good! open the gates |==> <==|
+                MetricService.increment('signin.success');
                 req.session.userinfo = user;
                 req.session.userinfo.fullName = user.fullName();
                 req.session.authenticated = true;
