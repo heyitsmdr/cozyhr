@@ -1,0 +1,140 @@
+/* General Styling */
+
+::selection {
+  background: @highlightcolor;
+}
+
+::-moz-selection {
+  background: @highlightcolor;
+}
+
+body {
+  background: #fff;
+  color: #b2b9bC;
+  padding-top: 46px;
+  padding-bottom: 46px;
+  .generalfont(14px);
+  height: 100%;
+}
+
+#topMenu {
+  .menugradiant(#383838, #222);
+  box-shadow: 0px 0px 5px #000;
+
+  .menulogo a {
+    height: 40px;
+    padding: 10px 20px;
+    float: left;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+
+    &:hover {
+      color: @topmenuhighlight;
+    }
+  }
+
+  .menuitem a {
+    height: 40px;
+    padding: 10px 9px;
+    float: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+
+    &:hover {
+      .menugradiant(#555, #444) !important;
+      color: @topmenuhighlight;
+    }
+
+    &.selected {
+      .menugradiant(#444, #383838);
+    }
+  }
+}
+
+#bottomMenu {
+  .menugradiant(#f9f9f9, #f3f3f3);
+  border-top: 1px solid rgb(229, 229, 229);
+
+  .linkInfo, .versionInfo {
+    height: 41px;
+    padding: 10px 9px;
+    font-size: 12px;
+  }
+
+  .versionInfo {
+    float: left;
+  }
+
+  .linkInfo {
+    text-align: right;
+
+    a {
+      color: #333;
+      text-decoration: none;
+      padding-right: 5px;
+
+      &:hover {
+        color: #666;
+      }
+    }
+  }
+}
+
+.tooltip {
+  padding: 5px;
+
+  .position {
+    font-size: 12px;
+  }
+
+  .name {
+    font-size: 13px;
+    font-weight: bold;
+  }
+}
+
+#mainContainer .sectionContainer {
+  .section {
+    background-color: rgba(235,235,235,0.1);
+    border: 1px solid @bordercolor;
+    border-radius: 4px;
+
+    .header {
+      .menugradiant(#454545, #2E2E2E);
+      .generalfont(13px, #fff, 600);
+      padding: 8px;
+      text-shadow: #000 0px 1px 0px;
+      border-bottom: 1px solid @bordercolor;
+
+      &.red {
+        .menugradiant(#b34444, #801f1f) !important;
+
+      }
+
+      &.green {
+        .menugradiant(#4e9127, #41801d) !important;
+      }
+    }
+
+    .content {
+      padding: 8px;
+      font-size: 13px;
+
+      &.no-padding {
+        padding: 0px;
+      }
+
+      &.green {
+        background-color: #f4f7f5;
+      }
+    }
+  }
+
+  .sectionSpace {
+    margin: 20px 0;
+  }
+}

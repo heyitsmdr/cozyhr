@@ -1,0 +1,95 @@
+/* Global Mixins */
+
+.generalfont(@size, @color:#000, @weight:400) {
+  font-family: 'Open Sans';
+  font-size: @size;
+  font-weight: @weight;
+  color: @color;
+}
+
+.altfont(@size, @color:#000, @weight:400) {
+  font-family: 'Sniglet';
+  font-size: @size;
+  font-weight: @weight;
+  color: @color;
+  -webkit-font-smoothing: antialiased;
+}
+
+.menugradiant(@start, @end) {
+  background-color: @end;
+  background-image: -moz-linear-gradient(@start, @end);
+  background-image: -webkit-linear-gradient(@start, @end);
+  background-image: linear-gradient(@start, @end);
+  background-repeat: repeat-x;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.rotate {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+
+.input-text {
+  padding: 3px;
+  border: 1px solid #bac0c7;
+
+  &:focus {
+    outline: 0;
+    border: 1px solid #8BADD4;
+    box-shadow: 0px 0px 5px #66B5F3;
+  }
+}
+
+.input-btn-gray {
+  .menugradiant(#fff, #eee);
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+
+  &:hover {
+    .menugradiant(#fff, #e4e2e2);
+    border: 1px solid #ccc9c9;
+  }
+
+  &:active {
+    .menugradiant(#e4e2e2, #fff);
+    border: 1px solid #ccc9c9;
+    box-shadow: inset 0px 0px 5px #B4B1B1;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.input-btn-red {
+  .menugradiant(#f8efef, #fccdcd);
+  border: 1px solid #d1acac;
+  border-radius: 4px;
+  color: #4d0000;
+
+  &:hover {
+    .menugradiant(#f8efef, #f6bcbc);
+    border: 1px solid #C49696;
+  }
+
+  &:active {
+    .menugradiant(#f6bcbc, #f8efef);
+    border: 1px solid #C49696;
+    box-shadow: inset 0px 0px 5px #B4B1B1;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+}

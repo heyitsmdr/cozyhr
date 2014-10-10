@@ -1,0 +1,74 @@
+/* Timeclock Styling */
+
+#mainContainer #pageTimeclock {
+  .sectionWorkingOn, .sectionTimeclock {
+    padding-top: 20px !important;
+  }
+
+  .sectionWorkingOn {
+    .label {
+      padding: 2px 8px;
+      font-weight: bold;
+    }
+
+    .office {
+      margin: 0 5px 5px 5px;
+
+      select {
+        width: 100%;
+      }
+    }
+
+    .position {
+      a {
+        text-decoration: none;
+        color: #333;
+      }
+
+      div {
+        .input-btn-gray;
+        margin: 5px;
+        padding: 15px 5px;
+        text-align: center;
+      }
+    }
+  }
+
+  .sectionTimeclock {
+    .content {
+      padding: 8px;
+
+      rect.now {
+        stroke: #000;
+      }
+    }
+  }
+
+}
+
+#clockedTable {
+  @border: 1px solid #ebebeb;
+  width: 100%;
+
+  .template.invisible {
+    display: none;
+  }
+
+  .position {
+    font-weight: normal;
+    border: @border;
+    padding: 5px;
+
+    .location {
+      font-size: 11px;
+    }
+  }
+
+  .times {
+    width: 40%;
+    font-weight: normal;
+    color: #666;
+    padding: 9px;
+    border: @border;
+  }
+}

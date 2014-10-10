@@ -1,0 +1,190 @@
+/* Dashboard Styling */
+
+#mainContainer #pageDashboard {
+  .sectionYou, .sectionCelebrations {
+    padding: 20px 0 15px 0;
+  }
+
+  .sectionYou {
+    .section {
+      border: 1px solid #aaa !important;
+    }
+
+    .name {
+      font-size: 15px;
+    }
+
+    .position {
+      font-size: 12px;
+    }
+
+    .sep {
+      border-top: 1px solid #ccc;
+      margin-top: 10px;
+    }
+
+    .info-new {
+      .benefit {
+        overflow: auto;
+
+        .amount, .desc {
+          float: left;
+        }
+
+        .amount {
+          width: 50px;
+          text-align: right;
+
+          a {
+            color: #000;
+            text-decoration: none;
+          }
+
+          a:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .desc {
+          padding-left: 10px;
+          color: #888;
+        }
+      }
+    }
+
+    .info {
+      font-size: 13px;
+      height: 32px;
+
+      .pto, .sick, .vaca {
+        text-align: center;
+        text-transform: uppercase;
+        float: left;
+        width: 40px;
+        margin-right: 5px;
+        padding: 4px;
+      }
+
+      .pto { background-color: rgba(0, 204, 255, 0.32); }
+      .sick { background-color: rgba(255, 0, 102, 0.32); }
+      .vaca { background-color: rgba(0, 255, 31, 0.32); }
+
+      .data {
+        padding: 4px;
+
+        .action {
+          color: #888;
+          display: none;
+
+          a {
+            color: #ccc;
+            text-decoration: none;
+
+            &:hover {
+              color: #333;
+            }
+          }
+        }
+      }
+    }
+
+    .head {
+      font-weight: bold;
+      padding: 5px 0;
+    }
+  }
+
+  .sectionWorkingNow {
+    #subSectionWorkers {
+      overflow: auto;
+    }
+  }
+
+  .picture {
+    &.small {
+      width: 30px !important;
+      height: 30px !important;
+    }
+    &.large-margin {
+      margin: 5px 5px 5px 5px !important;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    background-position: center;
+    display: block;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border: 1px solid #000;
+    float: left;
+    margin-right: 10px;
+  }
+
+  .feeditem {
+    margin-bottom: 20px;
+
+    .date {
+      font-size: 12px;
+    }
+
+    .comment {
+      margin-top: 5px;
+      margin-left: 50px;
+
+      input {
+        border: 1px solid #ddd;
+        .generalfont(12px);
+        padding: 5px;
+        margin-top: 2px;
+        width: 80%;
+
+        &:hover {
+          border: 1px solid #ccc;
+        }
+
+        &:focus {
+          outline: 0;
+          border: 1px solid #aaa;
+        }
+
+        &.disabled {
+          color: #ccc;
+        }
+      }
+    }
+
+    .specificComment {
+      margin: 10px 0px 15px 50px;
+
+      .commentText {
+      font-size: 12px;
+      }
+
+      .commentTime {
+      font-size: 12px;
+      color: #888;
+      }
+
+      .commentLinks {
+      display: none;
+      color: #ccc;
+
+      a {
+        font-size: 12px;
+        text-decoration: none;
+        color: inherit;
+
+        &:hover {
+        color: #333;
+        }
+      }
+      }
+    }
+  }
+}

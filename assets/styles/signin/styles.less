@@ -1,0 +1,113 @@
+/* Signin Styling */
+
+html.signin {
+  height: 100%;
+  width: 100%;
+}
+
+body.signin {
+  height: 100%;
+  background: url(../images/signin/bg@2x.png);
+  background-repeat: repeat;
+  background-size: 300px 295px;
+}
+
+#mainContainer {
+  #signinWrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 260px;
+    margin-top: -130px; /* Half the height */
+    margin-left: -200px; /* Half the width */
+
+    &.failed {
+      width: 400px;
+      height: 100px;
+      margin-top: -50px; /* Half the height */
+      margin-left: -200px; /* Half the width */
+    }
+
+    #logo {
+      width: 150px;
+      height: 57.5px;
+      background: url(../images/logo.png);
+      background-size: 150px 57.5px;
+      position: fixed;
+      z-index: 100;
+      top: 20px;
+      left: 20px;
+    }
+  }
+}
+
+#mainContainer #pageSignin {
+  display: none;
+
+  .intro-company {
+    .altfont(33px, #fff);
+    text-align: center;
+  }
+
+  .intro-nocompany {
+    .altfont(28px, #fff);
+    padding-top: 80px;
+    text-align: center;
+  }
+
+  .login-form {
+    padding: 10px;
+
+    div {
+      text-align: center;
+      padding: 8px;
+
+      input {
+        width: 250px;
+        height: 25px;
+        border: 1px solid rgba(40, 40, 40, 1);
+        background-color: rgba(40, 40, 40, 0.4);
+        border-radius: 5px;
+        padding: 5px;
+        .generalfont(14px);
+        color: #fff !important;
+
+        &:focus {
+          outline: none;
+          border: 1px solid rgba(100, 100, 100, 1);
+        }
+
+        &.disabled {
+          border: 2px solid #104d83;
+          background-color: #104d83;
+        }
+      }
+
+      &.btn {
+        width: 250px;
+        text-align: center;
+        background-color: #1b65a7;
+      }
+    }
+  }
+
+  .press-enter {
+    .generalfont(13px);
+    color: #fff;
+    text-align: center;
+
+    &.alert {
+      color: #a30909;
+
+      a {
+        color: #be1111;
+        text-decoration: none;
+
+        &:hover {
+          color: #f00;
+        }
+      }
+    }
+  }
+}
