@@ -5,3 +5,4 @@ bootstrap.sh
 bootstrapMongo.js
 exceptions.txt
 README.md
+*.sublime-project
