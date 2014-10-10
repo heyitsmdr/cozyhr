@@ -1,7 +1,7 @@
 <div id="signinWrapper" class="authOrgRegister">
   <div id="pageSignin">
     <div class="intro">Welcome to <strong>CozyHR</strong>!</div>
-    <div class="intro-company">Comfortably register for <strong><%- companyInfo.name %></strong>.</div>
+    <div class="intro-company">Register for<br><strong><%- companyInfo.name %></strong>.</div>
     <div class="login-form">
       <input type="hidden" id="inviteKey" value="<%= inviteKey %>">
       <div><input type="text" class="disabled" id="email" placeholder="Company Email" value="<%= email %>" disabled></div>
@@ -16,6 +16,5 @@
 
 <!-- Initialize Script -->
 <script>
-  var _inst = new SIGNIN_UTILS();
-  _inst.init();
+  CozyHR.pageHelper.init( CozyHR.pageHelpers.signin );
 </script>
