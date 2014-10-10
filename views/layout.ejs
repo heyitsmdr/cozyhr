@@ -11,7 +11,7 @@
     <script>
       /* Skel.js */
       window._skel_config = {
-        prefix: '/styles/importer',
+        prefix: null,
         normalizeCSS: true,
         boxModel: 'border',
         grid: { gutters: 20 },
@@ -76,11 +76,16 @@
     <script src="/js/vendor/skel-panels.0.4.9/skel-panels.0.4.9.min.js"></script>
     <!--SCRIPTS END-->
 
-    <!-- Page-Specific Styles -->
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/styles.css">
+    <!--STYLES END-->
+
+    <!-- Page-specific styling -->
     <% if(typeof pageStylesheet !== 'undefined') { %>
     <link rel="stylesheet" href="/styles/<%- pageStylesheet %>">
     <% } %>
-    <!-- END: Page-Specific Styles -->
+
+
   </head>
 
   <body class="<%= (typeof bodyClass !== 'undefined')?bodyClass:'' %>">
