@@ -19,7 +19,7 @@ module.exports.models = {
   ***************************************************************************/
 
   // connection: 'localDiskDb'
-  migrate: "safe",
+  migrate: "alter",
   schema: true
 
 };

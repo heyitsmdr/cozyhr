@@ -11,7 +11,7 @@ module.exports = {
     inviteEmail: 'string',
     invitedBy: { model: 'User' },
     invitedTo: { model: 'Company' },
-    invitedRole: { model: 'Permission' }
+    invitedRole: { model: 'Role' }
   }
 };
 

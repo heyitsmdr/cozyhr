@@ -26,14 +26,14 @@ module.exports = {
 				CompanyFeedComments.find({ feedId: feed.id }).limit(15).exec(function(err, feedComments){
 					// Iterate through the feedComments to get the authorName
 					async.each(feedComments, function(comment, cb) {
-						UserSpecial.one(comment.userId, function(commentAuthor) {
+						PopUser.one(comment.userId, function(e, commentAuthor) {
 							comment.authorName = commentAuthor.fullName();
 							comment.picture = commentAuthor.genPicture(true);
 
 							cb();
 						});
 					}, function(err) {
-						UserSpecial.one(feed.userId, function(author){
+						PopUser.one(feed.userId, function(e, author){
 							feedItems.push({
 								authorName: author.fullName(),
 								content: '<strong>' + author.fullName() + '</strong> ' + feed.content,
@@ -63,7 +63,7 @@ module.exports = {
 
 		workingNow = [];
 
-		UserSpecial.one(req.session.userinfo.id, function(usr) {
+		PopUser.one(req.session.userinfo.id, function(e, usr) {
 			workingNow.push({
 				picture: usr.genPicture(false)
 			});
@@ -80,7 +80,7 @@ module.exports = {
 		if(!req.isSocket)
 			return;
 
-		UserSpecial.one(req.session.userinfo.id, function(usr) {
+		PopUser.one(req.session.userinfo.id, function(e, usr) {
 
 			CompanyFeedComments.create({
 				feedId: req.param('feedid'),

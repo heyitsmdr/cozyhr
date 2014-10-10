@@ -7,7 +7,7 @@ function UserPopulated(search, callback) {
           name: this.fullName(),
           picture: this.picture,
           small: smallPicture,
-          position: this.models.permission.jobTitle
+          position: this.role.jobTitle
         };
       };
     }

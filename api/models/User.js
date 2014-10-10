@@ -31,8 +31,7 @@ module.exports = {
 			defaultsTo: false
 		},
     company: { model: 'Company' },
-    role: { model: 'Permission' },
-		permissionId: 'string',
+    role: { model: 'Role' },
 		picture: 'string',
     counter_pto: {
       type: 'float',

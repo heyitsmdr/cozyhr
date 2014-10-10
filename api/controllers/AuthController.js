@@ -71,7 +71,7 @@ module.exports = {
         });
         break;
       default:
-        PopUser.one({ email: req.param('email') }, function(e,user) {
+        PopUser.one({ email: req.param('email') }, function(e, user) {
           if(e || !user) {
             return res.json({error: 'The email address has not been found.'});
           } else {
@@ -158,7 +158,6 @@ module.exports = {
         password: password,
         company: invite.invitedTo.id,
         role: invite.invitedRole,
-        permissionId: invite.invitedRole,
         picture: ""
       }).exec(function(e, newUser) {
         if(e || !newUser) {

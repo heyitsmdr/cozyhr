@@ -17,7 +17,7 @@ module.exports = {
 
   employees: function(req, res) {
     PopUser.many({company: req.session.userinfo.company.id}, {sort: 'lastName ASC'}, function (e, employees) {
-      Permission.find({ companyId: req.session.userinfo.company.id }).exec(function(e, roles) {
+      Role.find({ companyId: req.session.userinfo.company.id }).exec(function(e, roles) {
         Invite.find({ invitedTo: req.session.userinfo.company.id }).populate('invitedRole').exec(function(e, invites) {
           res.view('admin/index', {
             selectedPage: 'admin',
@@ -53,7 +53,7 @@ module.exports = {
             res.json({ error: "user already exists in db" });
           } else {
 
-            Permission.findOne(invitedRole).exec(function(e, role) {
+            Role.findOne(invitedRole).exec(function(e, role) {
               if(e || !role) {
                 res.json({ error: "role doesn't exist" });
               } else if(role.companyId != req.session.userinfo.company.id) {
@@ -158,10 +158,10 @@ module.exports = {
   getRoles: function(req, res) {
     if(req.method == 'GET') {
       // Get all the roles for the company
-      Permission.find({ companyId: req.session.userinfo.company.id }, function(e, roles) {
+      Role.find({ companyId: req.session.userinfo.company.id }, function(e, roles) {
         // Count the employees asynchonously
         async.each(roles, function(role, done) {
-          User.find({ permissionId: role.id }, function(e, usrs) {
+          User.find({ role: role.id }).exec(function(e, usrs) {
             role.employeeCount = usrs.length;
             done(); // go to next permission/role
           });
@@ -178,7 +178,7 @@ module.exports = {
   newRole: function(req, res) {
     if(req.method == 'POST') {
       // Create a new role
-      Permission.create({
+      Role.create({
         companyId: req.session.userinfo.company.id,
         jobTitle: req.param('roleName'),
         companyAdmin: false
@@ -197,7 +197,7 @@ module.exports = {
       return res.serverError(new Error('AdminRoleNotSpecifiedException'));
     }
 
-    Permission.findOne(roleId).exec(function(e, role){
+    Role.findOne(roleId).exec(function(e, role){
       if(e || !role) {
         return res.serverError(new Error('AdminRoleNotFoundException'));
       }
@@ -225,7 +225,7 @@ module.exports = {
           role: role
         });
       } else if(selectedSection == 'employees') {
-        UserSpecial.many({company: req.session.userinfo.company.id, permissionId: roleId}, {sort: 'lastName ASC'}, function(employees) {
+        PopUser.many({company: req.session.userinfo.company.id, role: roleId}, {sort: 'lastName ASC'}, function(e, employees) {
           res.view('admin/role/index', {
             selectedPage: 'admin',
             selectedSection: 'employees',
