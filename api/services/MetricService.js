@@ -4,12 +4,11 @@ var socket;
 var isConnected = false;
 
 var REPORT_INTERVAL = 10 * 1000; // 10 Seconds
-var GRAPHITE_API_KEY = "fe67ecd0-c4ca-4c6d-962f-a0eced6bfc4a";
 
 function writeRaw(metric) {
   checkConnectionToGraphite(function() {
-    console.log(util.format("%s.%s\n", GRAPHITE_API_KEY, metric));
-    socket.write(util.format("%s.%s\n", GRAPHITE_API_KEY, metric));
+    sails.log.info(util.format("[metrics] %s.%s %s\n", (process.env.NODE_ENV || 'development') + '.' + (process.env.DYNO || 'local.0'), metric, Math.floor(Date.now() / 1000)));
+    socket.write(util.format("%s.%s %s\n", (process.env.NODE_ENV || 'development') + '.' + (process.env.DYNO || 'local.0'), metric, Math.floor(Date.now() / 1000)));
   });
 };
 
@@ -18,10 +17,10 @@ function checkConnectionToGraphite(callback) {
     return callback();
   }
 
-  socket = net.createConnection(2003, "carbon.hostedgraphite.com");
+  socket = net.createConnection(2003, "graphite.cozyhr.com");
 
   socket.on('connect', function() {
-    console.log('Connected to Hosted Graphite');
+    sails.log.info('Metrics: Connected');
     isConnected = true;
     callback();
   });

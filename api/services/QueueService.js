@@ -1,5 +1,5 @@
 // RabbitMQ
-var amqpConnection = require('amqp').createConnection({ url: "amqp://lu00GelV:-KdaPhbsdrAk70Af8seGdTb5hDglCcWU@furry-willow-20.bigwig.lshift.net:11142/R4MZ5zE8NSMd", clientProperties: { product: 'web-01' } });
+var amqpConnection = require('amqp').createConnection({ url: "amqp://lu00GelV:-KdaPhbsdrAk70Af8seGdTb5hDglCcWU@furry-willow-20.bigwig.lshift.net:11142/R4MZ5zE8NSMd", clientProperties: { product: process.env.DYNO || 'app.0' } });
 var exchangeName = 'cozyhr-' + (process.env.NODE_ENV || 'development');
 var exchange;
 
@@ -11,10 +11,16 @@ amqpConnection.on('ready', function() {
   });
 });
 
+process.on('SIGINT', function() {
+  amqpConnection.disconnect();
+  sails.log.info('RabbitMQ: Closing connection');
+  process.exit();
+});
+
 module.exports = {
 
   sendEmail: function(opt) {
-    // Send off to RabbitMQ so a worker can handle this
+    // Send off to RabbitMQ so a worker (aux server) can handle this
     exchange.publish('send_email', opt);
   }
 
