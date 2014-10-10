@@ -79,13 +79,6 @@
     <!--STYLES-->
     <link rel="stylesheet" href="/styles/styles.css">
     <!--STYLES END-->
-
-    <!-- Page-specific styling -->
-    <% if(typeof pageStylesheet !== 'undefined') { %>
-    <link rel="stylesheet" href="/styles/<%- pageStylesheet %>">
-    <% } %>
-
-
   </head>
 
   <body class="<%= (typeof bodyClass !== 'undefined')?bodyClass:'' %>">
