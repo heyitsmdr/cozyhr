@@ -1,12 +1,12 @@
 module.exports = {
   socket: function(socket, exceptionName) {
-    var traceStack = new Error(exceptionName).stack;
+    var traceStack = new Error('SocketException: ' + exceptionName);
 
     socket.emit('exception', {
-      stack: traceStack,
+      stack: traceStack.stack,
       timestamp: Date.now()
     });
 
-    sails.log.error('SocketException', traceStack);
+    return traceStack;
   }
 };

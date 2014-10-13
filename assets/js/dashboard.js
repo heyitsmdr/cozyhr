@@ -127,8 +127,7 @@ _dashboard.prototype.doWriteComment = function(evt, elem) {
 			$(this).val('');
 			// Check if unsuccesful
 			if(!res.success) {
-				alert('Error writing comment. See console for details.');
-				handleValidationError(res.error);
+				console.log(res.error);
 			}
 		}.bind(elem));
 	}
