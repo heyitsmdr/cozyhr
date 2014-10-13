@@ -9,8 +9,8 @@
 module.exports = {
 
   attributes: {
-  	companyId: 'string',
-  	userId: 'string',
+  	company: { model: 'Company' },
+  	user: { model: 'User' },
   	content: 'string'
   }
 

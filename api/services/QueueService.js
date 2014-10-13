@@ -21,6 +21,7 @@ module.exports = {
 
   sendEmail: function(opt) {
     // Send off to RabbitMQ so a worker (aux server) can handle this
+    MetricService.increment('rabbitmq.requests');
     exchange.publish('send_email', opt);
   }
 

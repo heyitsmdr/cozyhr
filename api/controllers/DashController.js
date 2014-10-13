@@ -19,7 +19,7 @@ module.exports = {
 
 		feedItems = [];
 
-		CompanyFeed.find({companyId: req.session.userinfo.company.id}).limit(10).sort('createdAt DESC').exec(function(err, feeds){
+		CompanyFeed.find({company: req.session.userinfo.company.id}).limit(10).sort('createdAt DESC').exec(function(err, feeds){
 			// Iterate through the feeds at this company
 			async.each(feeds, function(feed, callback){
 				// Let's gather the comments (if any)
@@ -33,7 +33,7 @@ module.exports = {
 							cb();
 						});
 					}, function(err) {
-						PopUser.one(feed.userId, function(e, author){
+						PopUser.one(feed.user, function(e, author){
 							feedItems.push({
 								authorName: author.fullName(),
 								content: '<strong>' + author.fullName() + '</strong> ' + feed.content,

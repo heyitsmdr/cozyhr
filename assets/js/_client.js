@@ -26,6 +26,10 @@ $(document).ready(function(){
   $(document).bind('contextmenu', function(e) {
     e.preventDefault();
   });
+  // Set up socket exceptions
+  io.socket.on('exception', function(exceptionData) {
+  	CozyHR.exception(exceptionData.stack);
+  });
 });
 
 // Underscore mixins
@@ -121,6 +125,13 @@ CozyHR.loadPageTemplates = function() {
 		this.templates[elem.id] = _html;
 		console.log('Loaded Mustache Template: ' + elem.id);
 	}.bind(this));
+};
+
+// Show an exception
+CozyHR.exception = function(stackTrace) {
+	$('body').append("<div id='exceptionOverlay'><div class='head'>Socket Exception</div><div class='stack'></div><a href='#' onclick='document.location.reload()'><div class='refresh input-btn-gray'>Reload Page</div></a></div>");
+
+	$('#exceptionOverlay .stack').html(stackTrace);
 };
 
 function generatePictureDiv(opt, extraClassOptions) {

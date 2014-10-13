@@ -16,10 +16,10 @@ _dashboard.prototype.init = function() {
 		setInterval(this.updateTimestamps, 60000);
 
 		// Get news feed items
-		io.socket.post('/main/getFeed', { start: 0 });
+		io.socket.post('/dash/getFeed', { start: 0 });
 
 		// Get employees working now
-		io.socket.post('/main/getWorkingNow');
+		io.socket.post('/dash/getWorkingNow');
 	}.bind(this));
 
 	return this;
@@ -117,7 +117,7 @@ _dashboard.prototype.doWriteComment = function(evt, elem) {
 		$(elem).prop('disabled', true);
 		$(elem).addClass('disabled');
 		// Send away
-		io.socket.post('/main/writeComment', {
+		io.socket.post('/dash/writeComment', {
 			feedid: $(elem).data('feedid'),
 			comment: $(elem).val()
 		}, function(res) {
@@ -141,7 +141,7 @@ _dashboard.prototype.doDeleteComment = function(elem) {
 		commentId = $(elem).parent().parent().attr('id').split('-')[1] || null;
 
 		if(commentId) {
-			io.socket.post('/main/removeComment', {
+			io.socket.post('/dash/removeComment', {
 				commentId: commentId
 			});
 		}
