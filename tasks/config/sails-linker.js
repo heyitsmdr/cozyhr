@@ -47,7 +47,7 @@ module.exports = function(grunt) {
 			options: {
 				startTag: '<!--SCRIPTS-->',
 				endTag: '<!--SCRIPTS END-->',
-				fileTmpl: '<script src="%s?t=' + Date.now() + '"></script>',
+				fileTmpl: '<script src="http://static.cozyhr.com%s?t=' + Date.now() + '"></script>',
 				appRoot: '.tmp/public'
 			},
 			files: {
@@ -107,7 +107,7 @@ module.exports = function(grunt) {
 			options: {
 				startTag: '<!--STYLES-->',
 				endTag: '<!--STYLES END-->',
-				fileTmpl: '<link rel="stylesheet" href="%s?t=' + Date.now() + '">',
+				fileTmpl: '<link rel="stylesheet" href="http://static.cozyhr.com%s?t=' + Date.now() + '">',
 				appRoot: '.tmp/public'
 			},
 			files: {
