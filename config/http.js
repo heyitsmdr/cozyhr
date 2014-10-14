@@ -33,6 +33,7 @@ module.exports.http = {
     order: [
       'startRequestTimer',
       'responseTimeLogger',
+      'viewGlobals',
       'cookieParser',
       'session',
       'myRequestLogger',
@@ -57,6 +58,12 @@ module.exports.http = {
       next();
     },
 
+    viewGlobals: function(req, res, next) {
+      res.locals({
+        STATIC_CDN: ((process.env.NODE_ENV=='production')?'http://static.cozyhr.com':'')
+      });
+      next();
+    },
   /****************************************************************************
   *                                                                           *
   * Example custom middleware; logs each request to the console.              *

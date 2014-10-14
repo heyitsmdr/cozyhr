@@ -76,8 +76,4 @@ module.exports.views = {
   * layout: 'layouts/internal'                                                *
   *                                                                           *
   ****************************************************************************/
-
-  global: {
-    STATIC: ((process.env.NODE_ENV=='production')?'http://static.cozyhr.com/':'/')
-  }
 };
