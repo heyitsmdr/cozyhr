@@ -128,8 +128,10 @@ CozyHR.loadPageTemplates = function() {
 };
 
 // Show an exception
-CozyHR.exception = function(stackTrace) {
-	$('body').append("<div id='exceptionOverlay'><div class='head'>Socket Exception</div><div class='stack'></div><a href='#' onclick='document.location.reload()'><div class='refresh input-btn-gray'>Reload Page</div></a></div>");
+CozyHR.exception = function(stackTrace, title) {
+	if(typeof title === 'undefined') { title = "Socket Exception"; }
+
+	$('body').append("<div id='exceptionOverlay'><div class='head'>" + title + "</div><div class='stack'></div><a href='#' onclick='document.location.reload()'><div class='refresh input-btn-gray'>Reload Page</div></a></div>");
 
 	$('#exceptionOverlay .stack').html(stackTrace);
 };

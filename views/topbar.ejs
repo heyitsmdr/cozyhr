@@ -3,12 +3,12 @@
 		<div class="row flush">
 			<div class="11u">
 				<div class="menulogo"><a href="/"><%= req.session.userinfo.company.name %></a></div>
-			  <div class="menuitem"><a class="<% if(selectedPage=="dash"){ %>selected<% } %>" href="/dash">Dashboard</a></div>
+			  <div class="menuitem"><a class="<% if(typeof selectedPage !== 'undefined' && selectedPage=="dash"){ %>selected<% } %>" href="/dash">Dashboard</a></div>
 			  <div class="menuitem"><a class="" href="#">You</a></div>
 			  <div class="menuitem"><a class="" href="#">Calendar</a></div>
-			  <div class="menuitem"><a class="<% if(selectedPage=="timeclock"){ %>selected<% } %>" href="/timeclock">Timeclock</a></div>
+			  <div class="menuitem"><a class="<% if(typeof selectedPage !== 'undefined' && selectedPage=="timeclock"){ %>selected<% } %>" href="/timeclock">Timeclock</a></div>
 			  <% if(req.session.userinfo.role.companyAdmin == true) { %>
-			  	<div class="menuitem"><a class="<% if(selectedPage=="admin"){ %>selected<% } %> admin" href="/admin/general">Admin</a></div>
+			  	<div class="menuitem"><a class="<% if(typeof selectedPage !== 'undefined' && selectedPage=="admin"){ %>selected<% } %> admin" href="/admin/general">Admin</a></div>
 			  <% } %>
 			</div>
 			<div class="1u">
