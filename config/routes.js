@@ -50,14 +50,7 @@ module.exports.routes = {
   '/admin': {
     controller: 'AdminController',
     action: 'index'
-  },
-
-  '/js': {
-    cors: {
-      origin: 'http://*.cozyhr.com',
-      methods: 'GET'
-    }
-  },
+  }
 
   /***************************************************************************
   *                                                                          *
