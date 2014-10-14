@@ -16,10 +16,10 @@ _dashboard.prototype.init = function() {
 		setInterval(this.updateTimestamps, 60000);
 
 		// Get news feed items
-		io.socket.post('/dash/getFeed', { start: 0 });
+		io.socket.get('/dash/getFeed', { start: 0 });
 
 		// Get employees working now
-		io.socket.post('/dash/getWorkingNow');
+		io.socket.get('/dash/getWorkingNow');
 	}.bind(this));
 
 	return this;
