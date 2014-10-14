@@ -52,6 +52,13 @@ module.exports.routes = {
     action: 'index'
   },
 
+  '/js': {
+    cors: {
+      origin: 'http://*.cozyhr.com',
+      methods: 'GET'
+    }
+  },
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

@@ -28,13 +28,6 @@
 
 module.exports.cors = {
 
-  '/js': {
-    cors: {
-      origin: 'http://*.cozyhr.com',
-      methods: 'GET'
-    }
-  },
-
   /***************************************************************************
   *                                                                          *
   * Allow CORS on all routes by default? If not, you must enable CORS on a   *
