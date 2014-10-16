@@ -28,24 +28,24 @@ module.exports.policies = {
 
   // '*': true,
 
-  '*': true,
+  '*': 'isSocketTraffic',
 
   'DashController': {
-    '*': 'isAuthenticatedRedirect'
+    '*': ['isSocketTraffic', 'isAuthenticatedRedirect']
   },
 
   'TimeclockController': {
-    '*': 'isAuthenticatedRedirect'
+    '*': ['isSocketTraffic', 'isAuthenticatedRedirect']
   },
 
   'AdminController': {
-    '*': ['isAuthenticatedRedirect', 'isCompanyAdmin']
+    '*': ['isSocketTraffic', 'isAuthenticatedRedirect', 'isCompanyAdmin']
   },
 
   'APIController': {
-    '*': ['isAuthenticatedAPI'],
-    'role': ['isAuthenticatedAPI', 'isCompanyAdmin'],
-    'roles': ['isAuthenticatedAPI', 'isCompanyAdmin']
+    '*': ['isSocketTraffic', 'isAuthenticatedAPI'],
+    'role': ['isSocketTraffic', 'isAuthenticatedAPI', 'isCompanyAdmin'],
+    'roles': ['isSocketTraffic', 'isAuthenticatedAPI', 'isCompanyAdmin']
   }
 
   /***************************************************************************

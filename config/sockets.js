@@ -27,6 +27,12 @@ module.exports.sockets = {
       socket.join('uid-' + session.userinfo.id);
     }
 
+    socket._emit = socket.emit;
+
+    socket.emit = function(a, b) {
+      MetricService.increment('socket.outbound');
+      this._emit(a, b);
+    };
   },
 
 
