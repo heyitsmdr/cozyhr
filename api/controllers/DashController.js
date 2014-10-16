@@ -15,50 +15,46 @@ module.exports = {
 
 	/* Request Type: Socket.GET */
 	getFeed: function(req, res) {
-		try {
-			ExceptionService.require(req, { socket: true, GET: true });
+		ExceptionService.require(req, { socket: true, GET: true });
 
-			feedItems = [];
+		feedItems = [];
 
-			CompanyFeed.find({company: req.session.userinfo.company.id}).limit(10).sort('createdAt DESC').exec(function(err, feeds){
-				// Iterate through the feeds at this company
-				async.each(feeds, function(feed, callback){
-					// Let's gather the comments (if any)
-					CompanyFeedComments.find({ feedId: feed.id }).limit(15).exec(function(err, feedComments){
-						// Iterate through the feedComments to get the authorName
-						async.each(feedComments, function(comment, cb) {
-							PopUser.one(comment.userId, function(e, commentAuthor) {
-								comment.authorName = commentAuthor.fullName();
-								comment.picture = commentAuthor.genPicture(true);
+		CompanyFeed.find({company: req.session.userinfo.company.id}).limit(10).sort('createdAt DESC').exec(function(err, feeds){
+			// Iterate through the feeds at this company
+			async.each(feeds, function(feed, callback){
+				// Let's gather the comments (if any)
+				CompanyFeedComments.find({ feedId: feed.id }).limit(15).exec(function(err, feedComments){
+					// Iterate through the feedComments to get the authorName
+					async.each(feedComments, function(comment, cb) {
+						PopUser.one(comment.userId, function(e, commentAuthor) {
+							comment.authorName = commentAuthor.fullName();
+							comment.picture = commentAuthor.genPicture(true);
 
-								cb();
+							cb();
+						});
+					}, function(err) {
+						PopUser.one(feed.user, function(e, author){
+							feedItems.push({
+								authorName: author.fullName(),
+								content: '<strong>' + author.fullName() + '</strong> ' + feed.content,
+								date: feed.createdAt,
+								feedid: feed.id,
+								comments: feedComments,
+								picture: author.genPicture(false),
+								mePicture: req.session.userinfo.picture
 							});
-						}, function(err) {
-							PopUser.one(feed.user, function(e, author){
-								feedItems.push({
-									authorName: author.fullName(),
-									content: '<strong>' + author.fullName() + '</strong> ' + feed.content,
-									date: feed.createdAt,
-									feedid: feed.id,
-									comments: feedComments,
-									picture: author.genPicture(false),
-									mePicture: req.session.userinfo.picture
-								});
 
-								callback();
-							});
+							callback();
 						});
 					});
-				}, function(err){
-					req.socket.emit('feedUpdate', feedItems);
 				});
+			}, function(err){
+				req.socket.emit('feedUpdate', feedItems);
 			});
+		});
 
-			// Subscribe to comments for this company
-			req.socket.join('dash-cid-' + req.session.userinfo.company.id);
-		} catch(ex) {
-			ExceptionService.socket(req, res, ex);
-		}
+		// Subscribe to comments for this company
+		req.socket.join('dash-cid-' + req.session.userinfo.company.id);
 	},
 
 	/* Request Type: Socket.GET */

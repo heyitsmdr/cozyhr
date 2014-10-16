@@ -20,23 +20,16 @@ module.exports = {
     }
   },
 
-  socket: function(req, res, exceptionName) {
-    var traceStack = new Error('SocketException [' + exceptionName + ']');
-
-    sails.log.warn(traceStack);
-
+  socket: function(req, res, data) {
     MetricService.increment('socket.exceptions');
 
-    // Make sure this is really a socket
-    if(req.isSocket) {
-      req.socket.emit('exception', {
-        stack: traceStack.stack,
-        timestamp: Date.now()
-      });
-    } else {
-      res.serverError(traceStack);
-    }
+    req.socket.emit('exception', {
+      stack: data,
+      timestamp: Date.now()
+    });
+  },
 
-    return traceStack;
+  http: function(req, res, data) {
+    MetricService.increment('http.exceptions');
   }
 };
