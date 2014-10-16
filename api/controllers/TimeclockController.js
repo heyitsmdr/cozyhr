@@ -4,7 +4,8 @@ module.exports = {
     Office.find({ company: req.session.userinfo.company.id }, function(e, offices) {
       res.view({
         selectedPage: 'timeclock',
-        offices: offices
+        offices: offices,
+        mustacheTemplates: ['clockPositionsFillin']
       });
     })
 	},

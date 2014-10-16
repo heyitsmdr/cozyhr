@@ -1,8 +1,13 @@
-<!-- Used in /views/timeclock/index.ejs -->
-<script id="clockPositionsFillin" type="x-tmpl-mustache">
-  <div class="row flush">
-    {{#positions}}
-    <div class="6u position"><a href="#"><div>{{name}}</div></a></div>
-    {{/positions}}
-  </div>
-</script>
+<% if(typeof mustacheTemplates !== 'undefined') { %>
+
+<% if(mustacheTemplates.indexOf('clockPositionsFillin') > -1) { %>
+  <script id="clockPositionsFillin" type="x-tmpl-mustache">
+    <div class="row flush">
+      {{#positions}}
+      <div class="6u position"><a href="#"><div>{{name}}</div></a></div>
+      {{/positions}}
+    </div>
+  </script>
+<% } %>
+
+<% } %>
