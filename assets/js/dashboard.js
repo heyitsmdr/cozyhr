@@ -98,9 +98,9 @@ _dashboard.prototype.onFeedUpdate = function(res) {
 		);
 	});
 
-	$('#subSectionCompanyFeedEntries').fadeOut(200, function(){
+	$('#subSectionCompanyFeedEntries').fadeOut(100, function(){
 		$('#subSectionCompanyFeedEntries').html( html.join('\n') );
-		$('#subSectionCompanyFeedEntries').fadeIn(200);
+		$('#subSectionCompanyFeedEntries').fadeIn(100);
 
 		this.updateTimestamps();
 	}.bind(this));

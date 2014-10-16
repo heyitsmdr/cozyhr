@@ -5,7 +5,7 @@ module.exports = {
       res.view({
         selectedPage: 'timeclock',
         offices: offices,
-        mustacheTemplates: ['clockPositionsFillin']
+        mustacheTemplates: ['clockPositionsFillin', 'noClockedTime']
       });
     })
 	},
@@ -44,6 +44,12 @@ module.exports = {
     } else {
       return res.json({'error':'Invalid request type. Expected GET.'});
     }
-  }
+  },
 
+  /* Request Type: Socket.GET */
+  getClocks: function(req, res) {
+    ExceptionService.require(req, { socket: true, GET: true });
+
+    req.socket.emit('clockUpdate', { clocks: [] });
+  }
 };

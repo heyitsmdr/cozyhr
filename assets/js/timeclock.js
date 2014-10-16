@@ -4,6 +4,12 @@ _timeclock.prototype.templates = [];
 
 _timeclock.prototype.init = function() {
 	$(document).ready(function(){
+		// Load Mustache Template
+		CozyHR.loadPageTemplates();
+
+		// Bind listeners
+		io.socket.on('clockUpdate', this.onClockUpdate.bind(this));
+
 		$('#selOffice').chosen({
 			placeholder_text_single: 'Choose an Office'
 		});
@@ -25,7 +31,12 @@ _timeclock.prototype.init = function() {
 		$('#selOffice').val( localStorage['lastOffice'] || $('#selOffice option:first').val() ).trigger('chosen:updated');
 		getPositionsAtOffice(localStorage['lastOffice'] || $('#selOffice option:first').val());
 
-		// Load Mustache Template
-		CozyHR.loadPageTemplates();
+		io.socket.get('/timeclock/getClocks');
 	}.bind(this));
+};
+
+_timeclock.prototype.onClockUpdate = function(data) {
+	if(data.clocks.length == 0) {
+		$('#clockNoticeContainer').html(Mustache.render(CozyHR.templates['noClockedTime']));
+	}
 };

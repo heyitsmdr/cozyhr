@@ -59,44 +59,51 @@ module.exports = {
 
 	/* Request Type: Socket.GET */
 	getWorkingNow: function(req, res) {
-		try {
-			ExceptionService.require(req, { socket: true, GET: true });
+		ExceptionService.require(req, { socket: true, GET: true });
 
-			workingNow = [];
+		workingNow = [];
 
-			PopUser.one(req.session.userinfo.id, function(e, usr) {
-				workingNow.push({
-					picture: usr.genPicture(false)
-				});
-
-				workingNow.push({
-					picture: usr.genPicture(false)
-				});
-
-				req.socket.emit('workersUpdate', workingNow);
+		PopUser.one(req.session.userinfo.id, function(e, usr) {
+			workingNow.push({
+				picture: usr.genPicture(false)
 			});
-		} catch(ex) {
-			ExceptionService.socket(req, res, ex);
-		}
+
+			workingNow.push({
+				picture: usr.genPicture(false)
+			});
+
+			req.socket.emit('workersUpdate', workingNow);
+		});
 	},
 
 	/* Request Type: Socket.POST */
 	writeComment: function(req, res) {
-		try {
-			ExceptionService.require(req, { socket: true, POST: true });
+		ExceptionService.require(req, { socket: true, POST: true });
 
-			PopUser.one(req.session.userinfo.id, function(e, usr) {
+		PopUser.one(req.session.userinfo.id, function(e, usr) {
 
-				CompanyFeedComments.create({
-					feedId: req.param('feedid'),
-					userId: req.session.userinfo.id,
-					content: req.param('comment')
-				}).exec(function(err, newComment){
-					if(err) {
-						res.json({ success: false, error: err });
-					} else {
-						// Send to you
-						req.socket
+			CompanyFeedComments.create({
+				feedId: req.param('feedid'),
+				userId: req.session.userinfo.id,
+				content: req.param('comment')
+			}).exec(function(err, newComment){
+				if(err) {
+					res.json({ success: false, error: err });
+				} else {
+					// Send to you
+					req.socket
+						.emit('newFeedComment', {
+							feedId: req.param('feedid'),
+							commentId: newComment.id,
+							content: newComment.content,
+							timestamp: newComment.createdAt,
+							authorName: req.session.userinfo.fullName,
+							authorId: newComment.userId,
+							picture: usr.genPicture(true)
+					});
+					// Send to everyone listening within this company
+					req.socket
+						.broadcast.to('dash-cid-' + req.session.userinfo.company.id)
 							.emit('newFeedComment', {
 								feedId: req.param('feedid'),
 								commentId: newComment.id,
@@ -105,57 +112,38 @@ module.exports = {
 								authorName: req.session.userinfo.fullName,
 								authorId: newComment.userId,
 								picture: usr.genPicture(true)
-						});
-						// Send to everyone listening within this company
-						req.socket
-							.broadcast.to('dash-cid-' + req.session.userinfo.company.id)
-								.emit('newFeedComment', {
-									feedId: req.param('feedid'),
-									commentId: newComment.id,
-									content: newComment.content,
-									timestamp: newComment.createdAt,
-									authorName: req.session.userinfo.fullName,
-									authorId: newComment.userId,
-									picture: usr.genPicture(true)
-						});
-						res.json({ success: true });
-					}
-				});
-
+					});
+					res.json({ success: true });
+				}
 			});
-		} catch(ex) {
-			ExceptionService.socket(req, res, ex);
-		}
+
+		});
 	},
 
 	/* Request Type: Socket.POST */
 	removeComment: function(req, res) {
-		try {
-			ExceptionService.require(req, { socket: true, POST: true });
+		ExceptionService.require(req, { socket: true, POST: true });
 
-			CompanyFeedComments.findOne(req.param('commentId')).exec(function(err, comment) {
-				if(!err && comment) {
-					// Check if we're allowed to delete this
-					if(comment.userId == req.session.userinfo.id) {
-						// Ok, let's delete.
-						CompanyFeedComments.destroy({ id: comment.id }, function(err) {
-							// Send to you
-							req.socket.emit('destroyFeedComment', { commentId: req.param('commentId') });
-							// Send to everyone listening within this company
-							req.socket.broadcast.to('dash-cid-' + req.session.userinfo.company.id).emit('destroyFeedComment', { commentId: req.param('commentId') });
-						});
-					} else {
-						res.json({ success: false, reason: 'user mismatch' });
-					}
-				} else if(!err && !comment) {
-					res.json({ success: false, reason: 'comment not found' });
+		CompanyFeedComments.findOne(req.param('commentId')).exec(function(err, comment) {
+			if(!err && comment) {
+				// Check if we're allowed to delete this
+				if(comment.userId == req.session.userinfo.id) {
+					// Ok, let's delete.
+					CompanyFeedComments.destroy({ id: comment.id }, function(err) {
+						// Send to you
+						req.socket.emit('destroyFeedComment', { commentId: req.param('commentId') });
+						// Send to everyone listening within this company
+						req.socket.broadcast.to('dash-cid-' + req.session.userinfo.company.id).emit('destroyFeedComment', { commentId: req.param('commentId') });
+					});
 				} else {
-					res.json({ success: false, reason: 'database error', error: err })
+					res.json({ success: false, reason: 'user mismatch' });
 				}
-			});
-		} catch(ex) {
-			ExceptionService.socket(req, res, ex);
-		}
+			} else if(!err && !comment) {
+				res.json({ success: false, reason: 'comment not found' });
+			} else {
+				res.json({ success: false, reason: 'database error', error: err })
+			}
+		});
 	},
 
 };

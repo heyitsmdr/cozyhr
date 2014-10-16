@@ -35,11 +35,36 @@
   }
 
   .sectionTimeclock {
-    .content {
-      padding: 8px;
+    .light-bg {
+      padding: 20px;
+      background-color: #fcfcfc;
+      border-radius: 5px;
+    }
 
-      rect.now {
-        stroke: #000;
+    #clockNoticeContainer {
+      text-align: center;
+
+      .alt {
+        padding-top: 10px;
+      }
+    }
+
+    #clocksContainer {
+      .day {
+        font-weight: bold;
+      }
+
+      .entry {
+        padding: 10px 0 0 5px;
+
+        .content {
+          padding-top: 3px;
+        }
+
+        .timestamp {
+          font-size: 12px;
+          color: #888;
+        }
       }
     }
   }
