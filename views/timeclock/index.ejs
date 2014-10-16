@@ -49,33 +49,6 @@
 
 </div>
 
-<!-- Mustache Template for Timeclock Popup -->
-<script id="timeclockPopup" type="x-tmpl-mustache">
-	<table id="clockedTable">
-		{{#clocks}}
-		<tr>
-			<th rowspan="2" class="position">
-				<div class="name">{{position}}</div>
-				<div class="location">at <strong>{{location}}</strong></div>
-			</th>
-		  <th class='times'><strong>In:</strong>&nbsp;{{time_in}}</th>
-		</tr>
-		<tr>
-			<td class='times'><strong>Out:</strong>&nbsp;{{time_out}}</td>
-		</tr>
-		{{/clocks}}
-	</table>
-</script>
-
-<!-- Mustache Template for Available Positions at Office -->
-<script id="clockPositionsFillin" type="x-tmpl-mustache">
-	<div class="row flush">
-		{{#positions}}
-		<div class="6u position"><a href="#"><div>{{name}}</div></a></div>
-		{{/positions}}
-	</div>
-</script>
-
 <!-- Initialize Script -->
 <script>
 	CozyHR.pageHelper.init( CozyHR.pageHelpers.timeclock );
