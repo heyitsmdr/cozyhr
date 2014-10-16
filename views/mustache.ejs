@@ -4,7 +4,7 @@
   <script id="clockPositionsFillin" type="x-tmpl-mustache">
     <div class="row flush">
       {{#positions}}
-      <div class="6u position"><a href="#"><div>{{name}}</div></a></div>
+      <div class="6u position"><a href="#" onclick="CozyHR.pageHelper.instance.clockIn('{{id}}')"><div>{{name}}</div></a></div>
       {{/positions}}
     </div>
   </script>

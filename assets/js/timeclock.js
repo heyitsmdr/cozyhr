@@ -33,6 +33,12 @@ _timeclock.prototype.init = function() {
 
 		io.socket.get('/timeclock/getClocks');
 	}.bind(this));
+
+	return this;
+};
+
+_timeclock.prototype.clockIn = function(positionId) {
+	console.log(positionId);
 };
 
 _timeclock.prototype.onClockUpdate = function(data) {
