@@ -30,8 +30,6 @@ module.exports = {
 			async.each(feeds, function(feed, callback){
 				// Let's gather the comments (if any)
 				CompanyFeedComments.find({ feed: feed.id }).exec(function(err, feedComments){
-					ExceptionService.checkMongoError(err);
-
 					// Iterate through the feedComments to get the authorName
 					async.each(feedComments, function(comment, cb) {
 						PopUser.one(comment.user, function(e, commentAuthor) {
@@ -45,8 +43,6 @@ module.exports = {
 							throw new Error('Could not properly get feed comments.');
 
 						PopUser.one(feed.user, function(e, author){
-							ExceptionService.checkMongoError(e);
-
 							feedItems.push({
 								authorName: author.fullName(),
 								content: '<strong>' + author.fullName() + '</strong> ' + feed.content,
@@ -145,7 +141,7 @@ module.exports = {
 		CompanyFeedComments.findOne(req.param('commentId')).exec(function(err, comment) {
 			ExceptionService.checkMongoError(err);
 
-			if(!err && comment) {
+			if(comment) {
 				var feedId = comment.feed;
 				// Check if we're allowed to delete this
 				if(comment.user == req.session.userinfo.id) {
@@ -161,10 +157,8 @@ module.exports = {
 				} else {
 					throw new Error('Tried to delete a comment with no ownership.');
 				}
-			} else if(!err && !comment) {
-				throw new Error('Comment not found.');
 			} else {
-				throw new Error('Database error.');
+				throw new Error('Comment not found.');
 			}
 		});
 	},
