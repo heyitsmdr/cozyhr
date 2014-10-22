@@ -9,8 +9,8 @@
 module.exports = {
 
 	attributes: {
-		feedId: 'string',
-		userId: 'string',
+		feed: { model: 'CompanyFeed' },
+		user: { model: 'User' },
 		content: {
       type: 'string',
       minLength: 2,

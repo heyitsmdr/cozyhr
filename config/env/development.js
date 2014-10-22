@@ -19,6 +19,9 @@ module.exports = {
 
   models: {
     connection: 'herokuMongoServer'
-  }
+  },
 
+  consoleFiltering: {
+    metrics: true
+  }
 };

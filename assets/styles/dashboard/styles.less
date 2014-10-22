@@ -100,12 +100,38 @@
     }
   }
 
+  .sectionCompanyFeed {
+    h2 {
+      margin-bottom: 10px;
+    }
+  }
+
   .feeditem {
     margin-bottom: 20px;
+    padding-top: 10px;
 
     .date {
       font-size: 12px;
     }
+
+    .comments {
+      .manyComments {
+        margin: 8px 0px 8px 50px;
+        font-size: 12px;
+        background-color: #eee;
+        padding: 5px;
+
+        a {
+          color: #444;
+          text-decoration: none;
+
+          &:hover {
+            color: #111;
+          }
+        }
+      }
+    }
+
 
     .comment {
       margin-top: 5px;
@@ -134,7 +160,8 @@
     }
 
     .specificComment {
-      margin: 10px 0px 15px 50px;
+      margin: 8px 0px 8px 50px;
+      display: none;
 
       .commentText {
       font-size: 12px;

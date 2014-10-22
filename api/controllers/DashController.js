@@ -4,7 +4,8 @@ module.exports = {
 		User.findOne(req.session.userinfo.id).exec(function(e, usr) {
 			res.view('main/dash', {
 				selectedPage: 'dash',
-				picture: usr.generatePicture(false, req)
+				picture: usr.generatePicture(false, req),
+				mustacheTemplates: ['feedItem', 'feedItemComment']
 			});
 		});
 	},
@@ -19,20 +20,23 @@ module.exports = {
 
 		feedItems = [];
 
-		CompanyFeed.find({company: req.session.userinfo.company.id}).limit(10).sort('createdAt DESC').exec(function(err, feeds){
+		CompanyFeed.find({company: req.session.userinfo.company.id}).limit(10).skip(req.param('start')).sort('createdAt DESC').exec(function(err, feeds){
 			// Iterate through the feeds at this company
 			async.each(feeds, function(feed, callback){
 				// Let's gather the comments (if any)
-				CompanyFeedComments.find({ feedId: feed.id }).limit(15).exec(function(err, feedComments){
+				CompanyFeedComments.find({ feed: feed.id }).exec(function(err, feedComments){
 					// Iterate through the feedComments to get the authorName
 					async.each(feedComments, function(comment, cb) {
-						PopUser.one(comment.userId, function(e, commentAuthor) {
+						PopUser.one(comment.user, function(e, commentAuthor) {
 							comment.authorName = commentAuthor.fullName();
 							comment.picture = commentAuthor.genPicture(true);
 
 							cb();
 						});
 					}, function(err) {
+						if(err)
+							throw new Error('Could not properly get feed comments.');
+
 						PopUser.one(feed.user, function(e, author){
 							feedItems.push({
 								authorName: author.fullName(),
@@ -49,6 +53,9 @@ module.exports = {
 					});
 				});
 			}, function(err){
+				if(err)
+					throw new Error('Could not properly get feed.');
+
 				req.socket.emit('feedUpdate', feedItems);
 			});
 		});
@@ -83,8 +90,8 @@ module.exports = {
 		PopUser.one(req.session.userinfo.id, function(e, usr) {
 
 			CompanyFeedComments.create({
-				feedId: req.param('feedid'),
-				userId: req.session.userinfo.id,
+				feed: req.param('feedid'),
+				user: req.session.userinfo.id,
 				content: req.param('comment')
 			}).exec(function(err, newComment){
 				if(err) {
@@ -98,7 +105,7 @@ module.exports = {
 							content: newComment.content,
 							timestamp: newComment.createdAt,
 							authorName: req.session.userinfo.fullName,
-							authorId: newComment.userId,
+							authorId: newComment.user,
 							picture: usr.genPicture(true)
 					});
 					// Send to everyone listening within this company
@@ -110,7 +117,7 @@ module.exports = {
 								content: newComment.content,
 								timestamp: newComment.createdAt,
 								authorName: req.session.userinfo.fullName,
-								authorId: newComment.userId,
+								authorId: newComment.user,
 								picture: usr.genPicture(true)
 					});
 					res.json({ success: true });
@@ -126,22 +133,23 @@ module.exports = {
 
 		CompanyFeedComments.findOne(req.param('commentId')).exec(function(err, comment) {
 			if(!err && comment) {
+				var feedId = comment.feed;
 				// Check if we're allowed to delete this
-				if(comment.userId == req.session.userinfo.id) {
+				if(comment.user == req.session.userinfo.id) {
 					// Ok, let's delete.
 					CompanyFeedComments.destroy({ id: comment.id }, function(err) {
 						// Send to you
-						req.socket.emit('destroyFeedComment', { commentId: req.param('commentId') });
+						req.socket.emit('destroyFeedComment', { feedId: feedId, commentId: req.param('commentId') });
 						// Send to everyone listening within this company
-						req.socket.broadcast.to('dash-cid-' + req.session.userinfo.company.id).emit('destroyFeedComment', { commentId: req.param('commentId') });
+						req.socket.broadcast.to('dash-cid-' + req.session.userinfo.company.id).emit('destroyFeedComment', { feedId: feedId, commentId: req.param('commentId') });
 					});
 				} else {
-					res.json({ success: false, reason: 'user mismatch' });
+					throw new Error('Tried to delete a comment with no ownership.');
 				}
 			} else if(!err && !comment) {
-				res.json({ success: false, reason: 'comment not found' });
+				throw new Error('Comment not found.');
 			} else {
-				res.json({ success: false, reason: 'database error', error: err })
+				throw new Error('Database error.');
 			}
 		});
 	},

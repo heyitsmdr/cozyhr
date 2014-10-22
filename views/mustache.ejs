@@ -19,4 +19,38 @@
   </script>
 <% } %>
 
+<% if(mustacheTemplates.indexOf('feedItem') > -1) { %>
+  <script id="feedItem" type="x-tmpl-mustache">
+    {{#feedData}}
+    <div id="fid-{{feedId}}" class="feeditem">
+      {{{pictureHtml}}}
+      <div class="action">{{{contentHtml}}}</div>
+      <div class="date">{{date}}</div>
+      <div class="comments">
+        {{#showMoreComments}}
+        <div class="manyComments"><a href="#" onclick="CozyHR.pageHelper.instance.loadMoreComments('{{feedId}}')">Show more of the previous <strong><span class="commentsHidden">{{commentsHidden}}</span></strong> comments.</a></div>
+        {{/showMoreComments}}
+        {{{commentsHtml}}}
+      </div>
+      <div class="comment"><div class="picture small" style="background-image:url({{pictureUrl}})"></div><input class="writeComment" type="text" data-feedid="{{feedId}}" placeholder="Write a comment.."></div>
+    </div>
+    {{/feedData}}
+  </script>
+<% } %>
+
+<% if(mustacheTemplates.indexOf('feedItemComment') > -1) { %>
+  <script id="feedItemComment" type="x-tmpl-mustache">
+    <div id="cid-{{commentId}}" data-timestamp="{{timestamp}}" style="{{{extraStyling}}}" class="specificComment">
+      {{{pictureHtml}}}
+      <div class="commentText">{{{contentHtml}}}</div>
+      <span class="commentTime">now</span>
+      <span class="commentLinks">
+        {{#isAuthor}}
+        - <a href="#" onclick="CozyHR.pageHelper.instance.doDeleteComment(this, '{{commentId}}')">Delete</a>
+        {{/isAuthor}}
+      </span>
+    </div>
+  </script>
+<% } %>
+
 <% } %>

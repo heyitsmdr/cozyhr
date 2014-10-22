@@ -36,7 +36,8 @@ function graphiteReporter() {
     QUEUE.forEach(function(queueMetric) {
       var _reportedMetric = util.format("%s.%s %s\n", (process.env.NODE_ENV || 'development') + '.' + (process.env.DYNO || 'web.0'), queueMetric.metric + ' ' + queueMetric.value, Math.floor(Date.now() / 1000));
 
-      sails.log.info("[metrics]", _reportedMetric.replace("\n", ""));
+      if(sails.config.consoleFiltering.metrics)
+        sails.log.info("[metrics]", _reportedMetric.replace("\n", ""));
 
       socket.write(_reportedMetric);
 

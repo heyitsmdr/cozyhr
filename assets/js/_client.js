@@ -30,6 +30,8 @@ $(document).ready(function(){
   io.socket.on('exception', function(exceptionData) {
   	CozyHR.exception(exceptionData.stack);
   });
+  // Load any necessary Mustache templates (passed in by the controller)
+  CozyHR.loadPageTemplates();
 });
 
 // Underscore mixins
@@ -136,11 +138,19 @@ CozyHR.exception = function(stackTrace, title) {
 	$('#exceptionOverlay .stack').html(stackTrace);
 };
 
+CozyHR.playSound = function(sound) {
+	createjs.Sound.play(sound);
+};
+
+CozyHR.registerSound = function(opt) {
+	createjs.Sound.registerSound(opt);
+};
+
 function generatePictureDiv(opt, extraClassOptions) {
 	var lines = [];
 	lines.push("<span class=\"name\">" + opt.name + "</span>");
 	lines.push("<span class=\"position\">" + opt.position + "</span>");
-	return "<div title='<div class=\"tooltip\">" + lines.join('<br>') + "</div>' class='person picture " + ((opt.small)?'small':'') + " " + extraClassOptions + "' style='background-image:url(" + opt.picture + ")'></div>";
+	return "<a href='/admin/employee/" + opt.id + "'><div title='<div class=\"tooltip\">" + lines.join('<br>') + "</div>' class='person picture " + ((opt.small)?'small':'') + " " + ((extraClassOptions)?extraClassOptions:'') + "' style='background-image:url(" + opt.picture + ")'></div></a>";
 };
 
 function fancyDate(a, b, fancyReturn) {

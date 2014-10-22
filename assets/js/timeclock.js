@@ -4,9 +4,6 @@ _timeclock.prototype.templates = [];
 
 _timeclock.prototype.init = function() {
 	$(document).ready(function(){
-		// Load Mustache Template
-		CozyHR.loadPageTemplates();
-
 		// Bind listeners
 		io.socket.on('clockUpdate', this.onClockUpdate.bind(this));
 

@@ -4,6 +4,7 @@ function UserPopulated(search, callback) {
       // Set up special functions
       user.genPicture = function(smallPicture) {
         return {
+          id: this.id,
           name: this.fullName(),
           picture: this.picture,
           small: smallPicture,
