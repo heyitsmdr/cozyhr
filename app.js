@@ -21,8 +21,12 @@
 // Ensure a "sails" can be located:
 (function() {
   var sails;
+  var newrelic;
   try {
     sails = require('sails');
+    if(process.env.NODE_ENV == 'production') {
+      newrelic = require('newrelic');
+    }
   } catch (e) {
     console.error('To run an app using `node app.js`, you usually need to have a version of `sails` installed in the same directory as your app.');
     console.error('To do that, run `npm install sails`');
