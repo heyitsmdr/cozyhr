@@ -8,7 +8,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name : ['CozyHR'],
+  app_name : ['cozyhr-prod-' + process.env.DYNO, 'cozyhr-prod'],
   /**
    * Your New Relic license key.
    */
