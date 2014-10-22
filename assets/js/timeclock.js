@@ -10,6 +10,7 @@ _timeclock.prototype.init = function() {
 		$('#selOffice').chosen({
 			placeholder_text_single: 'Choose an Office'
 		});
+
 		var getPositionsAtOffice = function(officeId) {
 			io.socket.get('/timeclock/getClockablePositions', {
 				officeId: officeId

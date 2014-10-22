@@ -43,9 +43,19 @@
 	<div class="6u">
 		<!-- Company Feed -->
 		<div class="section sectionCompanyFeed">
-			<div><h2>Company Feed</h2></div>
+			<div class="header">
+				<div class="headerTitle"><h2>Company Feed</h2></div>
+				<div class="headerFilter">
+					<select data-placeholder="Choose a feed filter.." id="feedFilter">
+						<option value="all">All Offices</option>
+						<% for(var i = 0; i < offices.length; i++) { %>
+							<option value="<%= offices[i].id %>"><%= offices[i].name %></option>
+						<% } %>
+					</select>
+				</div>
+			</div>
 			<div id="subSectionCompanyFeedEntries">
-				Loading news feed, one moment..
+				<div class="loading">Loading news feed, one moment..</div>
 			</div>
 		</div>
 	</div>

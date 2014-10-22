@@ -21,11 +21,24 @@ _dashboard.prototype.init = function() {
 		// Set up timers
 		setInterval(this.updateTimestamps, 60000);
 
-		// Get news feed items
-		io.socket.get('/dash/getFeed', { start: 0 });
-
 		// Pre-load sounds
 		CozyHR.registerSound({ src: '/sounds/bling1.mp3', id: 'comment'});
+
+		// Chosen-ify
+		$('#feedFilter').chosen({
+			placeholder_text_single: 'Select a filter'
+		});
+
+		$('#feedFilter').on('change', function(evt, params) {
+			localStorage['lastDashFeedFilter'] = params.selected;
+
+			$('#subSectionCompanyFeedEntries').html("<div class='loading'>Loading news feed, one moment..</div>");
+
+			io.socket.get('/dash/getFeed', { start: 0, filter: params.selected });
+		});
+
+		// Get news feed items
+		io.socket.get('/dash/getFeed', { start: 0, filter: (localStorage['lastDashFeedFilter'] || 'all') });
 
 		// Get employees working now
 		io.socket.get('/dash/getWorkingNow');
@@ -116,7 +129,7 @@ _dashboard.prototype.onNewFeedComment = function(res) {
 		})
 	);
 
-	$('#cid-' + res.commentId).fadeIn(400, function() {
+	$('#cid-' + res.commentId).fadeIn(200, function() {
 		$('input[data-feedid="' + res.feedId + '"]').focus();
 	});
 

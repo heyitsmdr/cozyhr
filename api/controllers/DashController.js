@@ -2,10 +2,13 @@ module.exports = {
 
 	home: function(req, res) {
 		User.findOne(req.session.userinfo.id).exec(function(e, usr) {
-			res.view('main/dash', {
-				selectedPage: 'dash',
-				picture: usr.generatePicture(false, req),
-				mustacheTemplates: ['feedItem', 'feedItemComment']
+			Office.find({company: usr.company}).exec(function(e, offices) {
+				res.view('main/dash', {
+					selectedPage: 'dash',
+					picture: usr.generatePicture(false, req),
+					offices: offices,
+					mustacheTemplates: ['feedItem', 'feedItemComment']
+				});
 			});
 		});
 	},
