@@ -146,6 +146,15 @@ CozyHR.registerSound = function(opt) {
 	createjs.Sound.registerSound(opt);
 };
 
+CozyHR.sortAssocArray = function(arr, sortBy, opt) {
+	return arr.sort(function(first, second) {
+		if(opt.sortType && opt.sortType == 'date')
+			return (new Date(second[sortBy]).getTime()) - (new Date(first[sortBy]).getTime());
+		else
+			return second[sortBy] - first[sortBy];
+	});
+};
+
 function generatePictureDiv(opt, extraClassOptions) {
 	var lines = [];
 	lines.push("<span class=\"name\">" + opt.name + "</span>");

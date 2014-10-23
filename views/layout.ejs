@@ -93,10 +93,10 @@
 
     <%- partial('mustache') %>
 
-    <script>
-      <% if(req.session.authenticated) { %>
+    <% if(req.session.authenticated) { %>
+      <script>
         CozyHR.userId = "<%- req.session.userinfo.id %>";
-      <% } %>
-    </script>
+      </script>
+    <% } %>
     </body>
 </html>

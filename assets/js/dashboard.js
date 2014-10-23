@@ -33,6 +33,7 @@ _dashboard.prototype.init = function() {
 			localStorage['lastDashFeedFilter'] = params.selected;
 
 			$('#subSectionCompanyFeedEntries').html("<div class='loading'>Loading news feed, one moment..</div>");
+			$('#ajax-loading').show();
 
 			io.socket.get('/dash/getFeed', { start: 0, filter: params.selected });
 		});
@@ -61,8 +62,11 @@ _dashboard.prototype.updateTimestamps = function() {
 _dashboard.prototype.onFeedUpdate = function(res) {
 	var feedData = [];
 
+	// Sort by date
+	var sortedResponse = CozyHR.sortAssocArray(res, 'date', { sortType: 'date' });
+
 	// Generate the data to pass to mustache for rendering
-	res.forEach(function(feedItem) {
+	sortedResponse.forEach(function(feedItem) {
 		feedData.push({
 			contentHtml: feedItem.content,
 			feedId: feedItem.feedid,
@@ -99,7 +103,7 @@ _dashboard.prototype.onFeedUpdate = function(res) {
 		$('#subSectionCompanyFeedEntries').html(html);
 
 		// Show the latest five comments for each feed item
-		res.forEach(function(feedItem) {
+		sortedResponse.forEach(function(feedItem) {
 			$('#fid-' + feedItem.feedid + ' .specificComment').each(function(i, elem) {
 				if(i >= (feedItem.comments.length - 5)) {
 					$(elem).show();
@@ -108,6 +112,8 @@ _dashboard.prototype.onFeedUpdate = function(res) {
 		});
 
 		$('#subSectionCompanyFeedEntries').fadeIn(100);
+
+		$('#ajax-loading').hide();
 
 		this.updateTimestamps();
 	}.bind(this));

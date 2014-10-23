@@ -104,6 +104,12 @@
     .header{
       padding-bottom: 40px;
 
+      #ajax-loading {
+        padding-top: 2px;
+        height: 18px;
+        width: 18px;
+      }
+
       .headerTitle {
         margin-right: 150px;
         float: left;
@@ -145,7 +151,7 @@
       .manyComments {
         margin: 8px 0px 8px 50px;
         font-size: 12px;
-        background-color: #eee;
+        background-color: #f7f7f7;
         padding: 5px;
 
         a {
@@ -163,6 +169,10 @@
     .comment {
       margin-top: 5px;
       margin-left: 50px;
+
+      &:hover {
+        opacity: 1;
+      }
 
       input {
         border: 1px solid #ddd;
