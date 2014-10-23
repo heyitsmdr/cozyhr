@@ -117,21 +117,29 @@ module.exports = {
     });
   },
 
+  /* Note: You don't need admin privs to see /admin/employee! Keep this in mind. */
   employee: function(req, res) {
+    ExceptionService.require(req, { socket: false, GET: true });
+
     var userId = req.param('id');
 
     if(!userId) {
-      return res.serverError(new Error('AdminEmployeeNotSpecifiedException'));
+      throw new Error('No employee id specified.');
     }
 
     PopUser.one(userId, function(e, employee) {
-      if(e || !employee) {
-        return res.serverError(new Error('AdminEmployeeNotFoundException'));
+      if(!employee) {
+        throw new Error('Employee not found.');
       }
 
       // same company?
       if(employee.company.id != req.session.userinfo.company.id) {
-        return res.serverError(new Error('AdminEmployeeCompanyMismatchException'));
+        throw new Error('Employee is not from this company.');
+      }
+
+      // is this you? if not, need admin
+      if(employee.id !== req.session.userinfo.id && !req.session.userinfo.role.companyAdmin) {
+        return res.forbidden('You are not permitted to perform this action.');
       }
 
       // okay
@@ -144,7 +152,7 @@ module.exports = {
           { name: employee.fullName() }
         ],
       });
-    });
+    }, res);
   },
 
   roles: function(req, res) {

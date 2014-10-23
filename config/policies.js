@@ -39,7 +39,8 @@ module.exports.policies = {
   },
 
   'AdminController': {
-    '*': ['isSocketTraffic', 'isAuthenticatedRedirect', 'isCompanyAdmin']
+    '*': ['isSocketTraffic', 'isAuthenticatedRedirect', 'isCompanyAdmin'],
+    'employee': ['isSocketTraffic', 'isAuthenticatedRedirect']
   },
 
   'APIController': {

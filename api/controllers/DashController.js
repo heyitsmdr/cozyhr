@@ -76,8 +76,6 @@ module.exports = {
 		workingNow = [];
 
 		PopUser.one(req.session.userinfo.id, function(e, usr) {
-			ExceptionService.checkMongoError(e);
-
 			workingNow.push({
 				picture: usr.genPicture(false)
 			});
@@ -95,8 +93,6 @@ module.exports = {
 		ExceptionService.require(req, { socket: true, POST: true });
 
 		PopUser.one(req.session.userinfo.id, function(e, usr) {
-			ExceptionService.checkMongoError(e);
-
 			CompanyFeedComments.create({
 				feed: req.param('feedid'),
 				user: req.session.userinfo.id,
