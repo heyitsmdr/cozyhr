@@ -23,19 +23,40 @@ module.exports = {
   socket: function(req, res, data) {
     MetricService.increment('socket.exceptions');
 
-    req.socket.emit('exception', {
-      stack: data,
-      timestamp: Date.now()
-    });
+    if(!data.fatal) {
+      req.socket.emit('exception', {
+        stack: data.stack,
+        timestamp: Date.now()
+      });
+    } else {
+      res.json({ success: false, error: data.message });
+    }
   },
 
   http: function(req, res, data) {
     MetricService.increment('http.exceptions');
+  },
+
+  error: function(errorMessage, opt) {
+    var _error = new Error(errorMessage);
+
+    _error.fatal = ((opt.fatal)?true:false);
+
+    return _error;
+  },
+
+  wrap: function(res, func) {
+    return function() {
+      var arrayList = [];
+      Object.keys(arguments).forEach(function(key) {
+        arrayList.push(arguments[key]);
+      });
+
+      try {
+        func.apply(this, arrayList);
+      } catch(ex) {
+        return res.serverError(ex);
+      }
+    }.bind(this)
   }
-
-  incompleteSocketRequest: function(res, msg) {
-    MetricService.increment('socket.incompletes');
-
-    return res.json({ success: false, error: msg });
-  };
 };

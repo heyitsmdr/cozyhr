@@ -155,7 +155,10 @@ module.exports = {
     }, res);
   },
 
-  /* Request Type: Socket.POST */
+  /**
+   * @via     Socket
+   * @method  POST
+   */
   saveEmployee: function(req, res) {
     ExceptionService.require(req, { socket: true, POST: true });
 

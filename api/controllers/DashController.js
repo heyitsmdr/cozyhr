@@ -17,13 +17,17 @@ module.exports = {
 		res.send( req.session );
 	},
 
-	/* Request Type: Socket.GET */
+  /**
+   * @via     Socket
+   * @method  GET
+   */
 	getFeed: function(req, res) {
 		ExceptionService.require(req, { socket: true, GET: true });
 
 		feedItems = [];
 
-		CompanyFeed.find({company: req.session.userinfo.company.id}).limit(10).skip(req.param('start')).sort({ createdAt: 'desc' }).exec(function(err, feeds){
+		CompanyFeed.find({company: req.session.userinfo.company.id}).limit(10).skip(req.param('start')).sort({ createdAt: 'desc' }).exec(ExceptionService.wrap(res, function(err, feeds){
+			throw ExceptionService.error('Uh ohhhh');
 			// Iterate through the feeds at this company
 			async.each(feeds, function(feed, callback){
 				// Let's gather the comments (if any)
@@ -61,7 +65,7 @@ module.exports = {
 
 				req.socket.emit('feedUpdate', feedItems);
 			});
-		});
+		}));
 
 		// Subscribe to comments for this company
 		req.socket.join('dash-cid-' + req.session.userinfo.company.id);

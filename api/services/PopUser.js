@@ -1,7 +1,5 @@
 function UserPopulated(search, callback, res) {
   User.findOne(search).populate('company').populate('role').exec(function(e, user) {
-    ExceptionService.checkMongoError(e);
-
     if(user) {
       // Set up special functions
       user.genPicture = function(smallPicture) {
@@ -34,8 +32,6 @@ function UsersPopulated(search, opt, callback, res) {
   }
 
   _U.populate('company').populate('role').exec(function(e, users) {
-    ExceptionService.checkMongoError(e);
-
     users.forEach(function(user) {
       // Set up special functions
       user.genPicture = function(smallPicture) {
