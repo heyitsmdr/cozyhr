@@ -172,7 +172,7 @@ _admin.prototype.initPositions = function() {
   }.bind(this));
 };
 
-_admin.prototype.initEmployee = function() {
+_admin.prototype.initRole = function() {
   $(document).ready(function() {
     // Bind delete role
     $('#btnDeleteRole').on('click', _.debounce(function() {
@@ -183,6 +183,25 @@ _admin.prototype.initEmployee = function() {
           document.location = "/admin/roles";
         } else {
           CozyHR.notify(res.error, {color: 'red', sound: true});
+        }
+      });
+    }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
+  }.bind(this));
+};
+
+_admin.prototype.initEmployee = function() {
+  $(document).ready(function() {
+    // Bind save settings
+    $('#btnSaveSettings').on('click', _.debounce(function() {
+      io.socket.post('/admin/saveEmployee', {
+        userId: CozyHR.editingUserId,
+        fullName: $('#txtFullName').val(),
+        picture: $('#txtPicture').val()
+      }, function(res) {
+        if(res.success) {
+          CozyHR.notify('Your settings have been saved.', {color: 'green', sound: true});
+        } else {
+          CozyHR.notify('Failed due to: ' + res.error, {color: 'red', sound: true});
         }
       });
     }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));

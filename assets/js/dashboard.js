@@ -187,7 +187,7 @@ _dashboard.prototype.doWriteComment = _.debounce(function(elem) {
 			console.log(res.error);
 		}
 	}.bind(elem));
-}, 1000, true);
+}, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true);
 
 _dashboard.prototype.doDeleteComment = function(elem, commentId) {
 	var commentId;

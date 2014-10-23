@@ -20,12 +20,6 @@ module.exports = {
     }
   },
 
-  checkMongoError: function(mongoError) {
-    if(mongoError) {
-      throw new Error('Mongo Error: ' + mongoError);
-    }
-  },
-
   socket: function(req, res, data) {
     MetricService.increment('socket.exceptions');
 
@@ -38,4 +32,10 @@ module.exports = {
   http: function(req, res, data) {
     MetricService.increment('http.exceptions');
   }
+
+  incompleteSocketRequest: function(res, msg) {
+    MetricService.increment('socket.incompletes');
+
+    return res.json({ success: false, error: msg });
+  };
 };

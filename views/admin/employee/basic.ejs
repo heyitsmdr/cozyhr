@@ -4,6 +4,38 @@
   </div>
 
   <div class="content">
-  Oh!
+    <div id="employeeContainer">
+
+      <!-- Full Name -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Full Name</div>
+          <div class="subtitle">This is your full, legal name.</div>
+        </div>
+        <div class="setting"><input type="text" id="txtFullName" value="<%- employee.fullName() %>"></div>
+      </div>
+
+      <!-- Picture -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Picture</div>
+          <div class="subtitle">This should be a picture of yourself.</div>
+        </div>
+        <div class="setting"><input type="text" id="txtPicture" value="<%- employee.picture %>"></div>
+      </div>
+
+      <!-- Save -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title green">Save</div>
+          <div class="subtitle green">Be sure to save when you're done!</div>
+        </div>
+        <div class="setting"><input type="button" id="btnSaveSettings" value="Save Settings"></div>
+      </div>
+    </div>
   </div>
 </div>
+
+<script>
+  CozyHR.pageHelper.queue( 'CozyHR.pageHelper.instance.initEmployee()' );
+</script>

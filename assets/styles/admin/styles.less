@@ -27,41 +27,94 @@
       a { color:#000; text-decoration: none; }
       a:hover { text-decoration: underline; }
     }
-  }
 
-  .section .content {
-    .left-align {
-      text-align: left;
-    }
-
-    .center-align {
-      text-align: center;
-    }
-
-    #companyEmployees {
-      .name {
-
-      }
-
-      .email {
-        color: #999;
-        font-size: 12px;
-      }
-
-      .position {
+    .section .content {
+      .left-align {
         text-align: left;
       }
 
-      .office {
+      .center-align {
         text-align: center;
       }
-    }
 
-    a {
-      color: #000;
-      text-decoration: none;
+      #companyEmployees {
+        .name {
 
-      &:hover { text-decoration: underline; }
+        }
+
+        .email {
+          color: #999;
+          font-size: 12px;
+        }
+
+        .position {
+          text-align: left;
+        }
+
+        .office {
+          text-align: center;
+        }
+      }
+
+      #employeeContainer {
+        .settingWrapper {
+          overflow: auto;
+
+          &.save {
+            background-color: #0f0;
+          }
+
+          &:not(:last-child) {
+            padding-bottom: 5px;
+          }
+
+          &:not(:first-child) {
+            border-top: 1px solid #eee;
+            padding-top: 5px;
+          }
+
+          .info {
+            float: left;
+            width: 60%;
+            padding: 5px;
+
+
+            .title {
+              font-weight: bold;
+
+              &.green { color: #060; }
+            }
+
+            .subtitle {
+              font-size: 12px;
+              color: #666;
+
+              &.green { color: #83a683; }
+            }
+          }
+
+          .setting {
+            float: right;
+            width: 40%;
+
+            input[type=text] {
+              margin-top: 8px;
+              width: 98%;
+            }
+
+            input[type=button] {
+              margin-top: 10px;
+            }
+          }
+        }
+      }
+
+      a {
+        color: #000;
+        text-decoration: none;
+
+        &:hover { text-decoration: underline; }
+      }
     }
   }
 }

@@ -155,6 +155,39 @@ module.exports = {
     }, res);
   },
 
+  /* Request Type: Socket.POST */
+  saveEmployee: function(req, res) {
+    ExceptionService.require(req, { socket: true, POST: true });
+
+    var userId = req.param('userId');
+
+    User.findOne(userId).exec(function(e, user) {
+      if(e || !user) {
+        return ExceptionService.incompleteSocketRequest(res, 'User not found.');
+      }
+
+      // is it you? if not, are you admin?
+      if(user.id !== req.session.userinfo.id && !req.session.userinfo.role.companyAdmin) {
+        return ExceptionService.incompleteSocketRequest(res, 'Not permitted.');
+      }
+
+      // alright, let us continue
+      var fullName = req.param('fullName');
+      var picture = req.param('picture');
+
+      User.update({ id: user.id }, {
+        picture: picture
+      }).exec(function(e, updatedUser) {
+        if(e) {
+          return ExceptionService.incompleteSocketRequest(res, 'Could not update record.');
+        }
+
+        req.session.userinfo.picture = updatedUser[0].picture;
+        res.json({ success: true });
+      });
+    });
+  },
+
   roles: function(req, res) {
     res.view('admin/index', {
       selectedPage: 'admin',

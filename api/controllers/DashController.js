@@ -24,8 +24,6 @@ module.exports = {
 		feedItems = [];
 
 		CompanyFeed.find({company: req.session.userinfo.company.id}).limit(10).skip(req.param('start')).sort({ createdAt: 'desc' }).exec(function(err, feeds){
-			ExceptionService.checkMongoError(err);
-
 			// Iterate through the feeds at this company
 			async.each(feeds, function(feed, callback){
 				// Let's gather the comments (if any)
@@ -98,8 +96,6 @@ module.exports = {
 				user: req.session.userinfo.id,
 				content: req.param('comment')
 			}).exec(function(err, newComment){
-				ExceptionService.checkMongoError(err);
-
 				// Send to you
 				req.socket
 					.emit('newFeedComment', {
@@ -135,16 +131,12 @@ module.exports = {
 		ExceptionService.require(req, { socket: true, POST: true });
 
 		CompanyFeedComments.findOne(req.param('commentId')).exec(function(err, comment) {
-			ExceptionService.checkMongoError(err);
-
 			if(comment) {
 				var feedId = comment.feed;
 				// Check if we're allowed to delete this
 				if(comment.user == req.session.userinfo.id) {
 					// Ok, let's delete.
 					CompanyFeedComments.destroy({ id: comment.id }, function(err) {
-						ExceptionService.checkMongoError(err);
-
 						// Send to you
 						req.socket.emit('destroyFeedComment', { feedId: feedId, commentId: req.param('commentId') });
 						// Send to everyone listening within this company
