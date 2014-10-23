@@ -4,7 +4,7 @@
 		<div class="sectionContainer sectionYou">
 			<div class="section">
 				<div class="content">
-					<div class="picture" style="background-image:url('<%- req.session.userinfo.picture %>')"></div>
+					<a href="/admin/employee/<%- req.session.userinfo.id %>"><div class="picture" style="background-image:url('<%- req.session.userinfo.picture %>')"></div></a>
 					<div class="name"><strong><%- req.session.userinfo.fullName %></strong></div>
 					<div class="position"><%- req.session.userinfo.role.jobTitle %></div>
 					<div class="sep"></div>
