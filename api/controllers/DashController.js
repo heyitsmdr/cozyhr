@@ -1,19 +1,37 @@
 module.exports = {
 
+	/**
+	 * @via     HTTP
+	 * @method  GET
+	 */
 	home: function(req, res) {
-		User.findOne(req.session.userinfo.id).exec(function(e, usr) {
-			Office.find({company: usr.company}).exec(function(e, offices) {
+		var es = ExceptionService.require(req, res, { GET: true });
+
+		User.findOne(req.session.userinfo.id).exec(es.wrap(function(e, usr) {
+			if(e)
+				throw ExceptionService.error('Could not find the user.');
+
+			Office.find({company: usr.company}).exec(es.wrap(function(e, offices) {
+				if(e)
+					throw ExceptionService.error('Could not get the offices for the company.')
+
 				res.view('main/dash', {
 					selectedPage: 'dash',
 					picture: usr.generatePicture(false, req),
 					offices: offices,
 					mustacheTemplates: ['feedItem', 'feedItemComment']
 				});
-			});
-		});
+			}));
+		}));
 	},
 
+	/**
+   * @via     HTTP
+   * @method  GET
+   */
 	sessionvars: function(req, res) {
+		ExceptionService.require(req, res, { GET: true });
+
 		res.send( req.session );
 	},
 
@@ -22,29 +40,40 @@ module.exports = {
    * @method  GET
    */
 	getFeed: function(req, res) {
-		ExceptionService.require(req, { socket: true, GET: true });
+		var es = ExceptionService.require(req, res, { socket: true, GET: true });
 
 		feedItems = [];
 
-		CompanyFeed.find({company: req.session.userinfo.company.id}).limit(10).skip(req.param('start')).sort({ createdAt: 'desc' }).exec(ExceptionService.wrap(res, function(err, feeds){
-			throw ExceptionService.error('Uh ohhhh');
+		CompanyFeed.find({company: req.session.userinfo.company.id}).limit(10).skip(req.param('start')).sort({ createdAt: 'desc' }).exec(es.wrap(function(err, feeds){
+			if(err)
+				throw ExceptionService.error('Could not get the company feed.');
+
 			// Iterate through the feeds at this company
-			async.each(feeds, function(feed, callback){
+			async.each(feeds, es.wrap(function(feed, callback){
 				// Let's gather the comments (if any)
-				CompanyFeedComments.find({ feed: feed.id }).exec(function(err, feedComments){
+				CompanyFeedComments.find({ feed: feed.id }).exec(es.wrap(function(err, feedComments){
+					if(err)
+						throw ExceptionService.error('Could not get feed comments.');
+
 					// Iterate through the feedComments to get the authorName
-					async.each(feedComments, function(comment, cb) {
-						PopUser.one(comment.user, function(e, commentAuthor) {
+					async.each(feedComments, es.wrap(function(comment, cb) {
+						PopUser.one(comment.user, es.wrap(function(e, commentAuthor) {
+							if(e)
+								throw ExceptionService.error('Could not find comment author.');
+
 							comment.authorName = commentAuthor.fullName();
 							comment.picture = commentAuthor.genPicture(true);
 
 							cb();
-						});
-					}, function(err) {
+						}));
+					}), es.wrap(function(err) {
 						if(err)
-							throw new Error('Could not properly get feed comments.');
+							throw ExceptionService.error('Could not properly get feed comments.');
 
-						PopUser.one(feed.user, function(e, author){
+						PopUser.one(feed.user, es.wrap(function(e, author){
+							if(e)
+								throw ExceptionService.error('Could not find feed author.');
+
 							feedItems.push({
 								authorName: author.fullName(),
 								content: '<strong>' + author.fullName() + '</strong> ' + feed.content,
@@ -56,28 +85,34 @@ module.exports = {
 							});
 
 							callback();
-						});
-					});
-				});
-			}, function(err){
+						}));
+					}));
+				}));
+			}), es.wrap(function(err){
 				if(err)
-					throw new Error('Could not properly get feed.');
+					throw ExceptionService.error('Could not properly get feed.');
 
 				req.socket.emit('feedUpdate', feedItems);
-			});
+			}));
 		}));
 
 		// Subscribe to comments for this company
 		req.socket.join('dash-cid-' + req.session.userinfo.company.id);
 	},
 
-	/* Request Type: Socket.GET */
+	/**
+   * @via     Socket
+   * @method  GET
+   */
 	getWorkingNow: function(req, res) {
-		ExceptionService.require(req, { socket: true, GET: true });
+		var es = ExceptionService.require(req, res, { socket: true, GET: true });
 
 		workingNow = [];
 
-		PopUser.one(req.session.userinfo.id, function(e, usr) {
+		PopUser.one(req.session.userinfo.id, es.wrap(function(e, usr) {
+			if(e)
+				throw ExceptionService.error('Could not get user.');
+
 			workingNow.push({
 				picture: usr.genPicture(false)
 			});
@@ -87,19 +122,28 @@ module.exports = {
 			});
 
 			req.socket.emit('workersUpdate', workingNow);
-		});
+		}));
 	},
 
-	/* Request Type: Socket.POST */
+	/**
+   * @via     Socket
+   * @method  POST
+   */
 	writeComment: function(req, res) {
-		ExceptionService.require(req, { socket: true, POST: true });
+		var es = ExceptionService.require(req, res, { socket: true, POST: true });
 
-		PopUser.one(req.session.userinfo.id, function(e, usr) {
+		PopUser.one(req.session.userinfo.id, es.wrap(function(e, usr) {
+			if(e)
+				throw ExceptionService.error('Could not find user.');
+
 			CompanyFeedComments.create({
 				feed: req.param('feedid'),
 				user: req.session.userinfo.id,
 				content: req.param('comment')
-			}).exec(function(err, newComment){
+			}).exec(es.wrap(function(err, newComment){
+				if(err)
+					throw ExceptionService.error('Could not create new comment.');
+
 				// Send to you
 				req.socket
 					.emit('newFeedComment', {
@@ -124,35 +168,45 @@ module.exports = {
 							authorId: newComment.user,
 							picture: usr.genPicture(true)
 				});
-				res.json({ success: true });
-			});
 
-		});
+				res.json({ success: true });
+			}));
+
+		}));
 	},
 
-	/* Request Type: Socket.POST */
+	/**
+   * @via     Socket
+   * @method  POST
+   */
 	removeComment: function(req, res) {
-		ExceptionService.require(req, { socket: true, POST: true });
+		var es = ExceptionService.require(req, res, { socket: true, POST: true });
 
-		CompanyFeedComments.findOne(req.param('commentId')).exec(function(err, comment) {
+		CompanyFeedComments.findOne(req.param('commentId')).exec(es.wrap(function(err, comment) {
+			if(err)
+				throw ExceptionService.error('Could not find comment.');
+
 			if(comment) {
 				var feedId = comment.feed;
 				// Check if we're allowed to delete this
 				if(comment.user == req.session.userinfo.id) {
 					// Ok, let's delete.
-					CompanyFeedComments.destroy({ id: comment.id }, function(err) {
+					CompanyFeedComments.destroy({ id: comment.id }, es.wrap(function(err) {
+						if(err)
+							throw ExceptionService.error('Could not delete comment.');
+
 						// Send to you
 						req.socket.emit('destroyFeedComment', { feedId: feedId, commentId: req.param('commentId') });
 						// Send to everyone listening within this company
 						req.socket.broadcast.to('dash-cid-' + req.session.userinfo.company.id).emit('destroyFeedComment', { feedId: feedId, commentId: req.param('commentId') });
-					});
+					}));
 				} else {
-					throw new Error('Tried to delete a comment with no ownership.');
+					throw ExceptionService.error('Tried to delete a comment with no ownership.');
 				}
 			} else {
-				throw new Error('Comment not found.');
+				throw ExceptionService.error('Comment not found.');
 			}
-		});
+		}));
 	},
 
 };

@@ -1,23 +1,47 @@
+var ExceptionServiceObject = function(req, res) {
+  this.req = req;
+  this.res = res;
+};
+
+ExceptionServiceObject.prototype.wrap = function(func) {
+  return function() {
+    var arrayList = [];
+    var funcArguments = arguments;
+    Object.keys(arguments).forEach(function(key) {
+      arrayList.push(funcArguments[key]);
+    });
+
+    try {
+      func.apply(this, arrayList);
+    } catch(ex) {
+      return this.res.serverError(ex);
+    }
+  }.bind(this);
+};
+
 module.exports = {
-  require: function(request, checks) {
+  require: function(req, res, checks) {
     // Socket
     if(checks.socket === true) {
-      if(!request.isSocket) {
-        throw new Error('Expected Socket, got ' + request.isSocket);
+      if(!req.isSocket) {
+        throw new Error('Expected Socket, got ' + req.isSocket);
       }
     }
     // POST
     if(checks.POST === true) {
-      if(request.method !== 'POST') {
-        throw new Error('Expected POST, got ' + request.method);
+      if(req.method !== 'POST') {
+        throw new Error('Expected POST, got ' + req.method);
       }
     }
     // GET
     if(checks.GET === true) {
-      if(request.method !== 'GET') {
-        throw new Error('Expected GET, got ' + request.method);
+      if(req.method !== 'GET') {
+        throw new Error('Expected GET, got ' + req.method);
       }
     }
+
+    // Return some utils
+    return new ExceptionServiceObject(req, res);
   },
 
   socket: function(req, res, data) {
@@ -40,23 +64,9 @@ module.exports = {
   error: function(errorMessage, opt) {
     var _error = new Error(errorMessage);
 
-    _error.fatal = ((opt.fatal)?true:false);
+    _error.fatal = ((opt && opt.fatal)?true:false);
 
     return _error;
   },
 
-  wrap: function(res, func) {
-    return function() {
-      var arrayList = [];
-      Object.keys(arguments).forEach(function(key) {
-        arrayList.push(arguments[key]);
-      });
-
-      try {
-        func.apply(this, arrayList);
-      } catch(ex) {
-        return res.serverError(ex);
-      }
-    }.bind(this)
-  }
 };

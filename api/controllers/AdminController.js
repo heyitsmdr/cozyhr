@@ -1,13 +1,11 @@
 module.exports = {
-
-  index: function(req, res) {
-    res.view({
-      selectedPage: 'admin',
-      breadcrumbs: [ { name: 'General' } ]
-    });
-  },
-
+  /**
+   * @via     HTTP
+   * @method  GET
+   */
   general: function(req, res) {
+    ExceptionService.require(req, res, { GET: true });
+
     res.view('admin/index', {
       selectedPage: 'admin',
       selectedSection: 'general',
@@ -15,6 +13,10 @@ module.exports = {
     });
   },
 
+  /**
+   * @via     HTTP
+   * @method  GET
+   */
   employees: function(req, res) {
     PopUser.many({company: req.session.userinfo.company.id}, {sort: 'lastName ASC'}, function (e, employees) {
       Role.find({ companyId: req.session.userinfo.company.id }).exec(function(e, roles) {

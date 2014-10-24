@@ -1,6 +1,6 @@
 function UserPopulated(search, callback, res) {
   User.findOne(search).populate('company').populate('role').exec(function(e, user) {
-    if(user) {
+    if(!e && user) {
       // Set up special functions
       user.genPicture = function(smallPicture) {
         return {
@@ -13,13 +13,7 @@ function UserPopulated(search, callback, res) {
       };
     }
 
-    try {
-      callback( e, user );
-    } catch(ex) {
-      if(typeof res !== 'undefined') {
-        res.serverError(ex);
-      }
-    }
+    callback( e, user );
   });
 };
 
@@ -32,25 +26,21 @@ function UsersPopulated(search, opt, callback, res) {
   }
 
   _U.populate('company').populate('role').exec(function(e, users) {
-    users.forEach(function(user) {
-      // Set up special functions
-      user.genPicture = function(smallPicture) {
-        return {
-          name: this.fullName(),
-          picture: this.picture,
-          small: smallPicture,
-          position: this.models.permission.jobTitle
+    if(!e && users) {
+      users.forEach(function(user) {
+        // Set up special functions
+        user.genPicture = function(smallPicture) {
+          return {
+            name: this.fullName(),
+            picture: this.picture,
+            small: smallPicture,
+            position: this.models.permission.jobTitle
+          };
         };
-      };
-    });
-
-    try {
-      callback( e, users );
-    } catch(ex) {
-      if(typeof res !== 'undefined') {
-        res.serverError(ex);
-      }
+      });
     }
+
+    callback( e, users );
   });
 };
 
