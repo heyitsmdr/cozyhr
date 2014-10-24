@@ -52,7 +52,7 @@ _admin.prototype.initEmployees = function() {
       $('#selNewEmployeeRole').chosen({width:'200px'});
     }
 
-    $('#btnInviteEmployee').on('click', function() {
+    $('#btnInviteEmployee').on('click', _.debounce(function() {
       if($('#txtNewEmployeeEmail').val().length > 0) {
         io.socket.post('/admin/createInvite', {
           email: $('#txtNewEmployeeEmail').val(),
@@ -61,10 +61,10 @@ _admin.prototype.initEmployees = function() {
           if(res.success)
             document.location = "/admin/employees";
           else
-            alert(res.error);
+            CozyHR.notify(res.error, {color: 'red', sound: true});
         });
       }
-    });
+    }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
   }.bind(this));
 };
 
