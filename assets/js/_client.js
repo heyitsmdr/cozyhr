@@ -131,7 +131,7 @@ CozyHR.loadPageTemplates = function() {
 
 // Show an exception
 CozyHR.exception = function(stackTrace, title) {
-	if(typeof title === 'undefined') { title = "Socket Exception"; }
+	if(typeof title === 'undefined') { title = "Something Went Wrong"; }
 
 	$('body').append("<div id='exceptionOverlay'><div class='head'>" + title + "</div><div class='stack'></div><a href='#' onclick='document.location.reload()'><div class='refresh input-btn-gray'>Reload Page</div></a></div>");
 

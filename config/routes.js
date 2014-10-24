@@ -49,7 +49,7 @@ module.exports.routes = {
 
   '/admin': {
     controller: 'AdminController',
-    action: 'index'
+    action: 'general'
   }
 
   /***************************************************************************

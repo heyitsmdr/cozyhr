@@ -49,7 +49,7 @@ module.exports = {
 
     if(!data.fatal) {
       req.socket.emit('exception', {
-        stack: data.stack,
+        stack: ((process.env.NODE_ENV!=='production') ? data.stack : 'It looks like something didn\'t go to plan. That\'s a shame.\n\nIf this is happening multiple times, please contact us with the following error code:\n\nGENERATED_CODE_HERE'),
         timestamp: Date.now()
       });
     } else {
@@ -57,7 +57,7 @@ module.exports = {
     }
   },
 
-  http: function(req, res, data) {
+  http: function(req, res, data, generatedCode) {
     MetricService.increment('http.exceptions');
   },
 
