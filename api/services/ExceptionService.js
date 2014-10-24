@@ -47,7 +47,7 @@ module.exports = {
   socket: function(req, res, data) {
     MetricService.increment('socket.exceptions');
 
-    if(!data.fatal) {
+    if(typeof data.fatal === 'undefined' || data.fatal === true) {
       req.socket.emit('exception', {
         stack: ((process.env.NODE_ENV!=='production') ? data.stack : 'It looks like something didn\'t go to plan. That\'s a shame.\n\nIf this is happening multiple times, please contact us with the following error code:\n\nGENERATED_CODE_HERE'),
         timestamp: Date.now()
@@ -64,7 +64,7 @@ module.exports = {
   error: function(errorMessage, opt) {
     var _error = new Error(errorMessage);
 
-    _error.fatal = ((opt && opt.fatal)?true:false);
+    _error.fatal = ((opt && typeof opt.fatal !== 'undefined')?opt.fatal:true);
 
     return _error;
   },

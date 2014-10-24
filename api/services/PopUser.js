@@ -1,4 +1,4 @@
-function UserPopulated(search, callback, res) {
+function UserPopulated(search, callback) {
   User.findOne(search).populate('company').populate('role').exec(function(e, user) {
     if(!e && user) {
       // Set up special functions
@@ -17,7 +17,7 @@ function UserPopulated(search, callback, res) {
   });
 };
 
-function UsersPopulated(search, opt, callback, res) {
+function UsersPopulated(search, opt, callback) {
   var _U = User.find();
   _U.where(search);
 

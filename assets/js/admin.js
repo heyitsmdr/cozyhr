@@ -30,7 +30,7 @@ _admin.prototype.initRoles = function() {
             $('#companyRoles').DataTable().ajax.reload();
             CozyHR.notify('Your new role has been created.', {color: 'green', sound: true});
           } else {
-            alert(res.error);
+            CozyHR.notify(res.error, {color: 'red', sound: true});
           }
         });
       }
@@ -54,7 +54,7 @@ _admin.prototype.initEmployees = function() {
 
     $('#btnInviteEmployee').on('click', function() {
       if($('#txtNewEmployeeEmail').val().length > 0) {
-        io.socket.post('/admin/do_invite', {
+        io.socket.post('/admin/createInvite', {
           email: $('#txtNewEmployeeEmail').val(),
           role: $('#selNewEmployeeRole').val()
         }, function(res) {

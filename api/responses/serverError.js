@@ -45,7 +45,9 @@ module.exports = function serverError (data, options) {
   // is not set to 'production'.  In production, we shouldn't
   // send back any identifying information about errors.
   if (sails.config.environment === 'production') {
-    data = undefined;
+    data = ((data.message)?data.message.replace(/"/g, "'"):undefined);
+  } else {
+    data = data.stack;
   }
 
   // If the user-agent wants JSON, always respond with JSON
@@ -66,7 +68,7 @@ module.exports = function serverError (data, options) {
 
   // If no second argument provided, try to serve the default view,
   // but fall back to sending JSON(P) if any errors occur.
-  else return res.view('500', { data: data }, function (err, html) {
+  else return res.view('500', { data: data, env: process.env.NODE_ENV }, function (err, html) {
 
     // If a view error occured, fall back to JSON(P).
     if (err) {
