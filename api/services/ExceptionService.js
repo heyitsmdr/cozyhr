@@ -45,14 +45,14 @@ module.exports = {
   },
 
   socket: function(req, res, data) {
-    MetricService.increment('socket.exceptions');
-
     if(typeof data.fatal === 'undefined' || data.fatal === true) {
+      MetricService.increment('socket.exceptions');
       req.socket.emit('exception', {
         stack: ((process.env.NODE_ENV!=='production') ? data.stack : 'It looks like something didn\'t go to plan. That\'s a shame.\n\nIf this is happening multiple times, please contact us with the following error code:\n\nGENERATED_CODE_HERE'),
         timestamp: Date.now()
       });
     } else {
+      // NOTE: Non-fatal socket exceptions are not sent to metrics, since these are usually UI-based error messages.
       res.json({ success: false, error: data.message });
     }
   },

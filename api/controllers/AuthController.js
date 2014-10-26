@@ -2,7 +2,13 @@ var bcrypt = require('bcrypt');
 
 module.exports = {
 
+  /**
+   * @via     HTTP
+   * @method  GET
+   */
   signin: function(req, res) {
+    var es = ExceptionService.require(req, res, { GET: true });
+
     // check if already signed in
     if(req.session.authenticated) {
       return res.redirect('/dash');
@@ -14,23 +20,24 @@ module.exports = {
       fromHost = fromHost.replace('.dev', '');
     }
 
-    Company.findOne({ host: fromHost }).exec(function(e, company) {
+    Company.findOne({ host: fromHost }).exec(es.wrap(function(e, company) {
       if(e || !company) {
         res.view({ htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin failed" });
       } else {
         res.view({ companyInfo: company, htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin" });
       }
-    });
+    }));
   },
 
-  do_signin: function(req, res) {
-    if(req.method != 'POST') {
-      return res.json({ error: 'Invalid method.' });
-    }
+  /**
+   * @via     HTTP
+   * @method  POST
+   */
+  attemptLogin: function(req, res) {
+    var es = ExceptionService.require(req, res, { POST: true });
 
     if(!req.param('email') || !req.param('password')) {
-      res.json({error: 'bad'});
-      return;
+      throw ExceptionService.error('Invalid parameters.', { fatal: false });
     }
 
     var action = req.param('btnLogin') || req.param('btnRegister');
@@ -69,18 +76,18 @@ module.exports = {
         });
         break;
       default:
-        PopUser.one({ email: req.param('email') }, function(e, user) {
+        PopUser.one({ email: req.param('email') }, es.wrap(function(e, user) {
           if(e || !user) {
             MetricService.increment('signin.failed');
             return res.json({error: 'The email address has not been found.'});
           } else {
-            bcrypt.compare(req.param('password'), user.password, function (err, match) {
+            bcrypt.compare(req.param('password'), user.password, es.wrap(function (err, match) {
               if(!match) {
                 MetricService.increment('signin.failed');
                 return res.json({error: 'The password for this account is not correct.<br><br><a href="/auth/recover">Did you forget your password?</a>'});
               } else {
                 // check host
-                if(user.company.host != req.host.toLowerCase() && req.host.toLowerCase().indexOf('.dev') == -1) {
+                if(user.company.host != req.host.toLowerCase().replace('.dev', '')) {
                   MetricService.increment('signin.failed');
                   return res.json({error: 'The email address does not belong to this company.'});
                 }
@@ -92,18 +99,30 @@ module.exports = {
                 req.session.globalAdmin = user.admin || false;
                 res.json({success: true});
               }
-            });
+            }));
           }
-        });
+        }));
         break;
     }
   },
 
+  /**
+   * @via     HTTP
+   * @method  GET
+   */
   register: function(req, res) {
+    ExceptionService.require(req, res, { GET: true });
+
     res.view();
   },
 
+  /**
+   * @via     HTTP
+   * @method  GET
+   */
   orgRegistration: function(req, res) {
+    var es = ExceptionService.require(req, res, { GET: true });
+
     // check if already signed in
     if(req.session.authenticated) {
       return res.redirect('/dash');
@@ -121,7 +140,7 @@ module.exports = {
       return res.send('No invite key specified.');
     }
 
-    Invite.findOne(inviteKey).populate('invitedTo').exec(function(e, invite) {
+    Invite.findOne(inviteKey).populate('invitedTo').exec(es.wrap(function(e, invite) {
       if(e || !invite) {
         return res.send('Invalid invite key.');
       }
@@ -131,13 +150,15 @@ module.exports = {
       }
 
       res.view({ companyInfo: invite.invitedTo, email: invite.inviteEmail, inviteKey: invite.id, htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin" });
-    });
+    }));
   },
 
+  /**
+   * @via     HTTP
+   * @method  POST
+   */
   do_org_register: function(req, res) {
-    if(req.method != 'POST') {
-      return res.json({ error: 'Invalid method.' });
-    }
+    var es = ExceptionService.require(req, res, { POST: true });
 
     var inviteKey = req.param('key');
     var firstName = req.param('fn');
@@ -148,7 +169,7 @@ module.exports = {
       return res.json({ error: 'No invite key specified.' });
     }
 
-    Invite.findOne(inviteKey).populate('invitedTo').exec(function(e, invite) {
+    Invite.findOne(inviteKey).populate('invitedTo').exec(es.wrap(function(e, invite) {
       if(e || !invite) {
         return res.json({ error: 'Invalid invite key.' });
       }
@@ -161,33 +182,28 @@ module.exports = {
         company: invite.invitedTo.id,
         role: invite.invitedRole,
         picture: ""
-      }).exec(function(e, newUser) {
+      }).exec(es.wrap(function(e, newUser) {
         if(e || !newUser) {
           return res.json({ error: 'Failed to create a new user.' });
         }
 
-        Invite.destroy({ id: invite.id }, function(err) {
+        Invite.destroy({ id: invite.id }, es.wrap(function(err) {
           res.json({ success: true });
-        });
-      });
-    });
+        }));
+      }));
+    }));
   },
 
+  /**
+   * @via     HTTP
+   * @method  GET
+   */
   signout: function(req, res) {
+    ExceptionService.require(req, res, { GET: true });
+
     req.session.authenticated = false;
     req.session.userinfo = undefined;
     res.redirect('/auth/signin');
-  },
-
-  dev_create_users: function(req, res) {
-  	User.create({
-  		firstName: 'Mike',
-  		lastName: 'Du Russel',
-  		email: 'ethryx@me.com',
-  		password: 'bunny'
-  	}).exec(function(err, user) {
-  		res.send('user created');
-  	});
   },
 
   /**

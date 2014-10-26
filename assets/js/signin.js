@@ -2,14 +2,15 @@ var _signin = CozyHR.pageHelpers.signin = function() { };
 
 _signin.prototype.init = function() {
   this.attemptLogin = _.debounce(function() {
-    $.post('/auth/do_signin', { email: $('#email').val(), password: $('#password').val() }, function(d) {
+    // NOTE: We're using jQuery here instead of sockets to preserve the host name
+    $.post('/auth/attemptLogin', { email: $('#email').val(), password: $('#password').val() }, function(d) {
       if(d.success) {
         $('#signinWrapper').fadeOut(function() {
           document.location = "/dash";
         });
       } else {
-        $('.press-enter').fadeOut(function() {
-          $('.press-enter').removeClass('alert').addClass('alert').html(d.error).fadeIn();
+        $('.press-enter').fadeOut(100, function() {
+          $('.press-enter').removeClass('alert').addClass('alert').html(d.error).fadeIn(150);
         });
       }
     });
