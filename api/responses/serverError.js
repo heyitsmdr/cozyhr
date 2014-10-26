@@ -25,19 +25,24 @@ module.exports = function serverError (data, options) {
   // Log and Send this to the exception handler
   if(req.isSocket) {
     if(data !== undefined) {
-      sails.log.warn('SocketException :: Sending 500 ("Server Error") response: \n',data);
-      ExceptionService.socket(req, res, data);
+      if(ExceptionService.socket(req, res, data)) {
+        sails.log.warn('SocketException :: Sending 500 ("Server Error") response: \n',data);
+      }
     } else {
-      sails.log.warn('SocketException :: Sending empty 500 ("Server Error") response.');
-      ExceptionService.socket(req, res);
+      if(ExceptionService.socket(req, res)) {
+        sails.log.warn('SocketException :: Sending empty 500 ("Server Error") response.');
+      }
     }
+    return; // No need to continue for sockets.
   } else {
     if(data !== undefined) {
-      sails.log.warn('HTTPException :: Sending 500 ("Server Error") response: \n',data);
-      ExceptionService.http(req, res, data);
+      if(ExceptionService.http(req, res, data)) {
+        sails.log.warn('HTTPException :: Sending 500 ("Server Error") response: \n',data);
+      }
     } else {
-      sails.log.warn('HTTPException :: Sending empty 500 ("Server Error") response.');
-      ExceptionService.http(req, res);
+      if(ExceptionService.http(req, res)) {
+        sails.log.warn('HTTPException :: Sending empty 500 ("Server Error") response.');
+      }
     }
   }
 

@@ -54,11 +54,17 @@ module.exports = {
     } else {
       // NOTE: Non-fatal socket exceptions are not sent to metrics, since these are usually UI-based error messages.
       res.json({ success: false, error: data.message });
+
+      return false;
     }
+
+    return true;
   },
 
   http: function(req, res, data, generatedCode) {
     MetricService.increment('http.exceptions');
+
+    return true;
   },
 
   error: function(errorMessage, opt) {
