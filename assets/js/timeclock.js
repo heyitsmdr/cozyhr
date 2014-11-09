@@ -36,11 +36,17 @@ _timeclock.prototype.init = function() {
 };
 
 _timeclock.prototype.clockIn = function(positionId) {
-	console.log(positionId);
+	io.socket.post('/timeclock/clockIn', { positionId: positionId }, function(result) {
+		if(result.success) {
+			alert('great');
+		} else {
+			CozyHR.notify(result.error, {color: 'red', sound: true});
+		}
+	});
 };
 
 _timeclock.prototype.onClockUpdate = function(data) {
 	if(data.clocks.length == 0) {
-		$('#clockNoticeContainer').html(Mustache.render(CozyHR.templates['noClockedTime']));
+		$('#clocks').html(Mustache.render(CozyHR.templates['noClockedTime']));
 	}
 };

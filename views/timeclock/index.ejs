@@ -2,16 +2,16 @@
 
 	<div class="row">
 		<div class="3u sectionContainer sectionWorkingOn">
-			<!--<div class="section">
+			<div class="section">
 				<div class="header green">
 						Clocked In
 				</div>
 				<div class="content green">
-					You're currently clocked in.
+					You're currently clocked in to <strong>Live Chat</strong>.
 				</div>
 			</div>
 
-			<div class="sectionSpace"></div>-->
+			<div class="sectionSpace"></div>
 
 			<div class="section">
 				<div class="header">
@@ -36,26 +36,17 @@
 		</div>
 
 		<div class="9u sectionContainer sectionTimeclock">
-
-			<div id="clockNoticeContainer" class="light-bg">
-				Loading, one moment..
-			</div>
-			<div id="clocksContainer" class="light-bg">
-				<div class="day">
-					Thursday, October 16th, 2014:
+			<div class="clocksContainer">
+				<div class="head">
+					<div class="columnTitle worked">Worked</div>
+					<div class="columnTitle clockinout">Clocked In</div>
+					<div class="columnTitle clockinout">Clocked Out</div>
+					<div class="columnTitle total">Total Time</div>
 				</div>
-				<div class="entry">
-					<a href="/admin/employee/5395dc48c8ce77790bf03a8b"><div class="picture" style="background-image:url('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfp1/t1.0-1/p320x320/1800382_10201588748065624_112239215_n.jpg')"></div></a>
-					<div class="content">You clocked in to <strong>Live Chat</strong> at the <strong>NYC</strong> office.</div>
-					<div class="timestamp">5m ago</div>
-				</div>
-				<div class="entry">
-					<a href="/admin/employee/5395dc48c8ce77790bf03a8b"><div class="picture" style="background-image:url('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfp1/t1.0-1/p320x320/1800382_10201588748065624_112239215_n.jpg')"></div></a>
-					<div class="content">You clocked in to <strong>QA</strong> at the <strong>NYC</strong> office.</div>
-					<div class="timestamp">15m ago</div>
+				<div id="clocks">
+					<div class="loading"><i class="fa fa-spinner fa-spin"></i></div>
 				</div>
 			</div>
-
 		</div>
 	</div>
 

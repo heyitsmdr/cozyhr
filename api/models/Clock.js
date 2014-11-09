@@ -10,6 +10,8 @@ module.exports = {
   attributes: {
     clockout: 'datetime',
     user: { model: 'User' },
-    company: { model: 'Company' }
+    company: { model: 'Company' },
+    position: { model: 'Position' },
+    working: 'boolean'
   }
 };

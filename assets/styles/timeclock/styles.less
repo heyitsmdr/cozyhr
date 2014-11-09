@@ -35,65 +35,55 @@
   }
 
   .sectionTimeclock {
-    .light-bg {
-      padding: 20px;
-      background-color: #fcfcfc;
-      border-radius: 5px;
-    }
+    .clocksContainer {
+      border: 1px solid @bordercolor;
 
-    #clockNoticeContainer {
-      text-align: center;
+      .head {
+        .menugradiant(#f7f7f7, #e8e8e8);
+        height: 35px;
+        border-bottom: 1px solid @bordercolor-lighter;
 
-      .alt {
-        padding-top: 10px;
-      }
-    }
-
-    #clocksContainer {
-      .day {
-        font-weight: bold;
-      }
-
-      .entry {
-        padding: 10px 0 0 5px;
-
-        .content {
-          padding-top: 3px;
-        }
-
-        .timestamp {
-          font-size: 12px;
-          color: #888;
+        .columnTitle {
+          .generalfont(12px, #000, bold);
+          float: left;
+          padding: 8px;
+          &.worked { width: 50%; }
+          &.clockinout { width: 15%; text-align: center; }
+          &.total { width: 20%; text-align: right; }
         }
       }
+
+      #clocks {
+        background-color: #fbfbfb;
+        overflow: auto;
+
+        .loading {
+          padding: 10px 0 10px 0;
+          font-size: 24px;
+          text-align: center;
+        }
+
+        .no-time {
+          text-align: center;
+          padding: 10px 0 10px 0;
+          .generalfont(12px);
+        }
+
+        .clock-entry {
+          .column {
+            .generalfont(12px);
+            float: left;
+            padding: 8px;
+
+            &.worked { width: 50%; }
+            &.clockinout { width: 15%; text-align: center; }
+            &.total { width: 20%; text-align: right; }
+
+            .lighter { color: #999; }
+          }
+        }
+      }
     }
   }
 
-}
-
-#clockedTable {
-  @border: 1px solid #ebebeb;
-  width: 100%;
-
-  .template.invisible {
-    display: none;
-  }
-
-  .position {
-    font-weight: normal;
-    border: @border;
-    padding: 5px;
-
-    .location {
-      font-size: 11px;
-    }
-  }
-
-  .times {
-    width: 40%;
-    font-weight: normal;
-    color: #666;
-    padding: 9px;
-    border: @border;
-  }
 }
