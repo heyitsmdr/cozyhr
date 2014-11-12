@@ -1,9 +1,29 @@
 <div class="section">
   <div class="header">
-    Main
+    Your Company
   </div>
 
   <div class="content">
-  Oh!
+    <div id="generalSettingsContainer">
+
+      <!-- Company Name -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Company Name</div>
+          <div class="subtitle">The full name of your company.</div>
+        </div>
+        <div class="setting"><input type="text" id="txtCompanyName" value="<%- req.session.userinfo.company.name %>"></div>
+      </div>
+
+      <!-- Company Subdomain -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Company Subdomain</div>
+          <div class="subtitle">This is the subdomain used to access your CozyHR portal.</div>
+        </div>
+        <div class="setting"><input type="text" id="txtCompanySubdomain" value="greenleaf"></div>
+      </div>
+
+    </div>
   </div>
 </div>
