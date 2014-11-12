@@ -73,15 +73,26 @@
         .menugradiant(#f7f7f7, #e8e8e8);
         height: 35px;
         border-bottom: 1px solid @bordercolor-lighter;
+        overflow: hidden;
 
         .columnTitle {
           .generalfont(12px, #000, bold);
           float: left;
           padding: 8px;
-          &.worked { width: 30%; }
-          &.day { width: 20%; text-align: right; }
-          &.clockinout { width: 20%; text-align: center; }
-          &.total { width: 10%; text-align: right; }
+
+          @media @desktop {
+            &.worked { width: 30%; }
+            &.day { width: 20%; text-align: right; }
+            &.clockinout { width: 20%; text-align: center; }
+            &.total { width: 10%; text-align: right; }
+          }
+
+          @media @desktop-small {
+            &.worked { width: 20%; }
+            &.day { width: 20%; text-align: right; }
+            &.clockinout { width: 20%; text-align: center; }
+            &.total { width: 20%; text-align: right; }
+          }
         }
       }
 
@@ -102,15 +113,27 @@
         }
 
         .clock-entry {
+          overflow: auto;
+          padding: 3px;
+
           .column {
             .generalfont(12px);
             float: left;
             padding: 8px;
 
-            &.worked { width: 30%; }
-            &.day { width: 20%; text-align: right; }
-            &.clockinout { width: 20%; text-align: center; }
-            &.total { width: 10%; text-align: right; }
+            @media @desktop {
+              &.worked { width: 30%; }
+              &.day { width: 20%; text-align: right; }
+              &.clockinout { width: 20%; text-align: center; }
+              &.total { width: 10%; text-align: right; }
+            }
+
+            @media @desktop-small {
+              &.worked { width: 20%; }
+              &.day { width: 20%; text-align: right; }
+              &.clockinout { width: 20%; text-align: center; }
+              &.total { width: 20%; text-align: right; }
+            }
 
             .lighter { color: #999; }
 
