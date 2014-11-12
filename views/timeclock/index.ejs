@@ -2,16 +2,23 @@
 
 	<div class="row">
 		<div class="3u sectionContainer sectionWorkingOn">
-			<div class="section">
+			<div id="sectionClockedIn" class="section" style="<% if(clock.length == 0) { %>display:none<% } %>">
 				<div class="header green">
 						Clocked In
 				</div>
 				<div class="content green">
-					You're currently clocked in to <strong>Live Chat</strong>.
+					<div class="left">
+						<div><strong id="clockPosition"><% if(clock.length > 0) { %><%- clock[0].position.name %><% } %></strong></div>
+						<div id="clockOffice"><% if(clock.length > 0) { %><%- clock[0].office.name %><% } %></div>
+						<div><a href="#" onclick="CozyHR.pageHelper.instance.clockOut()">Save & Clock Out</a></div>
+						<div><a href="#" onclick="CozyHR.pageHelper.instance.deleteClock()">Delete Clock</a></div>
+					</div>
+					<div class="right">
+						<div id="clockInTime" data-clockedin="<% if(clock.length > 0) { %><%- clock[0].createdAtTS %><% } %>"></div>
+					</div>
 				</div>
 			</div>
-
-			<div class="sectionSpace"></div>
+			<div id="sectionClockedInSpacing" class="sectionSpace" style="<% if(clock.length == 0) { %>display:none<% } %>"></div>
 
 			<div class="section">
 				<div class="header">
@@ -39,6 +46,7 @@
 			<div class="clocksContainer">
 				<div class="head">
 					<div class="columnTitle worked">Worked</div>
+					<div class="columnTitle day">&nbsp;</div>
 					<div class="columnTitle clockinout">Clocked In</div>
 					<div class="columnTitle clockinout">Clocked Out</div>
 					<div class="columnTitle total">Total Time</div>

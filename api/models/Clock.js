@@ -12,6 +12,7 @@ module.exports = {
     user: { model: 'User' },
     company: { model: 'Company' },
     position: { model: 'Position' },
+    office: { model: 'Office' },
     working: 'boolean'
   }
 };

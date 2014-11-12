@@ -13,7 +13,7 @@
 <% if(mustacheTemplates.indexOf('noClockedTime') > -1) { %>
   <script id="noClockedTime" type="x-tmpl-mustache">
     <div class="no-time">
-      <div>You do not have any clocked time yet.</div>
+      <div>You do not have any saved time yet.</div>
     </div>
   </script>
 <% } %>
@@ -23,6 +23,7 @@
     {{#clocks}}
     <div id="clock-{{clockId}}" class="clock-entry">
       <div class="column worked">{{positionName}} <span class="lighter">@ {{locationName}}</span></div>
+      <div class="column day">{{{dayName}}}</div>
       <div class="column clockinout">{{clockIn}}</div>
       <div class="column clockinout">{{clockOut}}</div>
       <div class="column total">{{totalTime}}</div>

@@ -162,10 +162,11 @@ function generatePictureDiv(opt, extraClassOptions) {
 	return "<a href='/admin/employee/" + opt.id + "'><div title='<div class=\"tooltip\">" + lines.join('<br>') + "</div>' class='person picture " + ((opt.small)?'small':'') + " " + ((extraClassOptions)?extraClassOptions:'') + "' style='background-image:url(" + opt.picture + ")'></div></a>";
 };
 
-function fancyDate(a, b, fancyReturn) {
+function fancyDate(a, b, fancyReturn, opt) {
 	var _MS_PER_DAY = 1000 * 60 * 60 * 24;
 	var _MS_PER_HOUR = 1000 * 60 * 60;
 	var _MS_PER_MINUTE = 1000 * 60;
+	var _MS_PER_SECOND = 1000;
 
 	// Discard the time and time-zone information.
 	var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate(), a.getHours(), a.getMinutes(), a.getSeconds());
@@ -175,22 +176,33 @@ function fancyDate(a, b, fancyReturn) {
 
 	ret.days = Math.floor((utc2 - utc1) / _MS_PER_DAY);
 	ret.hours = Math.floor((utc2 - utc1) / _MS_PER_HOUR) - (ret.days * 24);
-	ret.minutes = Math.floor((utc2 - utc1) / _MS_PER_MINUTE) - (ret.days * 24) - (ret.hours * 60);
+	ret.minutes = Math.floor((utc2 - utc1) / _MS_PER_MINUTE) - (ret.days * 1440) - (ret.hours * 60);
+	ret.seconds = Math.floor((utc2 - utc1) / _MS_PER_SECOND) - (ret.days * 86400) - (ret.hours * 3600) - (ret.minutes * 60);
+
+	if(!opt) { opt = {}; }
+
+	var options = {
+		now: ((opt.now) ? opt.now : 'Just now'),
+		withinHour: ((opt.withinHour) ? opt.withinHour : '%mm ago'),
+		withinDay: ((opt.withinDay) ? opt.withinDay : '%hh ago'),
+		yesterday: ((opt.yesterday) ? opt.yesterday : 'Yesterday'),
+		withinMonth: ((opt.withinMonth) ? opt.withinMonth : '%dd ago')
+	};
 
 	if(!fancyReturn)
 		return ret;
 
 	if(ret.days == 0 && ret.hours == 0 && ret.minutes == 0) {
-		return 'Just now';
+		return options.now.replace('%s', ret.seconds);
 	}
 	else if(ret.days == 0 && ret.hours == 0 && ret.minutes >= 1) {
-		return ret.minutes + 'm ago';
+		return options.withinHour.replace('%s', ret.seconds).replace('%m', ret.minutes);
 	}
 	else if(ret.days == 0 && ret.hours >= 1) {
-		return ret.hours + 'h ago';
+		return options.withinDay.replace('%s', ret.seconds).replace('%m', ret.minutes).replace('%h', ret.hours);
 	}
 	else if(ret.days == 1) {
-		return 'Yesterday';
+		return options.yesterday.replace('%s', ret.seconds).replace('%m', ret.minutes).replace('%h', ret.hours);
 	}
 	else {
 		if(ret.days > 30 && Math.floor(ret.days / 30) < 12) {
@@ -198,7 +210,7 @@ function fancyDate(a, b, fancyReturn) {
 		} else if(ret.days > 30 && Math.floor(ret.days / 30) >= 12) {
 			return Math.floor( Math.floor(ret.days / 30) / 12 ) + ' years ago';
 		} else {
-			return ret.days + 'd ago';
+			return options.withinDay.replace('%s', ret.seconds).replace('%m', ret.minutes).replace('%h', ret.hours).replace('%d', ret.days);
 		}
 	}
 };

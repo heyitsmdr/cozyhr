@@ -32,6 +32,37 @@
         text-align: center;
       }
     }
+
+    #sectionClockedIn .content {
+      overflow: auto;
+
+      .left {
+        text-align: left;
+        float: left;
+        width: 50%;
+      }
+
+      .right {
+        text-align: right;
+        float: left;
+        width: 50%;
+
+        #clockInTime {
+          color: #999;
+          font-size: 12px;
+        }
+      }
+
+      a {
+        font-size: 11px;
+        color: #999;
+        text-decoration: none;
+
+        &:hover {
+          color: #666;
+        }
+      }
+    }
   }
 
   .sectionTimeclock {
@@ -47,9 +78,10 @@
           .generalfont(12px, #000, bold);
           float: left;
           padding: 8px;
-          &.worked { width: 50%; }
-          &.clockinout { width: 15%; text-align: center; }
-          &.total { width: 20%; text-align: right; }
+          &.worked { width: 30%; }
+          &.day { width: 20%; text-align: right; }
+          &.clockinout { width: 20%; text-align: center; }
+          &.total { width: 10%; text-align: right; }
         }
       }
 
@@ -75,11 +107,21 @@
             float: left;
             padding: 8px;
 
-            &.worked { width: 50%; }
-            &.clockinout { width: 15%; text-align: center; }
-            &.total { width: 20%; text-align: right; }
+            &.worked { width: 30%; }
+            &.day { width: 20%; text-align: right; }
+            &.clockinout { width: 20%; text-align: center; }
+            &.total { width: 10%; text-align: right; }
 
             .lighter { color: #999; }
+
+            .day {
+              background-color: #414141;
+              color: #fff;
+              font-size: 11px;
+              padding: 3px 5px;
+              border: 1px solid #000;
+              border-radius: 8px;
+            }
           }
         }
       }
