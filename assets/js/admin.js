@@ -4,38 +4,42 @@ _admin.prototype.init = function() {
   return this;
 };
 
-_admin.prototype.initRoles = function() {
+_admin.prototype.initGeneral = function() {
   $(document).ready(function() {
-    // Init the data table
-    $('#companyRoles').dataTable({
-      "pageLength": 50,
-      "ajax": {
-        "url": "/admin/getRoles",
-        "type": "GET"
-      },
-      "columns": [
-        { "data": "jobTitle", "render": function(d,t,r,m) { return "<a href='/admin/role/" + r.id + "'>"+d+"</a>"; } },
-        { "data": "employeeCount" }
-      ]
+    // Bind
+    CozyHR.bindClick('#btnChangeSubdomain', function() {
+      $('#generalSettingsContainer').hide('slide', function() {
+        $('#changeSubdomainContainer').show('slide');
+      });
     });
-
-    // Init events
-    $('#txtNewRole').txtSubmit('#btnCreateRole', _.debounce(function() {
-      if( $('#txtNewRole').val().length > 0) {
-        io.socket.post('/admin/newRole', {
-          roleName: $('#txtNewRole').val()
-        }, function(res) {
-          if(res.success) {
-            $('#txtNewRole').val('');
-            $('#companyRoles').DataTable().ajax.reload();
-            CozyHR.notify('Your new role has been created.', {color: 'green', sound: true});
-          } else {
-            CozyHR.notify(res.error, {color: 'red', sound: true});
-          }
-        });
-      }
-    }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
-  }.bind(this));
+    CozyHR.bindClick('#btnBackToGeneral', function() {
+      $('#changeSubdomainContainer').hide('slide', function() {
+        $('#generalSettingsContainer').show('slide');
+      });
+    });
+    CozyHR.bindClick('#btnSaveSettings', function() {
+      io.socket.post('/admin/saveGeneral', {
+        companyName: $('#txtCompanyName').val(),
+      }, function(res) {
+        if(res.success) {
+          CozyHR.notify('Your company settings have been saved.', {color: 'green', sound: true});
+        } else {
+          CozyHR.notify('Failed due to: ' + res.error, {color: 'red', sound: true});
+        }
+      });
+    });
+    CozyHR.bindClick('#btnConfirmSubdomainChange', function() {
+      io.socket.post('/admin/saveNewSubdomain', {
+        subdomain: $('#txtCompanySubdomain').val()
+      }, function(res) {
+        if(res.success) {
+          document.location = "http://" + $('#txtCompanySubdomain').val().toLowerCase() + ((CozyHR.env!='production')?'.dev':'') + ".cozyhr.com/";
+        } else {
+          CozyHR.notify(res.error, {color: 'red', sound: true});
+        }
+      });
+    });
+  });
 };
 
 _admin.prototype.initEmployees = function() {
@@ -52,7 +56,7 @@ _admin.prototype.initEmployees = function() {
       $('#selNewEmployeeRole').chosen({width:'200px'});
     }
 
-    $('#btnInviteEmployee').on('click', _.debounce(function() {
+    CozyHR.bindClick('#btnInviteEmployee', function() {
       if($('#txtNewEmployeeEmail').val().length > 0) {
         io.socket.post('/admin/createInvite', {
           email: $('#txtNewEmployeeEmail').val(),
@@ -64,7 +68,41 @@ _admin.prototype.initEmployees = function() {
             CozyHR.notify(res.error, {color: 'red', sound: true});
         });
       }
-    }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
+    });
+  }.bind(this));
+};
+
+_admin.prototype.initRoles = function() {
+  $(document).ready(function() {
+    // Init the data table
+    $('#companyRoles').dataTable({
+      "pageLength": 50,
+      "ajax": {
+        "url": "/admin/getRoles",
+        "type": "GET"
+      },
+      "columns": [
+        { "data": "jobTitle", "render": function(d,t,r,m) { return "<a href='/admin/role/" + r.id + "'>"+d+"</a>"; } },
+        { "data": "employeeCount" }
+      ]
+    });
+
+    // Init events
+    CozyHR.bindTextClick('#txtNewRole', '#btnCreateRole', function() {
+      if( $('#txtNewRole').val().length > 0) {
+        io.socket.post('/admin/newRole', {
+          roleName: $('#txtNewRole').val()
+        }, function(res) {
+          if(res.success) {
+            $('#txtNewRole').val('');
+            $('#companyRoles').DataTable().ajax.reload();
+            CozyHR.notify('Your new role has been created.', {color: 'green', sound: true});
+          } else {
+            CozyHR.notify(res.error, {color: 'red', sound: true});
+          }
+        });
+      }
+    });
   }.bind(this));
 };
 
@@ -87,7 +125,7 @@ _admin.prototype.initOffices = function() {
     });
 
     // Bind click
-    $('#txtNewOffice').txtSubmit('#btnConstructOffice', _.debounce(function(){
+    CozyHR.bindTextClick('#txtNewOffice', '#btnConstructOffice', function() {
       if( $('#txtNewOffice').val().length > 0) {
         io.socket.post('/admin/newOffice', {
           officeName: $('#txtNewOffice').val()
@@ -102,7 +140,7 @@ _admin.prototype.initOffices = function() {
           }
         });
       }
-    }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
+    });
   }.bind(this));
 };
 
@@ -126,7 +164,7 @@ _admin.prototype.initPositions = function() {
     });
 
     // Bind click
-    $('#txtNewPosition').txtSubmit('#btnNewPosition', _.debounce(function(){
+    CozyHR.bindTextClick('#txtNewPosition', '#btnNewPosition', function() {
       if( $('#txtNewPosition').val().length > 0) {
         io.socket.post('/admin/newOfficePosition', {
           officeId: CozyHR.officeId,
@@ -142,7 +180,7 @@ _admin.prototype.initPositions = function() {
           }
         });
       }
-    }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
+    });
 
     // Bind delete position
     $(document).on('click', '.delete-position', _.debounce(function() {
@@ -158,7 +196,7 @@ _admin.prototype.initPositions = function() {
     }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
 
     // Bind delete office
-    $('#btnDeleteOffice').on('click', _.debounce(function() {
+    CozyHR.bindClick('#btnDeleteOffice', function() {
       io.socket.post('/admin/deleteOffice', {
         officeId: CozyHR.officeId
       }, function(res) {
@@ -168,7 +206,7 @@ _admin.prototype.initPositions = function() {
           CozyHR.notify(res.error, {color: 'red', sound: true});
         }
       });
-    }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
+    });
   }.bind(this));
 };
 

@@ -54,16 +54,6 @@ $.fn.enterKey = function (fnc) {
     })
 	})
 };
-$.fn.txtSubmit = function(btn, fnc) {
-	return this.each(function() {
-		$(this).enterKey(function(ev) {
-			fnc.call(this, 'btn');
-		});
-		$(btn).on('click', function() {
-			fnc.call(this, 'txt');
-		});
-	});
-};
 
 // Create the CozyHR namespace
 CozyHR = { };
@@ -153,6 +143,31 @@ CozyHR.sortAssocArray = function(arr, sortBy, opt) {
 		else
 			return second[sortBy] - first[sortBy];
 	});
+};
+
+CozyHR.bindClick = function(selector, func) {
+	$(selector).on('click', _.debounce(func, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
+	if(CozyHR.env !== 'production')
+		console.log('Bound click event with debounce to', selector);
+};
+
+CozyHR.bindTextClick = function(textSelector, buttonSelector, func) {
+	var debounceFunc = _.debounce(func, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true);
+
+	// Bind to enter press
+	$(textSelector).enterKey(debounceFunc);
+
+	// Bind to button click
+	$(buttonSelector).on('click', debounceFunc);
+
+	if(CozyHR.env !== 'production')
+		console.log('Bound text and click event with debounce to', textSelector, buttonSelector);
+};
+
+CozyHR.bindGlobalClick = function(selector, func) {
+	$(document).on('click', selector, _.debounce(func, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
+	if(CozyHR.env !== 'production')
+		console.log('Bound global click event with debounce to', selector);
 };
 
 function generatePictureDiv(opt, extraClassOptions) {

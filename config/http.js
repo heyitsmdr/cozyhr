@@ -60,7 +60,8 @@ module.exports.http = {
 
     viewGlobals: function(req, res, next) {
       res.locals({
-        STATIC_CDN: ((process.env.NODE_ENV=='production')?'http://static.cozyhr.com':'')
+        STATIC_CDN: ((process.env.NODE_ENV=='production')?'http://static.cozyhr.com':''),
+        ENV: process.env.NODE_ENV
       });
       next();
     },

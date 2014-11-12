@@ -217,6 +217,64 @@ module.exports = {
   },
 
   /**
+   * @via     Socket
+   * @method  POST
+   */
+  saveGeneral: function(req, res) {
+    var es = ExceptionService.require(req, res, { socket: true, POST: true });
+
+    var companyName = req.param('companyName');
+
+    if(!req.session.userinfo.role.companyAdmin) {
+      throw ExceptionService.error('Not permitted to make changes to this company.');
+    }
+
+    Company
+      .update({ id: req.session.userinfo.company.id }, { name: companyName })
+      .exec(es.wrap(function(e, updatedCompany) {
+        if(e) {
+          throw ExceptionService.error('Could not update company.');
+        }
+
+        req.session.userinfo.company.name = companyName;
+        res.json({ success: true });
+      }));
+  },
+
+  /**
+   * @via     Socket
+   * @method  POST
+   */
+  saveNewSubdomain: function(req, res) {
+    var es = ExceptionService.require(req, res, { socket: true, POST: true });
+
+    var subdomain = req.param('subdomain');
+
+    if(!req.session.userinfo.role.companyAdmin) {
+      throw ExceptionService.error('Not permitted to make changes to this company.');
+    }
+
+    Company
+      .find({ host: subdomain.toLowerCase() + '.cozyhr.com' })
+      .exec(es.wrap(function(e, foundCompanies) {
+        if(e || foundCompanies.length > 0) {
+          throw ExceptionService.error('Another company is already using that subdomain. Pick a new one.', {fatal: false});
+        }
+
+        Company
+          .update({ id: req.session.userinfo.company.id }, { host: subdomain.toLowerCase() + '.cozyhr.com' })
+          .exec(es.wrap(function(e, updatedCompany) {
+            if(e) {
+              throw ExceptionService.error('Could not update company.');
+            }
+
+            req.session.userinfo.company.host = subdomain;
+            res.json({ success: true });
+          }));
+      }));
+  },
+
+  /**
    * @via     HTTP
    * @method  GET
    */

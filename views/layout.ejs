@@ -39,8 +39,6 @@
           }
         }
       <% } %>
-      /* Prepare CozyHR Namespace */
-      CozyHR = [];
     </script>
     <% } %>
 
@@ -96,6 +94,7 @@
     <% if(req.session.authenticated) { %>
       <script>
         CozyHR.userId = "<%- req.session.userinfo.id %>";
+        CozyHR.env = "<%- ENV %>";
       </script>
     <% } %>
     </body>

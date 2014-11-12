@@ -4,6 +4,7 @@
   </div>
 
   <div class="content">
+
     <div id="generalSettingsContainer">
 
       <!-- Company Name -->
@@ -21,9 +22,64 @@
           <div class="title">Company Subdomain</div>
           <div class="subtitle">This is the subdomain used to access your CozyHR portal.</div>
         </div>
-        <div class="setting"><input type="text" id="txtCompanySubdomain" value="greenleaf"></div>
+        <div class="setting"><input type="text" value="<%- req.session.userinfo.company.host %>" disabled="disabled"><input type="button" id="btnChangeSubdomain" value="Change Subdomain"></div>
+      </div>
+
+      <!-- Save -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title green">Save</div>
+          <div class="subtitle green">Be sure to save when you're done!</div>
+        </div>
+        <div class="setting"><input type="button" id="btnSaveSettings" value="Save Settings"></div>
       </div>
 
     </div>
+
+    <div id="changeSubdomainContainer">
+
+      <!-- Disclaimer -->
+      <div class="settingWrapper">
+        <div class="info-alone red">
+          <strong>Warning!</strong> Changing the subdomain will require everyone to access your HR portal using a new link. The old link will <strong>not</strong> redirect to the new link. Furthermore, everyone currently logged in will be logged out (including yourself) and will require a new login session at the new URL. Proceed with caution.
+        </div>
+      </div>
+
+      <!-- Current Subdomain -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Current Subdomain</div>
+          <div class="subtitle">This is the subdomain used to access your CozyHR portal.</div>
+        </div>
+        <div class="setting"><input type="text" value="<%- req.session.userinfo.company.host %>" disabled="disabled"></div>
+      </div>
+
+      <!-- New Subdomain -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">New Subdomain</div>
+          <div class="subtitle">This is the subdomain used to access your CozyHR portal.</div>
+        </div>
+        <div class="setting"><input type="text" id="txtCompanySubdomain" value="<%- req.session.userinfo.company.host.replace('.cozyhr.com', '') %>"></div>
+      </div>
+
+      <!-- Save -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title green">Save</div>
+          <div class="subtitle green">Be sure to save when you're done!</div>
+        </div>
+        <div class="setting">
+          <input type="button" id="btnConfirmSubdomainChange" value="Change Subdomain">
+          <input type="button" id="btnBackToGeneral" value="Go back">
+        </div>
+      </div>
+
+    </div>
+
   </div>
 </div>
+
+<script>
+  CozyHR.pageHelper.queue('CozyHR.pageHelper.instance.initGeneral()');
+</script>
