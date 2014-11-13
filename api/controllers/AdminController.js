@@ -225,8 +225,6 @@ module.exports = {
 
     var companyName = req.param('companyName');
 
-    throw ExceptionService.error('Not permitted to make changes to this company.');
-
     if(!req.session.userinfo.role.companyAdmin) {
       throw ExceptionService.error('Not permitted to make changes to this company.');
     }
