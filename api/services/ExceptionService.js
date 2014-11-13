@@ -1,3 +1,14 @@
+var raven, sentryClient;
+
+if(process.env.NODE_ENV == 'production') {
+  raven = require('raven');
+  sentryClient = new raven.Client('https://235af824c3e14027aaa09097339110c5:fa4dec0c6f624d71bf5c20fa52f96d66@app.getsentry.com/33157');
+  sentryClient.patchGlobal();
+  sails.log.info('Reporting exceptions to Sentry.');
+} else {
+  sentryClient = false;
+}
+
 var ExceptionServiceObject = function(req, res) {
   this.req = req;
   this.res = res;
@@ -45,6 +56,9 @@ module.exports = {
   },
 
   socket: function(req, res, data) {
+    if(sentryClient)
+      sentryClient.captureError(data, {tags: {dyno: process.env.DYNO || 'local.1' }});
+
     if(typeof data.fatal === 'undefined' || data.fatal === true) {
       MetricService.increment('socket.exceptions');
       req.socket.emit('exception', {
@@ -62,6 +76,9 @@ module.exports = {
   },
 
   http: function(req, res, data, generatedCode) {
+    if(sentryClient)
+      sentryClient.captureError(data, {tags: {dyno: process.env.DYNO || 'local.1' }});
+
     MetricService.increment('http.exceptions');
 
     return true;
