@@ -10,7 +10,7 @@
       <!-- Company Name -->
       <div class="settingWrapper">
         <div class="info">
-          <div class="title">Company Name</div>
+          <div class="title">Name</div>
           <div class="subtitle">The full name of your company.</div>
         </div>
         <div class="setting"><input type="text" id="txtCompanyName" value="<%- req.session.userinfo.company.name %>"></div>
@@ -19,7 +19,7 @@
       <!-- Company Subdomain -->
       <div class="settingWrapper">
         <div class="info">
-          <div class="title">Company Subdomain</div>
+          <div class="title">CozyHR Subdomain</div>
           <div class="subtitle">This is the subdomain used to access your CozyHR portal.</div>
         </div>
         <div class="setting"><input type="text" value="<%- req.session.userinfo.company.host %>" disabled="disabled"><input type="button" id="btnChangeSubdomain" value="Change Subdomain"></div>
