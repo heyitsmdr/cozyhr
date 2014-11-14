@@ -211,14 +211,11 @@ _dashboard.prototype.onCommentMouseOut = function(evt) {
 };
 
 _dashboard.prototype.onWorkersUpdate = function(res) {
-	var _html = "";
-
 	res.forEach(function(worker) {
-		_html += generatePictureDiv(worker.picture, 'large-margin');
-		_html += generatePictureDiv(worker.picture, 'large-margin');
-		_html += generatePictureDiv(worker.picture, 'large-margin');
-		_html += generatePictureDiv(worker.picture, 'large-margin');
+		worker.pictureHtml = generatePictureDiv(worker.picture, 'large-margin');
 	});
 
-	$('#subSectionWorkers').html( _html );
+	$('#subSectionWorkers').html(Mustache.render(CozyHR.templates['workingNow'], {
+		workers: res
+	}));
 };

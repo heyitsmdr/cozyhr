@@ -69,4 +69,19 @@
   </script>
 <% } %>
 
+<% if(mustacheTemplates.indexOf('workingNow') > -1) { %>
+  <script id="workingNow" type="x-tmpl-mustache">
+    {{#workers}}
+    <div class="worker">
+      {{{pictureHtml}}}
+      <div class="name">{{fullName}}</div>
+      <div class="info">{{clockedPosition}} @ {{clockedLocation}}</div>
+    </div>
+    {{/workers}}
+    {{^workers}}
+    No one is working right now.
+    {{/workers}}
+  </script>
+<% } %>
+
 <% } %>

@@ -19,7 +19,7 @@ module.exports = {
 					selectedPage: 'dash',
 					picture: usr.generatePicture(false, req),
 					offices: offices,
-					mustacheTemplates: ['feedItem', 'feedItemComment']
+					mustacheTemplates: ['feedItem', 'feedItemComment', 'workingNow']
 				});
 			}));
 		}));
@@ -118,19 +118,28 @@ module.exports = {
 
 		workingNow = [];
 
-		PopUser.one(req.session.userinfo.id, es.wrap(function(e, usr) {
-			if(e)
-				throw ExceptionService.error('Could not get user.');
+		Clock.find({ company: req.session.userinfo.company.id, working: true}).populate('position').populate('office').exec(es.wrap(function(e, clocksWorking) {
+			if(e) {
+				throw ExceptionService.error('Could not get working clocks.');
+			}
 
-			workingNow.push({
-				picture: usr.genPicture(false)
-			});
+			async.each(clocksWorking, es.wrap(function(clockWorking, doneCallback) {
+				PopUser.one(clockWorking.user, es.wrap(function(e, usr) {
+					workingNow.push({
+						picture: usr.genPicture(false),
+						clockedPosition: clockWorking.position.name,
+						clockedLocation: clockWorking.office.name,
+						fullName: usr.fullName()
+					});
+					doneCallback();
+				}));
+			}), es.wrap(function(e) {
+				if(e) {
+					throw ExceptionService.error('Could not get working clocks.');
+				}
 
-			workingNow.push({
-				picture: usr.genPicture(false)
-			});
-
-			req.socket.emit('workersUpdate', workingNow);
+				req.socket.emit('workersUpdate', workingNow);
+			}));
 		}));
 	},
 

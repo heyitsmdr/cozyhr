@@ -1,26 +1,11 @@
 $(document).ready(function(){
-	// Set up regular tooltips
+	// Set up tooltips
 	$(document).on('mouseover', '.tt', function(event) {
-		$(this).qtip({
-			overwrite: false,
-			show: {
-				event: event.type,
-				ready: true
-			},
-			position: {target: 'mouse'},
-			style: 'qtip-dark'
-		});
-	});
-	// Set up person tooltips
-	$(document).on('mouseover', 'div.person', function(event) {
-		$(this).qtip({
-			overwrite: false,
-			show: {
-				event: event.type,
-				ready: true
-			},
-			style: 'qtip-dark'
-		});
+		if(!$(this).data('tt-init')) {
+			$(this).jBox('Tooltip');
+			$(this).data('tt-init', true);
+			$(this).mouseover();
+		}
 	});
   // Disable right click
   $(document).bind('contextmenu', function(e) {
@@ -174,7 +159,7 @@ function generatePictureDiv(opt, extraClassOptions) {
 	var lines = [];
 	lines.push("<span class=\"name\">" + opt.name + "</span>");
 	lines.push("<span class=\"position\">" + opt.position + "</span>");
-	return "<a href='/admin/employee/" + opt.id + "'><div title='<div class=\"tooltip\">" + lines.join('<br>') + "</div>' class='person picture " + ((opt.small)?'small':'') + " " + ((extraClassOptions)?extraClassOptions:'') + "' style='background-image:url(" + opt.picture + ")'></div></a>";
+	return "<a href='/admin/employee/" + opt.id + "'><div title='<div class=\"tooltip\">" + lines.join('<br>') + "</div>' class='tt person picture " + ((opt.small)?'small':'') + " " + ((extraClassOptions)?extraClassOptions:'') + "' style='background-image:url(" + opt.picture + ")'></div></a>";
 };
 
 function fancyDate(a, b, fancyReturn, opt) {
