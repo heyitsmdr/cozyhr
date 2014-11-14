@@ -11,6 +11,7 @@ module.exports = {
   attributes: {
   	company: { model: 'Company' },
   	user: { model: 'User' },
+    office: { model: 'Office' },
   	content: 'string'
   }
 

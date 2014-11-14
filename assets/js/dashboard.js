@@ -32,11 +32,13 @@ _dashboard.prototype.init = function() {
 		$('#feedFilter').on('change', function(evt, params) {
 			localStorage['lastDashFeedFilter'] = params.selected;
 
-			$('#subSectionCompanyFeedEntries').html("<div class='loading'>Loading news feed, one moment..</div>");
+			$('#subSectionCompanyFeedEntries').html("");
 			$('#ajax-loading').show();
 
 			io.socket.get('/dash/getFeed', { start: 0, filter: params.selected });
 		});
+
+		$('#feedFilter').val( localStorage['lastDashFeedFilter'] || $('#feedFilter option:first').val() ).trigger('chosen:updated');
 
 		// Get news feed items
 		io.socket.get('/dash/getFeed', { start: 0, filter: (localStorage['lastDashFeedFilter'] || 'all') });
@@ -71,6 +73,7 @@ _dashboard.prototype.onFeedUpdate = function(res) {
 			contentHtml: feedItem.content,
 			feedId: feedItem.feedid,
 			date: new Date(feedItem.date).toLocaleString(),
+			officeName: feedItem.officeName,
 			pictureHtml: generatePictureDiv(feedItem.picture),
 			pictureUrl: feedItem.mePicture,
 			commentsHtml: (function() {

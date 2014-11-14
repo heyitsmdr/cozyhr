@@ -41,7 +41,7 @@
     <div id="fid-{{feedId}}" class="feeditem">
       {{{pictureHtml}}}
       <div class="action">{{{contentHtml}}}</div>
-      <div class="date">{{date}}</div>
+      <div class="date">{{date}} ({{officeName}})</div>
       <div class="comments">
         {{#showMoreComments}}
         <div class="manyComments"><a href="#" onclick="CozyHR.pageHelper.instance.loadMoreComments('{{feedId}}')">Show more of the previous <strong><span class="commentsHidden">{{commentsHidden}}</span></strong> comments.</a></div>

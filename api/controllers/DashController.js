@@ -42,9 +42,17 @@ module.exports = {
 	getFeed: function(req, res) {
 		var es = ExceptionService.require(req, res, { socket: true, GET: true });
 
+		var filter = req.param('filter');
+
 		feedItems = [];
 
-		CompanyFeed.find({company: req.session.userinfo.company.id}).limit(10).skip(req.param('start')).sort({ createdAt: 'desc' }).exec(es.wrap(function(err, feeds){
+		var feedQueryParams = { company: req.session.userinfo.company.id };
+
+		if(filter.toLowerCase() !== 'all') {
+			feedQueryParams.office = [filter, null];
+		}
+
+		CompanyFeed.find(feedQueryParams).limit(10).skip(req.param('start')).sort({ createdAt: 'desc' }).populate('office').exec(es.wrap(function(err, feeds){
 			if(err)
 				throw ExceptionService.error('Could not get the company feed.');
 
@@ -81,7 +89,8 @@ module.exports = {
 								feedid: feed.id,
 								comments: feedComments,
 								picture: author.genPicture(false),
-								mePicture: req.session.userinfo.picture
+								mePicture: req.session.userinfo.picture,
+								officeName: ((feed.office) ? feed.office.name : 'Global')
 							});
 
 							callback();
