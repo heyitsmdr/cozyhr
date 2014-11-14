@@ -225,7 +225,7 @@ function fancyDate(a, b, fancyReturn, opt) {
 		} else if(ret.days > 30 && Math.floor(ret.days / 30) >= 12) {
 			return Math.floor( Math.floor(ret.days / 30) / 12 ) + ' years ago';
 		} else {
-			return options.withinDay.replace('%s', ret.seconds).replace('%m', ret.minutes).replace('%h', ret.hours).replace('%d', ret.days);
+			return options.withinMonth.replace('%s', ret.seconds).replace('%m', ret.minutes).replace('%h', ret.hours).replace('%d', ret.days);
 		}
 	}
 };
