@@ -164,6 +164,9 @@ _dashboard.prototype.loadMoreComments = function(feedId) {
 };
 
 _dashboard.prototype.onDestroyFeedComment = function(res) {
+	if(!$('#cid-' + res.commentId))
+		return;
+
 	// Hidden? If so, re-adjust number
 	if($('#cid-' + res.commentId).is(':hidden')) {
 		$('#fid-' + res.feedId + ' .manyComments .commentsHidden').html($('#fid-' + res.feedId + ' .specificComment:hidden').length - 1);
