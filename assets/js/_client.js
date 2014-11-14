@@ -155,6 +155,43 @@ CozyHR.bindGlobalClick = function(selector, func) {
 		console.log('Bound global click event with debounce to', selector);
 };
 
+CozyHR.bindText = function(selector, func) {
+	var debounceFunc = _.debounce(func, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true);
+
+	// Bind to enter press
+	$(selector).enterKey(debounceFunc);
+
+	if(CozyHR.env !== 'production')
+		console.log('Bound text event with debounce to', selector);
+};
+
+CozyHR.validateText = function(selector, validationOptions, notificationMessage) {
+	var showNotification = function() {
+		if(notificationMessage) {
+			CozyHR.notify(notificationMessage);
+		}
+	};
+
+	// Empty?
+	if(typeof validationOptions.empty !== 'undefined' && validationOptions.empty === false) {
+		if($(selector).val().length == 0) {
+			showNotification();
+			$(selector).effect('pulsate', 100);
+			return false;
+		}
+	}
+
+	// Same As
+	if(validationOptions.sameAs) {
+		if($(selector).val() != $(validationOptions.sameAs).val()) {
+			showNotification();
+			$(selector).effect('pulsate', 100);
+			return false;
+		}
+	}
+	return true;
+};
+
 function generatePictureDiv(opt, extraClassOptions) {
 	var lines = [];
 	lines.push("<span class=\"name\">" + opt.name + "</span>");

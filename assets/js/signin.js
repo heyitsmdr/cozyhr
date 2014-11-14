@@ -89,3 +89,26 @@ _signin.prototype.init = function() {
 
   return this;
 };
+
+_signin.prototype.initRegister = function() {
+  $(document).ready(function() {
+    // doRegister
+    var doRegister = function(e) {
+      // Validation
+      if(!CozyHR.validateText('#email', {empty:false})) { return; }
+      if(!CozyHR.validateText('#subdomain', {empty:false})) { return; }
+      if(!CozyHR.validateText('#nameFirst', {empty:false})) { return; }
+      if(!CozyHR.validateText('#nameLast', {empty:false})) { return; }
+      if(!CozyHR.validateText('#passwordOne', {empty:false})) { return; }
+      if(!CozyHR.validateText('#passwordTwo', {empty:false,sameAs:'#passwordOne'}, 'The two passwords do not match.')) { return; }
+    };
+
+    // Bind
+    CozyHR.bindText('#email', doRegister);
+    CozyHR.bindText('#subdomain', doRegister);
+    CozyHR.bindText('#nameFirst', doRegister);
+    CozyHR.bindText('#nameLast', doRegister);
+    CozyHR.bindText('#passwordOne', doRegister);
+    CozyHR.bindText('#passwordTwo', doRegister);
+  });
+};

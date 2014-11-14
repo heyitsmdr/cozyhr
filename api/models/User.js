@@ -26,10 +26,6 @@ module.exports = {
 		},
 		email: 'string',
 		password: 'string',
-		admin: {
-			type: 'boolean',
-			defaultsTo: false
-		},
     company: { model: 'Company' },
     role: { model: 'Role' },
 		picture: 'string',

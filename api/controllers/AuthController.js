@@ -22,7 +22,7 @@ module.exports = {
 
     Company.findOne({ host: fromHost }).exec(es.wrap(function(e, company) {
       if(e || !company) {
-        res.view({ htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin failed" });
+        res.view({ htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin failed", errorMessage: "No company exists under this domain." });
       } else {
         res.view({ companyInfo: company, htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin" });
       }
@@ -111,9 +111,19 @@ module.exports = {
    * @method  GET
    */
   register: function(req, res) {
-    ExceptionService.require(req, res, { GET: true });
+    var es = ExceptionService.require(req, res, { GET: true });
 
-    res.view();
+    var fromHost = req.host.toLowerCase();
+
+    if(fromHost.indexOf('.dev') > -1) {
+      fromHost = fromHost.replace('.dev', '');
+    }
+
+    if(fromHost !== 'new.cozyhr.com') {
+      return res.view("auth/signin", { htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin failed", errorMessage: "You cannot register a new company from here." });
+    }
+
+    res.view({ htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin" });
   },
 
   /**
@@ -181,7 +191,7 @@ module.exports = {
         password: password,
         company: invite.invitedTo.id,
         role: invite.invitedRole,
-        picture: ""
+        picture: "https://www.marqueed.com/assets/default_user-9fa815e2c71f8bad4f3643c9546ac4aa.png"
       }).exec(es.wrap(function(e, newUser) {
         if(e || !newUser) {
           return res.json({ error: 'Failed to create a new user.' });
