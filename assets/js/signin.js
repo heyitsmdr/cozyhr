@@ -101,6 +101,8 @@ _signin.prototype.initRegister = function() {
       if(!CozyHR.validateText('#nameLast', {empty:false})) { return; }
       if(!CozyHR.validateText('#passwordOne', {empty:false})) { return; }
       if(!CozyHR.validateText('#passwordTwo', {empty:false,sameAs:'#passwordOne'}, 'The two passwords do not match.')) { return; }
+
+      $.post('/auth/createCompany');
     };
 
     // Bind

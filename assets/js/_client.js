@@ -87,7 +87,7 @@ CozyHR.notify = function(content, options) {
 		  autoClose: 5000,
 			animation: {open: 'flip', close: 'flip'},
 			color: (options.color || 'black'),
-			audio: ((options.sound===true)?'/sounds/boop3':'')
+			audio: ((options.sound===true)?'/sounds/bling2':'')
 		})
 	);
 
@@ -177,6 +177,7 @@ CozyHR.validateText = function(selector, validationOptions, notificationMessage)
 		if($(selector).val().length == 0) {
 			showNotification();
 			$(selector).effect('pulsate', 100);
+			$(selector).focus();
 			return false;
 		}
 	}
@@ -186,6 +187,7 @@ CozyHR.validateText = function(selector, validationOptions, notificationMessage)
 		if($(selector).val() != $(validationOptions.sameAs).val()) {
 			showNotification();
 			$(selector).effect('pulsate', 100);
+			$(selector).focus();
 			return false;
 		}
 	}

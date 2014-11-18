@@ -167,7 +167,7 @@ module.exports = {
    * @via     HTTP
    * @method  POST
    */
-  do_org_register: function(req, res) {
+  createUser: function(req, res) {
     var es = ExceptionService.require(req, res, { POST: true });
 
     var inviteKey = req.param('key');
@@ -202,6 +202,26 @@ module.exports = {
         }));
       }));
     }));
+  },
+
+  /**
+   * @via     HTTP
+   * @method  POST
+   */
+  createCompany: function(req, res) {
+    var es = ExceptionService.require(req, res, { POST: true });
+
+    var params = ValidationService.validateParams(req, [
+      { param: 'email', checks: [ValidationService.NOT_EMPTY] }
+    ]);
+
+    if(params.hasErrors()) {
+
+    }
+
+    // params.get('email');
+
+
   },
 
   /**
