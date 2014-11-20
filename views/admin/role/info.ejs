@@ -12,7 +12,7 @@
           <div class="title">Name</div>
           <div class="subtitle">The name of the role.</div>
         </div>
-        <div class="setting"><input type="text" id="txtRoleName" value=""></div>
+        <div class="setting"><input type="text" id="txtRoleName" value="<%= role.jobTitle %>"></div>
       </div>
 
       <!-- PTO Accrual Rate -->
@@ -42,6 +42,15 @@
         <div class="setting" id="vacaAccrualContainer"></div>
       </div>
 
+      <!-- Save -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title green">Save</div>
+          <div class="subtitle green">Be sure to save when you're done!</div>
+        </div>
+        <div class="setting"><input type="button" id="btnSaveSettings" value="Save Settings"></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -54,8 +63,16 @@
   </div>
 
   <div class="content">
-    <div>If you would like to delete the role entirely, you can click the button below. <strong>There is no way to undo this action.</strong></div>
-    <div style="padding-top:5px;"><input type="button" id="btnDeleteRole" class="red" value="Delete Role"></div>
+
+    <!-- Delete Role -->
+    <div class="settingWrapper">
+      <div class="info">
+        <div class="title red">Delete Role</div>
+        <div class="subtitle red">If you would like to delete the role entirely, you can click the button below. <strong>There is no way to undo this action.</strong></div>
+      </div>
+      <div class="setting"><input type="button" id="btnDeleteRole" class="red" value="Delete Role"></div>
+    </div>
+
   </div>
 </div>
 
