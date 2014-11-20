@@ -65,7 +65,7 @@ _signin.prototype.init = function() {
             return;
           }
 
-          $.post('/auth/do_org_register', { key: $('#inviteKey').val(), fn: $('#nameFirst').val(), ln: $('#nameLast').val(), password: $('#passwordOne').val() }, function(d) {
+          $.post('/auth/createUser', { key: $('#inviteKey').val(), fn: $('#nameFirst').val(), ln: $('#nameLast').val(), password: $('#passwordOne').val() }, function(d) {
             if(d.success) {
               $('#signinWrapper').fadeOut(function() {
                 alert("Your account has been created! You will now be redirected to the login screen.");
@@ -95,14 +95,37 @@ _signin.prototype.initRegister = function() {
     // doRegister
     var doRegister = function(e) {
       // Validation
-      if(!CozyHR.validateText('#email', {empty:false})) { return; }
-      if(!CozyHR.validateText('#subdomain', {empty:false})) { return; }
-      if(!CozyHR.validateText('#nameFirst', {empty:false})) { return; }
-      if(!CozyHR.validateText('#nameLast', {empty:false})) { return; }
-      if(!CozyHR.validateText('#passwordOne', {empty:false})) { return; }
-      if(!CozyHR.validateText('#passwordTwo', {empty:false,sameAs:'#passwordOne'}, 'The two passwords do not match.')) { return; }
+      if(!CozyHR.validateText('#companyName', { notEmpty: true })) { return; }
+      if(!CozyHR.validateText('#email', { notEmpty: true, isEmail: true }, 'The email is not formatted correctly.')) { return; }
+      if(!CozyHR.validateText('#subdomain', { notEmpty: true })) { return; }
+      if(!CozyHR.validateText('#nameFirst', { notEmpty: true })) { return; }
+      if(!CozyHR.validateText('#nameLast', { notEmpty: true })) { return; }
+      if(!CozyHR.validateText('#passwordOne', { notEmpty: true })) { return; }
+      if(!CozyHR.validateText('#passwordTwo', { notEmpty: true, sameAs: '#passwordOne' }, 'The two passwords do not match.')) { return; }
 
-      $.post('/auth/createCompany');
+      $('.press-enter').html('<i class="fa fa-spinner fa-spin"></i>');
+
+      $.post('/auth/createCompany', {
+        companyName: $('#companyName').val(),
+        email: $('#email').val(),
+        subdomain: $('#subdomain').val(),
+        nameFirst: $('#nameFirst').val(),
+        nameLast: $('#nameLast').val(),
+        password: $('#passwordTwo').val()
+      }, function(res) {
+        $('.press-enter').html('Press enter to start enjoying the benefits of CozyHR.');
+
+        if(res.success) {
+          alert("Your company has been created! You will now be redirected to the login screen.");
+          if(CozyHR.env === 'development') {
+            document.location = "http://" + res.subdomain.replace('.cozyhr.com', '.dev.cozyhr.com') + "/auth/signin";
+          } else {
+            document.location = "http://" + res.subdomain + "/auth/signin";
+          }
+        } else {
+          CozyHR.notify(res.error, {color: 'red', sound: true});
+        }
+      });
     };
 
     // Bind

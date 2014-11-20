@@ -12,6 +12,13 @@ _timeclock.prototype.init = function() {
 		});
 
 		var getPositionsAtOffice = function(officeId) {
+			if(!officeId) {
+				$('#sectionClockablePositions').html( Mustache.render(CozyHR.templates['clockPositionsFillin'], {
+					positions: []
+				}) );
+				return;
+			}
+
 			io.socket.get('/timeclock/getClockablePositions', {
 				officeId: officeId
 			}, function(res) {

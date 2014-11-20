@@ -212,16 +212,67 @@ module.exports = {
     var es = ExceptionService.require(req, res, { POST: true });
 
     var params = ValidationService.validateParams(req, [
-      { param: 'email', checks: [ValidationService.NOT_EMPTY] }
+      { param: 'companyName', checks: [ValidationService.NOT_EMPTY] },
+      { param: 'email', checks: [ValidationService.NOT_EMPTY, ValidationService.IS_EMAIL] },
+      { param: 'subdomain', checks: [ValidationService.NOT_EMPTY] },
+      { param: 'nameFirst', checks: [ValidationService.NOT_EMPTY] },
+      { param: 'nameLast', checks: [ValidationService.NOT_EMPTY] },
+      { param: 'password', checks: [ValidationService.NOT_EMPTY] }
     ]);
 
     if(params.hasErrors()) {
-
+      throw ExceptionService.error('Server-side validation failed.');
     }
 
-    // params.get('email');
+    Company.find({ host: params.get('subdomain').toLowerCase() + '.cozyhr.com' }).exec(es.wrap(function(e, companies) {
+      if(e || companies.length >= 1) {
+        return res.json({ success: false, error: 'The subdomain you\'ve choosen is already in use. Please choose a new one.' });
+      }
 
+      User.findOne({ email: params.get('email').toLowerCase() }).exec(es.wrap(function(e, users) {
+        if(e) {
+          throw ExceptionService.error('Error looking for users matching email.');
+        }
 
+        if(users) {
+          return res.json({ success: false, error: 'The email is already associated with another CozyHR user. Please use another email.' });
+        }
+
+        Company.create({ name: params.get('companyName'), host: params.get('subdomain').toLowerCase() + '.cozyhr.com' }).exec(es.wrap(function(e, createdCompany) {
+          if(e) {
+            throw ExceptionService.error('Could not create company.');
+          }
+
+          Role.create({ companyId: createdCompany.id, jobTitle: 'Founder / CEO', companyAdmin: true }).exec(es.wrap(function(e, createdRole) {
+            if(e) {
+              throw ExceptionService.error('Could not create role.');
+            }
+
+            User.create({
+              firstName: params.get('nameFirst'),
+              lastName: params.get('nameLast'),
+              email: params.get('email'),
+              password: params.get('password'),
+              company: createdCompany.id,
+              role: createdRole.id,
+              picture: 'https://www.marqueed.com/assets/default_user-9fa815e2c71f8bad4f3643c9546ac4aa.png'
+            }).exec(es.wrap(function(e, createdUser) {
+              if(e) {
+                throw ExceptionService.error('Could not create user.');
+              }
+
+              CompanyFeed.create({ company: createdCompany.id, user: createdUser.id, office: null, content: 'created a new human resources portal for ' + createdCompany.name + '!'}).exec(es.wrap(function(e, createdFeed) {
+                if(e) {
+                  throw ExceptionService.error('Could not create feed item.');
+                }
+
+                res.json({ success: true, subdomain: createdCompany.host });
+              }));
+            }));
+          }));
+        }));
+      }));
+    }));
   },
 
   /**

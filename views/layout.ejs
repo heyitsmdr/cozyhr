@@ -91,11 +91,14 @@
 
     <%- partial('mustache') %>
 
+    <script>
     <% if(req.session.authenticated) { %>
-      <script>
-        CozyHR.userId = "<%- req.session.userinfo.id %>";
-        CozyHR.env = "<%- ENV %>";
-      </script>
+      CozyHR.userId = "<%- req.session.userinfo.id %>";
+      CozyHR.env = "<%- ENV %>";
+    <% } else { %>
+      CozyHR.env = "<%- ENV %>";
     <% } %>
+    </script>
+
     </body>
 </html>

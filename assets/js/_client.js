@@ -168,12 +168,12 @@ CozyHR.bindText = function(selector, func) {
 CozyHR.validateText = function(selector, validationOptions, notificationMessage) {
 	var showNotification = function() {
 		if(notificationMessage) {
-			CozyHR.notify(notificationMessage);
+			CozyHR.notify(notificationMessage, { color: 'red' });
 		}
 	};
 
 	// Empty?
-	if(typeof validationOptions.empty !== 'undefined' && validationOptions.empty === false) {
+	if(validationOptions.notEmpty) {
 		if($(selector).val().length == 0) {
 			showNotification();
 			$(selector).effect('pulsate', 100);
@@ -191,6 +191,17 @@ CozyHR.validateText = function(selector, validationOptions, notificationMessage)
 			return false;
 		}
 	}
+
+	// Email
+	if(validationOptions.isEmail) {
+		if($(selector).val().indexOf('@') == -1 || $(selector).val().indexOf('.') == -1) {
+			showNotification();
+			$(selector).effect('pulsate', 100);
+			$(selector).focus();
+			return false;
+		}
+	}
+
 	return true;
 };
 
