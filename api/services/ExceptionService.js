@@ -56,7 +56,7 @@ module.exports = {
   },
 
   socket: function(req, res, data) {
-    if(sentryClient)
+    if(sentryClient && (typeof data.fatal === 'undefined' || data.fatal === true))
       sentryClient.captureError(data, {tags: {dyno: process.env.DYNO || 'local.1' }});
 
     if(typeof data.fatal === 'undefined' || data.fatal === true) {
@@ -76,7 +76,7 @@ module.exports = {
   },
 
   http: function(req, res, data, generatedCode) {
-    if(sentryClient)
+    if(sentryClient && (typeof data.fatal === 'undefined' || data.fatal === true))
       sentryClient.captureError(data, {tags: {dyno: process.env.DYNO || 'local.1' }});
 
     MetricService.increment('http.exceptions');
