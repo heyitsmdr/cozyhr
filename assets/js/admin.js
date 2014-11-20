@@ -212,6 +212,11 @@ _admin.prototype.initPositions = function() {
 
 _admin.prototype.initRole = function() {
   $(document).ready(function() {
+    // Load Mustache Templates
+    $('#ptoAccrualContainer').html(Mustache.render(CozyHR.templates['accrualSetting'], { id: 'pto' }));
+    $('#sickAccrualContainer').html(Mustache.render(CozyHR.templates['accrualSetting'], { id: 'sick' }));
+    $('#vacaAccrualContainer').html(Mustache.render(CozyHR.templates['accrualSetting'], { id: 'vaca' }));
+
     // Bind delete role
     $('#btnDeleteRole').on('click', _.debounce(function() {
       io.socket.post('/admin/deleteRole', {

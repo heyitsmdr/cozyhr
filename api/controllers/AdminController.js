@@ -379,6 +379,7 @@ module.exports = {
               { name: 'Roles', href: '/admin/roles' },
               { name: role.jobTitle }
             ],
+          mustacheTemplates: ['accrualSetting'],
           role: role
         });
       } else if(selectedSection == 'employees') {

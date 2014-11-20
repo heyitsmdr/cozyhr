@@ -84,4 +84,13 @@
   </script>
 <% } %>
 
+<% if(mustacheTemplates.indexOf('accrualSetting') > -1) { %>
+  <script id="accrualSetting" type="x-tmpl-mustache">
+    <select id="{{id}}AccrualType">
+      <option value="disabled">Disabled</option>
+      <option value="disabled">Disabled</option>
+    </select>
+  </script>
+<% } %>
+
 <% } %>
