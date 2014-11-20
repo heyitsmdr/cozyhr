@@ -49,7 +49,7 @@
       <div class="settingWrapper">
         <div class="info">
           <div class="title">Current Subdomain</div>
-          <div class="subtitle">This is the subdomain used to access your CozyHR portal.</div>
+          <div class="subtitle">This is the current subdomain used to access your CozyHR portal.</div>
         </div>
         <div class="setting"><input type="text" value="<%- req.session.userinfo.company.host %>" disabled="disabled"></div>
       </div>
@@ -58,7 +58,7 @@
       <div class="settingWrapper">
         <div class="info">
           <div class="title">New Subdomain</div>
-          <div class="subtitle">This is the subdomain used to access your CozyHR portal.</div>
+          <div class="subtitle">This will be the new subdomain used to access your CozyHR portal.</div>
         </div>
         <div class="setting"><input type="text" id="txtCompanySubdomain" value="<%- req.session.userinfo.company.host.replace('.cozyhr.com', '') %>"></div>
       </div>
