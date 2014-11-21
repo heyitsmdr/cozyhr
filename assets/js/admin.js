@@ -239,7 +239,6 @@ _admin.prototype.initEmployee = function() {
       io.socket.post('/admin/saveEmployee', {
         userId: CozyHR.editingUserId,
         fullName: $('#txtFullName').val(),
-        picture: $('#txtPicture').val()
       }, function(res) {
         if(res.success) {
           CozyHR.notify('Your settings have been saved.', {color: 'green', sound: true});

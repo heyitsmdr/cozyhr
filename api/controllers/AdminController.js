@@ -201,16 +201,12 @@ module.exports = {
 
       // alright, let us continue
       var fullName = req.param('fullName');
-      var picture = req.param('picture');
 
-      User.update({ id: user.id }, {
-        picture: picture
-      }).exec(es.wrap(function(e, updatedUser) {
+      User.update({ id: user.id }, {}).exec(es.wrap(function(e, updatedUser) {
         if(e) {
           throw ExceptionService.error('Could not update user.');
         }
 
-        req.session.userinfo.picture = updatedUser[0].picture;
         res.json({ success: true });
       }));
     }));
