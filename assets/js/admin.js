@@ -56,7 +56,7 @@ _admin.prototype.initEmployees = function() {
       $('#selNewEmployeeRole').chosen({width:'200px'});
     }
 
-    CozyHR.bindClick('#btnInviteEmployee', function() {
+    CozyHR.bindTextClick('#txtNewEmployeeEmail', '#btnInviteEmployee', function() {
       if($('#txtNewEmployeeEmail').val().length > 0) {
         io.socket.post('/admin/createInvite', {
           email: $('#txtNewEmployeeEmail').val(),
