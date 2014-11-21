@@ -47,13 +47,13 @@ module.exports = function(grunt) {
 			options: {
 				startTag: '<!--SCRIPTS-->',
 				endTag: '<!--SCRIPTS END-->',
-				fileTmpl: '<script src="http://static.cozyhr.com%s?t=' + Date.now() + '"></script>',
+				fileTmpl: '<script src="http://static.cozyhr.com%s"></script>',
 				appRoot: '.tmp/public'
 			},
 			files: {
-				'.tmp/public/**/*.html': ['.tmp/public/min/production.min.js'],
-				'views/**/*.html': ['.tmp/public/min/production.min.js'],
-				'views/**/*.ejs': ['.tmp/public/min/production.min.js']
+				'.tmp/public/**/*.html': ['.tmp/public/min/*.production.min.js'],
+				'views/**/*.html': ['.tmp/public/min/*.production.min.js'],
+				'views/**/*.ejs': ['.tmp/public/min/*.production.min.js']
 			}
 		},
 
@@ -107,13 +107,13 @@ module.exports = function(grunt) {
 			options: {
 				startTag: '<!--STYLES-->',
 				endTag: '<!--STYLES END-->',
-				fileTmpl: '<link rel="stylesheet" href="http://static.cozyhr.com%s?t=' + Date.now() + '">',
+				fileTmpl: '<link rel="stylesheet" href="http://static.cozyhr.com%s">',
 				appRoot: '.tmp/public'
 			},
 			files: {
-				'.tmp/public/index.html': ['.tmp/public/min/production.min.css'],
-				'views/**/*.html': ['.tmp/public/min/production.min.css'],
-				'views/**/*.ejs': ['.tmp/public/min/production.min.css']
+				'.tmp/public/index.html': ['.tmp/public/min/*.production.min.css'],
+				'views/**/*.html': ['.tmp/public/min/*.production.min.css'],
+				'views/**/*.ejs': ['.tmp/public/min/*.production.min.css']
 			}
 		},
 
