@@ -99,12 +99,6 @@ module.exports.sockets = {
   *                                                                          *
   ***************************************************************************/
 
-  adapter: 'redis',
-  host: 'koi.redistogo.com',
-  port: 10677,
-  db: 'redistogo',
-  pass: '5952fbe237e40957ca1d7b7c91edc90f',
-
   // adapter: 'redis',
   // host: '127.0.0.1',
   // port: 6379,

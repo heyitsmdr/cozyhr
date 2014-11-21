@@ -21,6 +21,22 @@ module.exports = {
     connection: 'digitalOceanMongoServer'
   },
 
+  session: {
+    adapter: 'mongo',
+    host: 'mongo.cozyhr.com',
+    port: 27017,
+    db: 'cozy-production',
+    collection: 'sessions'
+  },
+
+  sockets: {
+    adapter: 'mongo',
+    host: 'mongo.cozyhr.com',
+    port: 27017,
+    db: 'cozy-production',
+    collection: 'sockets'
+  },
+
   consoleFiltering: {
     metrics: true
   }
