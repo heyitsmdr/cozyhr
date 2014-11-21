@@ -191,7 +191,7 @@ module.exports = {
         password: password,
         company: invite.invitedTo.id,
         role: invite.invitedRole,
-        picture: "https://www.marqueed.com/assets/default_user-9fa815e2c71f8bad4f3643c9546ac4aa.png"
+        picture: MiscService.generateGravatarURL(invite.inviteEmail)
       }).exec(es.wrap(function(e, newUser) {
         if(e || !newUser) {
           return res.json({ error: 'Failed to create a new user.' });
@@ -255,7 +255,7 @@ module.exports = {
               password: params.get('password'),
               company: createdCompany.id,
               role: createdRole.id,
-              picture: 'https://www.marqueed.com/assets/default_user-9fa815e2c71f8bad4f3643c9546ac4aa.png'
+              picture: MiscService.generateGravatarURL(params.get('email'))
             }).exec(es.wrap(function(e, createdUser) {
               if(e) {
                 throw ExceptionService.error('Could not create user.');

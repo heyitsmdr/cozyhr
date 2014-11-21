@@ -19,9 +19,12 @@
       <div class="settingWrapper">
         <div class="info">
           <div class="title">Picture</div>
-          <div class="subtitle">This should be a picture of yourself.</div>
+          <div class="subtitle">Your profile picture across the site.</div>
         </div>
-        <div class="setting"><input type="text" id="txtPicture" value="<%- employee.picture %>"></div>
+        <div class="setting margin3">
+          <div class="picture" style="background-image:url('<%= employee.picture %>')"></div>
+          <div class="text">We use <strong>Gravatar</strong> for this.<br>Click <a href="http://www.gravatar.com" target="_new">here</a> to edit it.</div>
+        </div>
       </div>
 
       <!-- Save -->

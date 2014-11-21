@@ -28,7 +28,6 @@ module.exports = {
 		password: 'string',
     company: { model: 'Company' },
     role: { model: 'Role' },
-		picture: 'string',
     counter_pto: {
       type: 'float',
       defaultsTo: 0
@@ -41,6 +40,7 @@ module.exports = {
       type: 'float',
       defaultsTo: 0
     },
+    picture: 'string',
 		generatePicture: function(smallPicture) {
 			return {
 					name: this.fullName(),
