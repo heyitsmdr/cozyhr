@@ -65,13 +65,6 @@ module.exports.connections = {
     database: 'app26186884'
   },
 
-  localMongoServer: {
-    adapter: 'sails-mongo',
-    host: 'localhost',
-    port: 27017,
-    database: 'app26186884'
-  },
-
   digitalOceanMongoServer: {
     adapter: 'sails-mongo',
     host: 'mongo.cozyhr.com',
