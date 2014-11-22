@@ -271,13 +271,3 @@ function handleValidationError(ve) {
 		console.log(e.stack);
 	});
 };
-
-function createNotification(content, alertType) {
-	var n = noty({
-		text: content,
-		layout: 'topRight',
-		type: alertType || 'alert',
-		maxVisible: 5,
-		timeout: 3000
-	});
-};
