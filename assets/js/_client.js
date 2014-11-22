@@ -94,6 +94,34 @@ CozyHR.notify = function(content, options) {
 	return CozyHR.notifications[CozyHR.notifications.length - 1]; // Return jBox instance
 };
 
+CozyHR.confirm = function(question, opt, confirmCallback, cancelCallback) {
+	swal({
+		title: "Are you sure?",
+		text: question,
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Yes, delete it!",
+		cancelButtonText: "No, cancel plx!",
+		closeOnConfirm: false,
+		closeOnCancel: false,
+		allowOutsideClick: true
+	}, function(isConfirm){
+		if (isConfirm) {
+			swal({
+				title: "Deleted!",
+				text: "Your imaginary file has been deleted.",
+				type: "success",
+				doneFunction: function() {
+					console.log('done');
+				}
+			});
+		} else {
+			swal("Cancelled", "Your imaginary file is safe :)", "error");
+		}
+	});
+};
+
 // Load page-specific Mustache template(s)
 CozyHR.loadPageTemplates = function() {
 	$('script[type=x-tmpl-mustache]').each(function(index, elem) {
