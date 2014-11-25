@@ -64,11 +64,8 @@ _dashboard.prototype.updateTimestamps = function() {
 _dashboard.prototype.onFeedUpdate = function(res) {
 	var feedData = [];
 
-	// Sort by date
-	var sortedResponse = CozyHR.sortAssocArray(res, 'date', { sortType: 'date' });
-
 	// Generate the data to pass to mustache for rendering
-	sortedResponse.forEach(function(feedItem) {
+	res.forEach(function(feedItem) {
 		feedData.push({
 			contentHtml: feedItem.content,
 			feedId: feedItem.feedid,
@@ -106,7 +103,7 @@ _dashboard.prototype.onFeedUpdate = function(res) {
 		$('#subSectionCompanyFeedEntries').html(html);
 
 		// Show the latest five comments for each feed item
-		sortedResponse.forEach(function(feedItem) {
+		res.forEach(function(feedItem) {
 			$('#fid-' + feedItem.feedid + ' .specificComment').each(function(i, elem) {
 				if(i >= (feedItem.comments.length - 5)) {
 					$(elem).show();
@@ -195,7 +192,7 @@ _dashboard.prototype.doWriteComment = _.debounce(function(elem) {
 	}.bind(elem));
 }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true);
 
-_dashboard.prototype.doDeleteComment = function(elem, commentId) {
+_dashboard.prototype.doDeleteComment = _.debounce(function(elem, commentId) {
 	var commentId;
 
 	if(commentId) {
@@ -203,7 +200,7 @@ _dashboard.prototype.doDeleteComment = function(elem, commentId) {
 			commentId: commentId
 		});
 	}
-};
+}, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true);
 
 _dashboard.prototype.onCommentMouseOver = function(evt) {
 	$(evt.currentTarget).find('.commentLinks').show();

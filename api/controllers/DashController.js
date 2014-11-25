@@ -77,7 +77,7 @@ module.exports = {
 			feeds.forEach(function(_feed) {
 				_feed.userObj = feedUsers[_feed.user];
 
-				var feedComments = _feed.comments.forEach(function(_comment) {
+				_feed.comments.forEach(function(_comment) {
 					_comment.userObj = commentUsers[_comment.user];
 
 					_comment.authorName = _comment.userObj.fullName();
@@ -89,7 +89,7 @@ module.exports = {
 					content: '<strong>' + _feed.userObj.fullName() + '</strong> ' + _feed.content,
 					date: _feed.createdAt,
 					feedid: _feed.id,
-					comments: feedComments || [],
+					comments: _feed.comments || [],
 					picture: _feed.userObj.genPicture(false),
 					mePicture: _feed.userObj.picture,
 					officeName: ((_feed.office) ? _feed.office.name : 'Global')
@@ -148,7 +148,7 @@ module.exports = {
 			if(e)
 				throw ExceptionService.error('Could not find user.');
 
-			CompanyFeedComments.create({
+			CompanyFeedComment.create({
 				feed: req.param('feedid'),
 				user: req.session.userinfo.id,
 				content: req.param('comment')
@@ -194,7 +194,7 @@ module.exports = {
 	removeComment: function(req, res) {
 		var es = ExceptionService.require(req, res, { socket: true, POST: true });
 
-		CompanyFeedComments.findOne(req.param('commentId')).exec(es.wrap(function(err, comment) {
+		CompanyFeedComment.findOne(req.param('commentId')).exec(es.wrap(function(err, comment) {
 			if(err)
 				throw ExceptionService.error('Could not find comment.');
 
@@ -203,7 +203,7 @@ module.exports = {
 				// Check if we're allowed to delete this
 				if(comment.user == req.session.userinfo.id) {
 					// Ok, let's delete.
-					CompanyFeedComments.destroy({ id: comment.id }, es.wrap(function(err) {
+					CompanyFeedComment.destroy({ id: comment.id }, es.wrap(function(err) {
 						if(err)
 							throw ExceptionService.error('Could not delete comment.');
 
