@@ -9,20 +9,15 @@ module.exports = {
 	home: function(req, res) {
 		var es = ExceptionService.require(req, res, { GET: true });
 
-		User.findOne(req.session.userinfo.id).exec(es.wrap(function(e, usr) {
-			if(e)
-				throw ExceptionService.error('Could not find the user.');
-
-			Office.find({company: usr.company}).exec(es.wrap(function(e, offices) {
-				if(e)
-					throw ExceptionService.error('Could not get the offices for the company.')
-
-				res.view('main/dash', {
-					selectedPage: 'dash',
-					offices: offices,
-					mustacheTemplates: ['feedItem', 'feedItemComment', 'workingNow']
-				});
-			}));
+		Office.find({ company: req.session.userinfo.company.id })
+		.then(function(offices) {
+			res.view('main/dash', {
+				selectedPage: 'dash',
+				offices: offices,
+				mustacheTemplates: ['feedItem', 'feedItemComment', 'workingNow']
+			});
+		}).catch(es.wrap(function(e) {
+			throw ExceptionService.error(e);
 		}));
 	},
 
