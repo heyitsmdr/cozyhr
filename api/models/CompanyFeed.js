@@ -12,7 +12,8 @@ module.exports = {
   	company: { model: 'Company' },
   	user: { model: 'User' },
     office: { model: 'Office' },
-  	content: 'string'
+  	content: 'string',
+    comments: { collection: 'CompanyFeedComment', via: 'feed' }
   }
 
 };

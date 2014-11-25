@@ -40,15 +40,7 @@ module.exports = {
       type: 'float',
       defaultsTo: 0
     },
-    picture: 'string',
-		generatePicture: function(smallPicture) {
-			return {
-					name: this.fullName(),
-					picture: this.picture,
-					small: smallPicture,
-					position: ''
-			};
-		}
+    picture: 'string'
 	},
 
 	/* Lifecycle Callbacks */

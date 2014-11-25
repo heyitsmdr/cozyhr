@@ -112,10 +112,10 @@ CozyHR.confirm = function(question, opt, confirmCallback, cancelCallback) {
 				title: "Deleted!",
 				text: "Your imaginary file has been deleted.",
 				type: "success",
-				doneFunction: function() {
-					console.log('done');
-				}
-			});
+				closeOnConfirm: false}, function() {
+					this.close();
+					console.log('k');
+				});
 		} else {
 			swal("Cancelled", "Your imaginary file is safe :)", "error");
 		}

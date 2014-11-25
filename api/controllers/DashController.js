@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 module.exports = {
 
 	/**
@@ -17,7 +19,6 @@ module.exports = {
 
 				res.view('main/dash', {
 					selectedPage: 'dash',
-					picture: usr.generatePicture(false, req),
 					offices: offices,
 					mustacheTemplates: ['feedItem', 'feedItemComment', 'workingNow']
 				});
@@ -35,7 +36,7 @@ module.exports = {
 		res.send( req.session );
 	},
 
-  /**
+	/**
    * @via     Socket
    * @method  GET
    */
@@ -43,70 +44,63 @@ module.exports = {
 		var es = ExceptionService.require(req, res, { socket: true, GET: true });
 
 		var filter = req.param('filter');
-
-		feedItems = [];
-
+		var feedItems = [];
 		var feedQueryParams = { company: req.session.userinfo.company.id };
 
 		if(filter.toLowerCase() !== 'all') {
 			feedQueryParams.office = [filter, null];
 		}
 
-		CompanyFeed.find(feedQueryParams).limit(10).skip(req.param('start')).sort({ createdAt: 'desc' }).populate('office').exec(es.wrap(function(err, feeds){
-			if(err)
-				throw ExceptionService.error('Could not get the company feed.');
+		CompanyFeed.find(feedQueryParams)
+		.limit(10)
+		.skip(req.param('start'))
+		.sort({ createdAt: 'desc' })
+		.populate('office')
+		.populate('comments')
+		.then(function(feeds){
+			var feedUsers = PopUser.manyPromise({ id: _.uniq(_.pluck(feeds, 'user')) }, {});
 
-			// Iterate through the feeds at this company
-			async.each(feeds, es.wrap(function(feed, callback){
-				// Let's gather the comments (if any)
-				CompanyFeedComments.find({ feed: feed.id }).exec(es.wrap(function(err, feedComments){
-					if(err)
-						throw ExceptionService.error('Could not get feed comments.');
+			var commentUsersArray = [];
+			_.forEach(feeds, function(_feed) {
+				_.forEach(_feed.comments, function(_comment) {
+					commentUsersArray.push(_comment.user);
+				});
+			});
 
-					// Iterate through the feedComments to get the authorName
-					async.each(feedComments, es.wrap(function(comment, cb) {
-						PopUser.one(comment.user, es.wrap(function(e, commentAuthor) {
-							if(e)
-								throw ExceptionService.error('Could not find comment author.');
+			var commentUsers = PopUser.manyPromise({ id: _.uniq(commentUsersArray) }, {});
 
-							comment.authorName = commentAuthor.fullName();
-							comment.picture = commentAuthor.genPicture(true);
+			return [feeds, feedUsers, commentUsers];
+		}).spread(function(feeds, feedUsers, commentUsers) {
+			var feedUsers = _.indexBy(feedUsers, 'id');
+			var commentUsers = _.indexBy(commentUsers, 'id');
 
-							cb();
-						}));
-					}), es.wrap(function(err) {
-						if(err)
-							throw ExceptionService.error('Could not properly get feed comments.');
+			feeds.forEach(function(_feed) {
+				_feed.userObj = feedUsers[_feed.user];
 
-						PopUser.one(feed.user, es.wrap(function(e, author){
-							if(e)
-								throw ExceptionService.error('Could not find feed author.');
+				var feedComments = _feed.comments.forEach(function(_comment) {
+					_comment.userObj = commentUsers[_comment.user];
 
-							feedItems.push({
-								authorName: author.fullName(),
-								content: '<strong>' + author.fullName() + '</strong> ' + feed.content,
-								date: feed.createdAt,
-								feedid: feed.id,
-								comments: feedComments,
-								picture: author.genPicture(false),
-								mePicture: req.session.userinfo.picture,
-								officeName: ((feed.office) ? feed.office.name : 'Global')
-							});
+					_comment.authorName = _comment.userObj.fullName();
+					_comment.picture = _comment.userObj.genPicture(true);
+				});
 
-							callback();
-						}));
-					}));
-				}));
-			}), es.wrap(function(err){
-				if(err)
-					throw ExceptionService.error('Could not properly get feed.');
+				feedItems.push({
+					authorName: _feed.userObj.fullName(),
+					content: '<strong>' + _feed.userObj.fullName() + '</strong> ' + _feed.content,
+					date: _feed.createdAt,
+					feedid: _feed.id,
+					comments: feedComments || [],
+					picture: _feed.userObj.genPicture(false),
+					mePicture: _feed.userObj.picture,
+					officeName: ((_feed.office) ? _feed.office.name : 'Global')
+				});
 
 				req.socket.emit('feedUpdate', feedItems);
-			}));
+			});
+		}).catch(es.wrap(function(err) {
+			throw ExceptionService.error(err);
 		}));
 
-		// Subscribe to comments for this company
-		req.socket.join('dash-cid-' + req.session.userinfo.company.id);
 	},
 
 	/**
