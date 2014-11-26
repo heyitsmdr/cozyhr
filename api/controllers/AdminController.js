@@ -408,26 +408,42 @@ module.exports = {
       throw ExceptionService.error('No role id specified.');
     }
 
-    Role.findOne(roleId).exec(es.wrap(function(e, role) {
-      if(e || !role) {
-        throw ExceptionService.error('Could not find role.');
+    Role.findOne(roleId)
+    .then(function(role) {
+      if(!role) {
+        var err = new Error('Could not find role.');
+        err.fatal = true;
+        throw err;
       }
 
       // same company?
       if(role.companyId != req.session.userinfo.company.id) {
-        throw ExceptionService.error('Role does not belong to this company.');
+        var err = new Error('Role does not belong to this company.');
+        err.fatal = true;
+        throw err;
       }
 
-      // TODO: Check if any users are assigned to this role
+      // has users assigned to it?
+      var roleUsers = User.find({ role: role.id }).then(function(users) {
+        return users;
+      });
 
-      Role.destroy({ id: role.id }).exec(es.wrap(function(e) {
-        if(e) {
-          throw ExceptionService.error('Error deleting role.');
-        }
+      return [role.id, roleUsers];
+    }).spread(function(roleId, roleUsers) {
+      if(roleUsers.length >= 1) {
+        var err = new Error('There are no employees set to this role.');
+        err.fatal = false;
+        throw err;
+      }
 
-        res.json({ success: true });
-      }));
+      return Role.destroy({ id: roleId }).then();
+    }).then(function() {
+      res.json({ success: true });
+    }).catch(es.wrap(function(err) {
+      throw ExceptionService.error(err, { fatal: err.fatal });
     }));
+
+
   },
 
   /**
