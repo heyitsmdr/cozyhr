@@ -89,7 +89,13 @@
       <%- partial('bottombar') %>
     <% } %>
 
-    <%- partial('mustache') %>
+    <% if(typeof mustacheTemplates !== 'undefined') { %>
+      <% for(var i = 0; i < mustacheTemplates.length; i++) { %>
+        <script id="<%= mustacheTemplates[i] %>" type="x-tmpl-mustache">
+          <%- partial('_mustache/' + mustacheTemplates[i] + '.mustache') %>
+        </script>
+      <% } %>
+    <% } %>
 
     <script>
     <% if(req.session.authenticated) { %>

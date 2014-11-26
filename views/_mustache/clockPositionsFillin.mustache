@@ -1,0 +1,8 @@
+<div class="row flush">
+  {{#positions}}
+  <div class="6u position"><a href="#" onclick="CozyHR.pageHelper.instance.clockIn('{{id}}')"><div>{{name}}</div></a></div>
+  {{/positions}}
+  {{^positions}}
+    <div class="12u no-positions">There are no clockable positions here.</div>
+  {{/positions}}
+</div>
