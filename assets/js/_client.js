@@ -94,30 +94,51 @@ CozyHR.notify = function(content, options) {
 	return CozyHR.notifications[CozyHR.notifications.length - 1]; // Return jBox instance
 };
 
-CozyHR.confirm = function(question, opt, confirmCallback, cancelCallback) {
+CozyHR.confirm = function(question, opt) {
 	swal({
 		title: "Are you sure?",
 		text: question,
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Yes, delete it!",
-		cancelButtonText: "No, cancel plx!",
+		confirmButtonText: opt.confirmText || "Yes, delete it!",
+		cancelButtonText: opt.cancelText || "No, cancel!",
 		closeOnConfirm: false,
 		closeOnCancel: false,
 		allowOutsideClick: true
 	}, function(isConfirm){
 		if (isConfirm) {
-			swal({
-				title: "Deleted!",
-				text: "Your imaginary file has been deleted.",
-				type: "success",
-				closeOnConfirm: false}, function() {
-					this.close();
-					console.log('k');
+
+			var done = function() {
+				swal({
+					title: "Deleted!",
+					text: opt.confirmSuccess || "Deleted!",
+					type: "success",
+					closeOnConfirm: false
+				}, function() {
+					swal('close');
+					if(typeof opt.confirmCallback === 'function')
+						opt.confirmCallback();
 				});
+			};
+
+			swal('close');
+
+			if(typeof opt.preConfirmCallback === 'function')
+				opt.preConfirmCallback(done);
+			else
+				done();
 		} else {
-			swal("Cancelled", "Your imaginary file is safe :)", "error");
+			swal({
+				title: "Cancelled",
+				text: opt.cancelSuccess || "Safe!",
+				type: "error",
+				closeOnConfirm: false
+			}, function() {
+				swal('close');
+				if(typeof opt.cancelCallback === 'function')
+					opt.cancelCallback();
+			});
 		}
 	});
 };

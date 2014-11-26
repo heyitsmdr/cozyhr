@@ -197,13 +197,24 @@ _admin.prototype.initPositions = function() {
 
     // Bind delete office
     CozyHR.bindClick('#btnDeleteOffice', function() {
-      io.socket.post('/admin/deleteOffice', {
-        officeId: CozyHR.officeId
-      }, function(res) {
-        if(res.success) {
+      CozyHR.confirm('Do you really want to delete this office from your company?', {
+        confirmText: 'Yes, delete the office!',
+        cancelText: 'No, keep it.',
+        confirmSuccess: 'The office has been deleted!',
+        cancelSuccess: 'The office has not been deleted.',
+        preConfirmCallback: function(success) {
+          io.socket.post('/admin/deleteOffice', {
+            officeId: CozyHR.officeId
+          }, function(res) {
+            if(!res.success) {
+              CozyHR.notify(res.error, {color: 'red', sound: true});
+            } else {
+              success();
+            }
+          });
+        },
+        confirmCallback: function() {
           document.location = "/admin/offices";
-        } else {
-          CozyHR.notify(res.error, {color: 'red', sound: true});
         }
       });
     });
@@ -212,23 +223,36 @@ _admin.prototype.initPositions = function() {
 
 _admin.prototype.initRole = function() {
   $(document).ready(function() {
+
     // Load Mustache Templates
     $('#ptoAccrualContainer').html(Mustache.render(CozyHR.templates['accrualSetting'], { id: 'pto' }));
     $('#sickAccrualContainer').html(Mustache.render(CozyHR.templates['accrualSetting'], { id: 'sick' }));
     $('#vacaAccrualContainer').html(Mustache.render(CozyHR.templates['accrualSetting'], { id: 'vaca' }));
 
     // Bind delete role
-    $('#btnDeleteRole').on('click', _.debounce(function() {
-      io.socket.post('/admin/deleteRole', {
-        roleId: CozyHR.roleId
-      }, function(res) {
-        if(res.success) {
+    CozyHR.bindClick('#btnDeleteRole', function() {
+      CozyHR.confirm('Do you really want to delete this role from your company?', {
+        confirmText: 'Yes, delete the role!',
+        cancelText: 'No, keep it.',
+        confirmSuccess: 'The role has been deleted!',
+        cancelSuccess: 'The role has not been deleted.',
+        preConfirmCallback: function(success) {
+          io.socket.post('/admin/deleteRole', {
+            roleId: CozyHR.roleId
+          }, function(res) {
+            if(!res.success) {
+              CozyHR.notify(res.error, {color: 'red', sound: true});
+            } else {
+              success();
+            }
+          });
+        },
+        confirmCallback: function() {
           document.location = "/admin/roles";
-        } else {
-          CozyHR.notify(res.error, {color: 'red', sound: true});
         }
       });
-    }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
+    });
+
   }.bind(this));
 };
 
