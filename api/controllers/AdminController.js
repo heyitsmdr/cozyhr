@@ -431,7 +431,7 @@ module.exports = {
       return [role.id, roleUsers];
     }).spread(function(roleId, roleUsers) {
       if(roleUsers.length >= 1) {
-        var err = new Error('There are no employees set to this role.');
+        var err = new Error('There are one or more employees set to this role.');
         err.fatal = false;
         throw err;
       }
