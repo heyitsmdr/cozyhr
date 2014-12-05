@@ -37,7 +37,7 @@
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js",
-    "test": "./node_modules/mocha/bin/mocha test/*"
+    "test": "node test/travis.js"
   },
   "engines": {
     "node": "0.10.x"
