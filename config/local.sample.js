@@ -85,7 +85,7 @@ module.exports = {
    metricsaEnabled: false,
 
    log: {
-    level: 'info';
+    level: 'info'
    },
 
    consoleFiltering: {
