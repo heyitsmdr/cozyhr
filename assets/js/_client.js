@@ -98,6 +98,10 @@ CozyHR.notify = function(content, options) {
 	return CozyHR.notifications[CozyHR.notifications.length - 1]; // Return jBox instance
 };
 
+CozyHR.JST = function(template) {
+	return JST['assets/templates/' + template + '.html'];
+};
+
 CozyHR.confirm = function(question, opt) {
 	swal({
 		title: "Are you sure?",
