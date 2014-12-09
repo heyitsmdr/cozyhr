@@ -47,6 +47,7 @@
     <script src="/js/dependencies/jquery-1.11.1.min.js"></script>
     <script src="/js/dependencies/skel.0.4.9.min.js"></script>
     <script src="/js/dependencies/underscore.1.7.0-min.js"></script>
+    <script src="/js/vendor/backbone.1.1.2/backbone-min.js"></script>
     <script src="/js/vendor/chosen.1.1.0/chosen.jquery.min.js"></script>
     <script src="/js/vendor/jbox.0.3.1/jBox.js"></script>
     <script src="/js/vendor/jquery-ui.1.11.1/jquery-ui.min.js"></script>
@@ -56,6 +57,10 @@
     <script src="/js/vendor/soundjs.0.5.2/soundjs-0.5.2.min.js"></script>
     <script src="/js/vendor/sweetalert-0.3.2/sweet-alert.min.js"></script>
     <script src="/js/_client.js"></script>
+    <script src="/js/backbone/views/signin.js"></script>
+    <script src="/js/backbone/views/signin/auth-form.js"></script>
+    <script src="/js/backbone/views/signin/signin.js"></script>
+    <script src="/js/backbone/routes.js"></script>
     <script src="/js/admin.js"></script>
     <script src="/js/dashboard.js"></script>
     <script src="/js/signin.js"></script>
@@ -82,7 +87,7 @@
     <% } %>
 
     <div id="mainContainer" class="container <%= (typeof extraContainerClass !== 'undefined')?extraContainerClass:'' %>">
-      <%- body %>
+
     </div>
 
     <% if(req.session.authenticated) { %>

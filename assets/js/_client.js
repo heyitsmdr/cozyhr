@@ -50,6 +50,10 @@ CozyHR.globals = {
 	DEFAULT_DEBOUNCE_TIMEOUT: 500
 };
 
+// Prepare namespace for Backbone
+CozyHR.Views = {};
+
+// CozyHR Namespace Extensions
 CozyHR.pageHelper.init = function(pageHelper) {
 	if(CozyHR.pageHelper.instance)
 		return console.error('Page helper attempted to be initialized twice.');
