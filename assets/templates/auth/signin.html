@@ -1,0 +1,16 @@
+<div id="signinWrapper" class="authSignin">
+  <a href="http://www.cozyhr.com"><div id="logo"></div></a>
+  <div id="pageSignin">
+    <div class="intro-company"><%- companyName %></div>
+    <div class="login-form">
+      <div><input type="text" id="email" placeholder="Company Email"></div>
+      <div><input type="password" id="password" placeholder="Password"></div>
+    </div>
+    <div class="press-enter">Press enter to sign in.</div>
+  </div>
+</div>
+
+<!-- Initialize Script -->
+<script>
+  CozyHR.pageHelper.init( CozyHR.pageHelpers.signin );
+</script>
