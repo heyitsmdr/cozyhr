@@ -14,7 +14,7 @@ function checkConnectionToGraphite(callback) {
   socket = net.createConnection(2003, "graphite.cozyhr.com");
 
   socket.on('connect', function() {
-    sails.log.info('Metrics: Connected');
+    sails.log.info('[MetricService]', 'Connection to Graphite established.');
     isConnected = true;
     callback();
   });
@@ -37,7 +37,7 @@ function graphiteReporter() {
       var _reportedMetric = util.format("%s.%s %s\n", (process.env.NODE_ENV || 'development') + '.' + (process.env.DYNO || 'web.0'), queueMetric.metric + ' ' + queueMetric.value, Math.floor(Date.now() / 1000));
 
       if(sails.config.consoleFiltering.metrics)
-        sails.log.info("[metrics]", _reportedMetric.replace("\n", ""));
+        sails.log.verbose('[MetricService]', 'Sending metric:', _reportedMetric.replace("\n", ""));
 
       socket.write(_reportedMetric);
 
@@ -46,7 +46,11 @@ function graphiteReporter() {
   });
 };
 
-setInterval(graphiteReporter, REPORT_INTERVAL);
+if(sails.config.metricsEnabled !== false) {
+  setInterval(graphiteReporter, REPORT_INTERVAL);
+} else {
+  sails.log.info('[MetricService]', 'The metric service has been disabled by your config.');
+}
 
 module.exports = {
   increment: function(metric) {

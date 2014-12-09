@@ -82,6 +82,12 @@ module.exports = {
 
    environment: 'development',
 
+   metricsaEnabled: false,
+
+   log: {
+    level: 'info';
+   },
+
    consoleFiltering: {
      metrics: false
    }
