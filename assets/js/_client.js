@@ -187,6 +187,10 @@ CozyHR.sortAssocArray = function(arr, sortBy, opt) {
 	});
 };
 
+CozyHR.debounce = function(func) {
+	return _.debounce(func, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true);
+};
+
 CozyHR.bindClick = function(selector, func) {
 	$(selector).on('click', _.debounce(func, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true));
 	if(CozyHR.env !== 'production')

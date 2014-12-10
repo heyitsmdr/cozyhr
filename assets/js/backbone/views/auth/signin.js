@@ -12,15 +12,18 @@ CozyHR.Views.AuthSigninView = Marionette.LayoutView.extend({
     this.form.show(new CozyHR.Views.AuthFormView({
       title: 'CozyHR',
       submitText: 'Press enter to sign in.',
+      postTo: '/auth/attemptLogin',
       fields: [{
         type: 'text',
         id: 'email',
-        placeholder: 'Company Email'
+        placeholder: 'Company Email',
+        validationType: 'email'
       },
       {
         type: 'password',
         id: 'password',
-        placeholder: 'Password'
+        placeholder: 'Password',
+        validationType: 'password'
       }]
     }));
   },

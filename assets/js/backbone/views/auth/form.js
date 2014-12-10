@@ -2,7 +2,24 @@ var formFieldModel = Backbone.Model.extend({
   defaults: {
     type: '',
     id: '',
-    placeholder: ''
+    placeholder: '',
+    validationType: '',
+    allowBlank: false,
+    value: ''
+  },
+
+  validate: function() {
+    // Blank?
+    if(this.get('value').length === 0 && this.get('allowBlank') === false) {
+      return false;
+    }
+
+    // Email Validation
+    if(this.get('validationType') === 'email' && (this.get('value').indexOf('@') === -1 || this.get('value').indexOf('.') === -1)) {
+      return false;
+    }
+
+    return true;
   }
 });
 
@@ -15,8 +32,21 @@ var fieldView = Marionette.ItemView.extend({
     this.model = o.model;
   },
 
+  events: {
+    'keypress'  : 'onKeyPress'
+  },
+
   onBeforeRender: function() {
     this.template = _.template('<input type="<%- type %>" id="<%- id %>" placeholder="<%- placeholder %>">', this.model.attributes);
+  },
+
+  onKeyPress: function(evt) {
+    // update value on model
+    this.model.set('value', evt.target.value);
+
+    if(evt.keyCode === 13) {
+      this.trigger('try:submit');
+    }
   }
 });
 
@@ -25,6 +55,57 @@ var fieldCollectionView = Marionette.CollectionView.extend({
 
   initialize: function() {
     this.collection = new formFieldCollection;
+  },
+
+  childEvents: {
+    'try:submit': function() {
+      var formValidated = this.collection.map(function(_field) {
+        return _field.validate();
+      });
+
+      if(formValidated.indexOf(false) === -1) {
+        this.trigger('do:submit');
+      }
+    }
+  }
+});
+
+var formModel = Backbone.Model.extend({
+  defaults: {
+    title: 'Blank Form',
+    submitText: 'Press enter to submit the form',
+    submitColor: '#fff',
+    fields: [],
+    fieldCollection: false,
+    postTo: ''
+  },
+
+  initialize: function() {
+    this.setFields();
+
+    this.listenTo(this.get('fieldCollection'), 'do:submit', function() {
+      // Bubble this up
+      this.trigger('do:submit');
+    }.bind(this));
+  },
+
+  setFields: function() {
+    this.get('fields').forEach(function(field) {
+      var newField = new formFieldModel(field);
+      this.get('fieldCollection').collection.add(newField);
+    }.bind(this));
+  },
+
+  getFieldsAsJSON: function() {
+    return JSON.stringify(this.get('fieldCollection').collection);
+  },
+
+  getSubmitData: function() {
+    var submitObj = {};
+    this.get('fieldCollection').collection.each(function(field) {
+      submitObj[ field.get('id') ] = field.get('value');
+    });
+    return submitObj;
   }
 });
 
@@ -33,25 +114,36 @@ CozyHR.Views.AuthFormView = Backbone.View.extend({
 
   initialize: function(o) {
     this.fieldCollectionView = new fieldCollectionView();
+    o.fieldCollection = this.fieldCollectionView;
+    this.model = new formModel(o);
 
-    this.title = o.title || 'Blank Form';
-    this.submitText = o.submitText || 'Press enter to submit the form.';
-
-    o.fields.forEach(function(field) {
-      this.addField(field);
-    }.bind(this));
+    this.listenTo(this.fieldCollectionView, 'do:submit', this.submit);
+    this.listenTo(this.model, 'change:submitText', this.onSubmitTextChange);
   },
 
   addField: function(o) {
-    var newField = new formFieldModel(o);
-    this.fieldCollectionView.collection.add(newField);
+    this.model.get('fields').push(o);
   },
 
   render: function() {
     this.$el.html( this.template({
-      title: this.title,
-      submitText: this.submitText
+      title: this.model.get('title'),
+      submitText: this.model.get('submitText')
     }) );
     this.$('.login-form').html(this.fieldCollectionView.render().el);
+  },
+
+  submit: CozyHR.debounce(function() {
+    $.post(this.model.get('postTo'), this.model.getSubmitData(), function(data) {
+      if(data.success) {
+
+      } else {
+        this.model.set({ submitText: data.error, submitColor: '#f00' });
+      }
+    }.bind(this));
+  }),
+
+  onSubmitTextChange: function() {
+    console.log('on text change..');
   }
 });
