@@ -17,6 +17,13 @@ $(document).ready(function(){
   });
   // Load any necessary Mustache templates (passed in by the controller)
   CozyHR.loadPageTemplates();
+  // Page Helper Router
+  switch(document.location.pathname.toLowerCase()) {
+  	case '/':
+  	case '/dash':
+  		CozyHR.pageHelper.init( CozyHR.pageHelpers.dashboard );
+  		break;
+  }
 });
 
 // Underscore mixins

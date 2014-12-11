@@ -3,3 +3,7 @@ node_js:
   - "0.10"
 env:
   - NODE_ENV="production"
+notifications:
+  hipchat:
+    rooms:
+      - 73ffbaf59f532121ba8fe8e166665d@Development
