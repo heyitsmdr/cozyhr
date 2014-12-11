@@ -1,41 +1,54 @@
+var companyModel = Backbone.Model.extend({
+  urlRoot: '/'
+  name: ''
+});
+
 CozyHR.Views.AuthSigninView = Marionette.LayoutView.extend({
-  el: '#mainContainer',
   template: CozyHR.JST('auth/signin'),
 
+  className: 'bb-AuthSigninView',
+
   regions: {
-    form: '#pageSignin'
+    form: '#authFormWrapper'
   },
 
   initialize: function() {
-    this.render();
+    this.model = new companyModel();
+    this.model.fetch();
 
-    this.form.show(new CozyHR.Views.AuthFormView({
+    this.authFormView = new CozyHR.Views.AuthFormView({
       title: 'CozyHR',
       submitText: 'Press enter to sign in.',
       postTo: '/auth/attemptLogin',
-      fields: [{
-        type: 'text',
-        id: 'email',
-        placeholder: 'Company Email',
-        validationType: 'email'
-      },
-      {
-        type: 'password',
-        id: 'password',
-        placeholder: 'Password',
-        validationType: 'password'
-      }]
-    }));
+      fields: [
+        {
+          type: 'text',
+          id: 'email',
+          placeholder: 'Company Email',
+          validationType: 'email'
+        },
+        {
+          type: 'password',
+          id: 'password',
+          placeholder: 'Password',
+          validationType: 'password'
+        }
+      ]
+    });
   },
 
   render: function() {
     this.$el.html( this.template({ }) );
 
-    // fade the form in
-    $('#pageSignin').fadeIn();
+    this.form.show(this.authFormView);
 
-    // drop the logo in
-    $('#logo').hide().toggle('drop', { direction: 'up' });
+    this.$('#authFormWrapper').fadeIn();
+
+    this.$('#logo').fadeIn();
+  },
+
+  onDestroy: function() {
+    this.authFormView = null;
   }
 
 });

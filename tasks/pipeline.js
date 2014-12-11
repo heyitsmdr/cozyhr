@@ -43,6 +43,9 @@ var jsFilesToInject = [
   // Backbone Routing
   'js/backbone/routes.js',
 
+  // Load base backbone classes first
+  'js/backbone/base/**/*.js',
+
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
   'js/**/*.js'

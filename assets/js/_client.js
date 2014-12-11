@@ -51,7 +51,18 @@ CozyHR.globals = {
 };
 
 // Prepare namespace for Backbone
+CozyHR.BaseViews = {};
 CozyHR.Views = {};
+
+CozyHR.changeView = function(newViewInstance) {
+	console.log('Switching to a new view.');
+
+	CozyHR.CurrentView = newViewInstance;
+	// This will automatically call newViewInstance.render()
+	CozyHR.App.mainContainer.show( newViewInstance );
+
+	console.log('Switched to a new view.');
+};
 
 // CozyHR Namespace Extensions
 CozyHR.pageHelper.init = function(pageHelper) {

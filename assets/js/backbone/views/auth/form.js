@@ -33,14 +33,14 @@ var fieldView = Marionette.ItemView.extend({
   },
 
   events: {
-    'keypress'  : 'onKeyPress'
+    'keyup' : 'onKeyUp'
   },
 
   onBeforeRender: function() {
     this.template = _.template('<input type="<%- type %>" id="<%- id %>" placeholder="<%- placeholder %>">', this.model.attributes);
   },
 
-  onKeyPress: function(evt) {
+  onKeyUp: function(evt) {
     // update value on model
     this.model.set('value', evt.target.value);
 
@@ -74,7 +74,7 @@ var formModel = Backbone.Model.extend({
   defaults: {
     title: 'Blank Form',
     submitText: 'Press enter to submit the form',
-    submitColor: '#fff',
+    submitTextClass: '',
     fields: [],
     fieldCollection: false,
     postTo: ''
@@ -134,16 +134,19 @@ CozyHR.Views.AuthFormView = Backbone.View.extend({
   },
 
   submit: CozyHR.debounce(function() {
+    console.log(this.model.getSubmitData());
     $.post(this.model.get('postTo'), this.model.getSubmitData(), function(data) {
       if(data.success) {
-
+        document.location = '/#/signing-in';
       } else {
-        this.model.set({ submitText: data.error, submitColor: '#f00' });
+        this.model.set({ submitText: data.error, submitTextClass: 'alert' });
       }
     }.bind(this));
   }),
 
   onSubmitTextChange: function() {
-    console.log('on text change..');
+    this.$('.press-enter').fadeOut(100, function() {
+      this.$('.press-enter').removeClass(this.model.get('submitTextClass')).addClass(this.model.get('submitTextClass')).html(this.model.get('submitText')).fadeIn(150);
+    }.bind(this));
   }
 });
