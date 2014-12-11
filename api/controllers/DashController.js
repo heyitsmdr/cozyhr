@@ -11,7 +11,7 @@ module.exports = {
 
 		Office.find({ company: req.session.userinfo.company.id })
 		.then(function(offices) {
-			res.view('main/dash', {
+			res.view('dash/base', {
 				selectedPage: 'dash',
 				offices: offices,
 				mustacheTemplates: ['feedItem', 'feedItemComment', 'workingNow']

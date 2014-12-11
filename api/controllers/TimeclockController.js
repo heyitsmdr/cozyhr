@@ -22,7 +22,7 @@ module.exports = {
           clockedInPosition[0].createdAtTS = new Date(clockedInPosition[0].createdAt).getTime();
         }
 
-        res.view({
+        res.view('timeclock/base', {
           selectedPage: 'timeclock',
           offices: offices,
           clock: clockedInPosition,
