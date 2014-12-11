@@ -92,6 +92,9 @@ _signin.prototype.init = function() {
 
 _signin.prototype.initRegister = function() {
   $(document).ready(function() {
+    // Drop-down-fade-in logo
+    $('#logo').hide().toggle('drop', { direction: 'up' });
+
     // doRegister
     var doRegister = function(e) {
       // Validation

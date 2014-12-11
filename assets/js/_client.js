@@ -19,10 +19,21 @@ $(document).ready(function(){
   CozyHR.loadPageTemplates();
   // Page Helper Router
   switch(document.location.pathname.toLowerCase()) {
+  	case '/auth/signin':
+  	case '/auth/orgRegistration':
+  		CozyHR.pageHelper.init( CozyHR.pageHelpers.signin );
+  		break;
+		case '/auth/register':
+			CozyHR.pageHelper.init( CozyHR.pageHelpers.signin );
+  		CozyHR.pageHelper.queue('CozyHR.pageHelper.instance.initRegister()');
+  		break;
   	case '/':
   	case '/dash':
   		CozyHR.pageHelper.init( CozyHR.pageHelpers.dashboard );
   		break;
+		case '/timeclock':
+			CozyHR.pageHelper.init( CozyHR.pageHelpers.timeclock );
+			break;
   }
 });
 
