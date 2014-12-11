@@ -6,7 +6,7 @@ module.exports = {
   general: function(req, res) {
     ExceptionService.require(req, res, { GET: true });
 
-    res.view('admin/index', {
+    res.view('admin/base', {
       selectedPage: 'admin',
       selectedSection: 'general',
       breadcrumbs: [ { name: 'General' } ]
@@ -32,7 +32,7 @@ module.exports = {
           if(e)
             throw ExceptionService.error('Could not find invites for company.');
 
-          res.view('admin/index', {
+          res.view('admin/base', {
             selectedPage: 'admin',
             selectedSection: 'employees',
             breadcrumbs: [ { name: 'Employees' } ],
@@ -168,7 +168,7 @@ module.exports = {
       }
 
       // okay
-      res.view('admin/employee/edit', {
+      res.view('admin/subpages/employee/base', {
         selectedPage: 'admin',
         employee: employee,
         selectedSection: 'basic',
@@ -277,7 +277,7 @@ module.exports = {
   roles: function(req, res) {
     ExceptionService.require(req, res, { GET: true });
 
-    res.view('admin/index', {
+    res.view('admin/base', {
       selectedPage: 'admin',
       selectedSection: 'roles',
       breadcrumbs: [ { name: 'Roles' } ]
@@ -368,7 +368,7 @@ module.exports = {
       }
 
       if(selectedSection == 'info') {
-        res.view('admin/role/index', {
+        res.view('admin/subpages/role/base', {
           selectedPage: 'admin',
           selectedSection: 'info',
           breadcrumbs: [
@@ -380,7 +380,7 @@ module.exports = {
         });
       } else if(selectedSection == 'employees') {
         PopUser.many({company: req.session.userinfo.company.id, role: roleId}, {sort: 'lastName ASC'}, es.wrap(function(e, employees) {
-          res.view('admin/role/index', {
+          res.view('admin/subpages/role/base', {
             selectedPage: 'admin',
             selectedSection: 'employees',
             breadcrumbs: [
@@ -453,7 +453,7 @@ module.exports = {
   offices: function(req, res) {
     ExceptionService.require(req, res, { GET: true });
 
-    res.view('admin/index', {
+    res.view('admin/base', {
       selectedPage: 'admin',
       selectedSection: 'offices',
       breadcrumbs: [ { name: 'Offices & Positions' } ]
@@ -550,7 +550,7 @@ module.exports = {
           if(e)
             throw ExceptionService.error('Could not get positions at office.');
 
-          res.view('admin/office/index', {
+          res.view('admin/subpages/office/base', {
             selectedPage: 'admin',
             selectedSection: 'positions',
             breadcrumbs: [

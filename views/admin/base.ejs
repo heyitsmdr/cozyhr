@@ -1,5 +1,5 @@
 <div id="pageAdmin" class="row sectionContainer">
-  <%- partial('breadcrumbs') %>
+  <%- partial('partials/breadcrumbs') %>
   <div class="-1u 2u sidemenu">
     <a class="item" href="/admin/general"><div class="<% if(selectedSection=="general"){ %>selected<% } %>">General</div></a>
     <a class="item" href="/admin/employees"><div class="<% if(selectedSection=="employees"){ %>selected<% } %>">Employees</div></a>
@@ -8,19 +8,19 @@
   </div>
   <div class="8u admincontent">
     <% if(selectedSection=="general"){ %>
-      <%- partial('general') %>
+      <%- partial('partials/general') %>
     <% } %>
 
     <% if(selectedSection=="employees"){ %>
-      <%- partial('employees') %>
+      <%- partial('partials/employees') %>
     <% } %>
 
     <% if(selectedSection=="roles"){ %>
-      <%- partial('roles') %>
+      <%- partial('partials/roles') %>
     <% } %>
 
     <% if(selectedSection=="offices"){ %>
-      <%- partial('offices') %>
+      <%- partial('partials/offices') %>
     <% } %>
   </div>
 </div>
