@@ -24,7 +24,7 @@ $(document).ready(function(){
   switch(true) {
   	/* Signin and Registration Pages */
   	case (path == '/auth/signin'):
-  	case (path == '/auth/orgRegistration'):
+  	case (path == '/auth/orgregistration'):
   		CozyHR.pageHelper.init( CozyHR.pageHelpers.signin );
   		break;
 		case (path == '/auth/register'):
