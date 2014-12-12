@@ -71,21 +71,22 @@ body {
   }
 
   .menuitem a {
-    height: 40px;
+    height: 41px;
     padding: 10px 9px;
     float: left;
     font-size: 13px;
-    font-weight: 600;
     color: #fff;
     text-decoration: none;
 
     &:hover {
-      .menugradiant(#555, #444) !important;
-      color: @topmenuhighlight;
+      //.menugradiant(#555, #444) !important;
+      color: #BDBDBD;
+      //border-bottom: 1px solid #ccc;
     }
 
     &.selected {
-      .menugradiant(#444, #383838);
+      //.menugradiant(#444, #383838);
+      border-bottom: 1px solid #fff;
     }
   }
 }
