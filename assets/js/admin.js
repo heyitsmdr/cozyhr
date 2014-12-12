@@ -43,6 +43,7 @@ _admin.prototype.initGeneral = function() {
 };
 
 _admin.prototype.initEmployees = function() {
+  console.log('hey');
   $(document).ready(function() {
     // Set up the table
     $('#companyEmployees').dataTable({

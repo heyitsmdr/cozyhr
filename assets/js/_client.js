@@ -18,21 +18,56 @@ $(document).ready(function(){
   // Load any necessary Mustache templates (passed in by the controller)
   CozyHR.loadPageTemplates();
   // Page Helper Router
-  switch(document.location.pathname.toLowerCase()) {
-  	case '/auth/signin':
-  	case '/auth/orgRegistration':
+  var path = document.location.pathname.toLowerCase();
+  var pathSearch = document.location.search.toLowerCase();
+
+  switch(true) {
+  	case (path == '/auth/signin'):
+  	case (path == '/auth/orgRegistration'):
   		CozyHR.pageHelper.init( CozyHR.pageHelpers.signin );
   		break;
-		case '/auth/register':
+		case (path == '/auth/register'):
 			CozyHR.pageHelper.init( CozyHR.pageHelpers.signin );
-  		CozyHR.pageHelper.queue('CozyHR.pageHelper.instance.initRegister()');
+  		CozyHR.pageHelper.instance.initRegister();
   		break;
-  	case '/':
-  	case '/dash':
+  	case (path == '/'):
+  	case (path == '/dash'):
   		CozyHR.pageHelper.init( CozyHR.pageHelpers.dashboard );
   		break;
-		case '/timeclock':
+		case (path == '/timeclock'):
 			CozyHR.pageHelper.init( CozyHR.pageHelpers.timeclock );
+			break;
+		case (path == '/admin/general'):
+			CozyHR.pageHelper.init( CozyHR.pageHelpers.admin );
+			CozyHR.pageHelper.instance.initGeneral();
+			break;
+		case (path == '/admin/offices'):
+			CozyHR.pageHelper.init( CozyHR.pageHelpers.admin );
+			CozyHR.pageHelper.instance.initOffices();
+			break;
+		case (path == '/admin/employees'):
+			CozyHR.pageHelper.init( CozyHR.pageHelpers.admin );
+			CozyHR.pageHelper.instance.initEmployees();
+			break;
+		case (path == '/admin/roles'):
+			CozyHR.pageHelper.init( CozyHR.pageHelpers.admin );
+			CozyHR.pageHelper.instance.initRoles();
+			break;
+		case ((/\/admin\/office\/(.*)/).test(path)):
+			CozyHR.pageHelper.init( CozyHR.pageHelpers.admin );
+			CozyHR.pageHelper.instance.initPositions();
+			break;
+		case ((/\/admin\/role\/(.*)/).test(path) && pathSearch == '?section=employees'):
+			CozyHR.pageHelper.init( CozyHR.pageHelpers.admin );
+			CozyHR.pageHelper.instance.initEmployees()
+			break;
+		case ((/\/admin\/role\/(.*)/).test(path)):
+			CozyHR.pageHelper.init( CozyHR.pageHelpers.admin );
+			CozyHR.pageHelper.instance.initRole();
+			break;
+		case ((/\/admin\/employee\/(.*)/).test(path)):
+			CozyHR.pageHelper.init( CozyHR.pageHelpers.admin );
+			CozyHR.pageHelper.queue( 'CozyHR.pageHelper.instance.initEmployee()' );
 			break;
   }
 });
