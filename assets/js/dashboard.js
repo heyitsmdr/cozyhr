@@ -69,7 +69,7 @@ _dashboard.prototype.onFeedUpdate = function(res) {
 		feedData.push({
 			contentHtml: feedItem.content,
 			feedId: feedItem.feedid,
-			date: new Date(feedItem.date).toLocaleString(),
+			date: moment(feedItem.date).format('MMM Do, YYYY @ h:mma'),
 			officeName: feedItem.officeName,
 			pictureHtml: generatePictureDiv(feedItem.picture),
 			pictureUrl: feedItem.mePicture,
