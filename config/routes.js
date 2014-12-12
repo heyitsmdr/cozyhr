@@ -33,8 +33,8 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    controller: 'DashController',
-    action: 'home'
+    controller: 'RootController',
+    action: 'index'
   },
 
   '/dash': {

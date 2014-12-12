@@ -33,6 +33,19 @@ var jsFilesToInject = [
   // Vendor files brought in here
   'js/vendor/**/*.js',
 
+  // Main client file
+  'js/_client.js',
+
+  // Backbone Models and Views
+  'js/backbone/models/**/*.js',
+  'js/backbone/views/**/*.js',
+
+  // Backbone Routing
+  'js/backbone/routes.js',
+
+  // Load base backbone classes first
+  'js/backbone/base/**/*.js',
+
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
   'js/**/*.js'

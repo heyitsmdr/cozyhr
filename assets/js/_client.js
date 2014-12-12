@@ -109,6 +109,21 @@ CozyHR.globals = {
 	DEFAULT_DEBOUNCE_TIMEOUT: 500
 };
 
+// Prepare namespace for Backbone
+CozyHR.BaseViews = {};
+CozyHR.Views = {};
+
+CozyHR.changeView = function(newViewInstance) {
+	console.log('Switching to a new view.');
+
+	CozyHR.CurrentView = newViewInstance;
+	// This will automatically call newViewInstance.render()
+	CozyHR.App.mainContainer.show( newViewInstance );
+
+	console.log('Switched to a new view.');
+};
+
+// CozyHR Namespace Extensions
 CozyHR.pageHelper.init = function(pageHelper) {
 	if(CozyHR.pageHelper.instance)
 		return console.error('Page helper attempted to be initialized twice.');
@@ -151,6 +166,10 @@ CozyHR.notify = function(content, options) {
 	);
 
 	return CozyHR.notifications[CozyHR.notifications.length - 1]; // Return jBox instance
+};
+
+CozyHR.JST = function(template) {
+	return JST['assets/templates/' + template + '.html'];
 };
 
 CozyHR.confirm = function(question, opt) {
@@ -236,6 +255,10 @@ CozyHR.sortAssocArray = function(arr, sortBy, opt) {
 		else
 			return second[sortBy] - first[sortBy];
 	});
+};
+
+CozyHR.debounce = function(func) {
+	return _.debounce(func, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true);
 };
 
 CozyHR.bindClick = function(selector, func) {
