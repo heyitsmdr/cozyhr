@@ -4,8 +4,4 @@ node_js:
 env:
   - NODE_ENV="production"
 notifications:
-  hipchat:
-    rooms:
-      - 73ffbaf59f532121ba8fe8e166665d@Development
-    template:
-      - '%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}'
+  slack: cozyhr:ttWJEKU6Cswdf8mSdW7K1XmT
