@@ -22,6 +22,7 @@ $(document).ready(function(){
   var pathSearch = document.location.search.toLowerCase();
 
   switch(true) {
+  	/* Signin and Registration Pages */
   	case (path == '/auth/signin'):
   	case (path == '/auth/orgRegistration'):
   		CozyHR.pageHelper.init( CozyHR.pageHelpers.signin );
@@ -30,13 +31,18 @@ $(document).ready(function(){
 			CozyHR.pageHelper.init( CozyHR.pageHelpers.signin );
   		CozyHR.pageHelper.instance.initRegister();
   		break;
+		/* Dashboard Page */
   	case (path == '/'):
   	case (path == '/dash'):
+  	case (path == '/dash/home'):
   		CozyHR.pageHelper.init( CozyHR.pageHelpers.dashboard );
   		break;
+		/* Timeclock Page */
 		case (path == '/timeclock'):
+		case (path == '/timeclock/index'):
 			CozyHR.pageHelper.init( CozyHR.pageHelpers.timeclock );
 			break;
+		/* Admin Page */
 		case (path == '/admin/general'):
 			CozyHR.pageHelper.init( CozyHR.pageHelpers.admin );
 			CozyHR.pageHelper.instance.initGeneral();
