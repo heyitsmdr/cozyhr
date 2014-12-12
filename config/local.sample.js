@@ -82,7 +82,7 @@ module.exports = {
 
    environment: 'development',
 
-   metricsaEnabled: false,
+   metricsEnabled: false,
 
    log: {
     level: 'info'
