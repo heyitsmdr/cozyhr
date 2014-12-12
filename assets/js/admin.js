@@ -29,6 +29,9 @@ _admin.prototype.initGeneral = function() {
       });
     });
     CozyHR.bindClick('#btnConfirmSubdomainChange', function() {
+      if($('#txtCompanySubdomain').val() == $('#txtCurrentCompanySubdomain').val().split('.')[0]) {
+        return CozyHR.notify('You must pick a new subdomain to use.', { color:' red', sound: true });
+      }
       io.socket.post('/admin/saveNewSubdomain', {
         subdomain: $('#txtCompanySubdomain').val()
       }, function(res) {
@@ -43,7 +46,6 @@ _admin.prototype.initGeneral = function() {
 };
 
 _admin.prototype.initEmployees = function() {
-  console.log('hey');
   $(document).ready(function() {
     // Set up the table
     $('#companyEmployees').dataTable({
