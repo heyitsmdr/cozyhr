@@ -52,17 +52,21 @@
 }
 
 .input-btn-gray {
-  .menugradiant(#fff, #eee);
+  .menugradiant(#f2f2f2, #eee);
   border: 1px solid #dbdbdb;
   border-radius: 4px;
 
+  &.disabled {
+    color: #ccc;
+  }
+
   &:hover {
-    .menugradiant(#fff, #e4e2e2);
+    .menugradiant(#f2f2f2, #e4e2e2);
     border: 1px solid #ccc9c9;
   }
 
   &:active {
-    .menugradiant(#e4e2e2, #fff);
+    .menugradiant(#e4e2e2, #f2f2f2);
     border: 1px solid #ccc9c9;
     box-shadow: inset 0px 0px 5px #B4B1B1;
   }
@@ -73,18 +77,22 @@
 }
 
 .input-btn-red {
-  .menugradiant(#f8efef, #fccdcd);
-  border: 1px solid #d1acac;
+  .menugradiant(#f9d8d8, #fccdcd);
+  border: 1px solid #d8acac;
   border-radius: 4px;
   color: #4d0000;
 
+  &.disabled {
+    color: #ccc;
+  }
+
   &:hover {
-    .menugradiant(#f8efef, #f6bcbc);
+    .menugradiant(#f9d8d8, #f6bcbc);
     border: 1px solid #C49696;
   }
 
   &:active {
-    .menugradiant(#f6bcbc, #f8efef);
+    .menugradiant(#f6bcbc, #f9d8d8);
     border: 1px solid #C49696;
     box-shadow: inset 0px 0px 5px #B4B1B1;
   }

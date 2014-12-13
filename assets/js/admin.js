@@ -49,9 +49,9 @@ _admin.prototype.initEmployees = function() {
   $(document).ready(function() {
     // Set up the table
     $('#companyEmployees').dataTable({
-      "pageLength": 50,
-      "oLanguage": {
-        "sEmptyTable": "There are no employees to display here."
+      pageLength: 50,
+      language: {
+        emptyTable: "There are no employees to display here."
       }
     });
     // Bind click event to invite a new employee
