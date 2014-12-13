@@ -99,16 +99,16 @@ _timeclock.prototype.onClockUpdate = function(data) {
 
 		var clockData = [];
 		data.clocks.forEach(function(cdat) {
-			var dClockedIn = new Date(cdat.createdAt)
-			var dClockedOut = new Date(cdat.clockout);
+			var dClockedIn = moment(cdat.createdAt);
+			var dClockedOut = moment(cdat.clockout);
 
 			clockData.push({
 				positionName: cdat.position.name,
 				locationName: cdat.office.name,
-				clockIn: dClockedIn.toLocaleString(),
-				clockOut: dClockedOut.toLocaleString(),
-				dayName: this.getDayRange(dClockedIn.getDay(), dClockedOut.getDay()),
-				totalTime: fancyDate(dClockedIn, dClockedOut, true, fancyDateOptions)
+				clockIn: dClockedIn.format('MMM D, YYYY h:mma'),
+				clockOut: dClockedOut.format('MMM D, YYYY h:mma'),
+				dayName: this.getDayRange(dClockedIn.day(), dClockedOut.day()),
+				totalTime: fancyDate(new Date(cdat.createdAt), new Date(cdat.clockout), true, fancyDateOptions)
 			});
 		}.bind(this));
 
