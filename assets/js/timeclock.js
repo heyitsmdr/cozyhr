@@ -105,8 +105,8 @@ _timeclock.prototype.onClockUpdate = function(data) {
 			clockData.push({
 				positionName: cdat.position.name,
 				locationName: cdat.office.name,
-				clockIn: dClockedIn.format('MMM D, YYYY h:mma'),
-				clockOut: dClockedOut.format('MMM D, YYYY h:mma'),
+				clockIn: dClockedIn.format('MMM D, YYYY @ h:mma'),
+				clockOut: dClockedOut.format('MMM D, YYYY @ h:mma'),
 				dayName: this.getDayRange(dClockedIn.day(), dClockedOut.day()),
 				totalTime: fancyDate(new Date(cdat.createdAt), new Date(cdat.clockout), true, fancyDateOptions)
 			});
