@@ -22,19 +22,21 @@ module.exports = {
   },
 
   session: {
-    adapter: 'mongo',
-    host: 'mongo.cozyhr.com',
-    port: 27017,
-    db: 'cozy-production',
-    collection: 'sessions'
+    adapter: 'redis',
+    host: process.env['REDIS_HOST'],
+    port: process.env['REDIS_PORT'],
+    user: process.env['REDIS_USERNAME'],
+    db: 'sails',
+    pass: process.env['REDIS_PASSWORD']
   },
 
   sockets: {
-    adapter: 'mongo',
-    host: 'mongo.cozyhr.com',
-    port: 27017,
-    db: 'cozy-production',
-    collection: 'sockets'
+    adapter: 'redis',
+    host: process.env['REDIS_HOST'],
+    port: process.env['REDIS_PORT'],
+    user: process.env['REDIS_USERNAME'],
+    db: 'sails',
+    pass: process.env['REDIS_PASSWORD']
   },
 
   consoleFiltering: {
