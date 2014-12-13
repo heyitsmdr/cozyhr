@@ -43,9 +43,11 @@
 		</div>
 
 		<div class="9u sectionContainer sectionTimeclock">
+
+			<!-- Current Pay Period -->
 			<div class="clocksContainer">
 				<div class="head">
-					<div class="columnTitle worked">Worked</div>
+					<div class="columnTitle worked">Current Pay Period</div>
 					<div class="columnTitle day">&nbsp;</div>
 					<div class="columnTitle clockinout">Clocked In</div>
 					<div class="columnTitle clockinout">Clocked Out</div>
@@ -55,7 +57,26 @@
 					<div class="loading"><i class="fa fa-spinner fa-spin"></i></div>
 				</div>
 			</div>
+			<div class="totalHours">
+				<strong>Pay Period Hours:</strong> 5h
+			</div>
+
+			<!-- Previous Clocks -->
+			<div class="clocksContainer">
+				<div class="head">
+					<div class="columnTitle worked">Previous Pay Periods</div>
+					<div class="columnTitle day">&nbsp;</div>
+					<div class="columnTitle clockinout">Clocked In</div>
+					<div class="columnTitle clockinout">Clocked Out</div>
+					<div class="columnTitle total">Total Time</div>
+				</div>
+				<div id="clocksPrevious">
+					<div class="loading"><i class="fa fa-spinner fa-spin"></i></div>
+				</div>
+			</div>
+
 		</div>
+
 	</div>
 
 </div>
