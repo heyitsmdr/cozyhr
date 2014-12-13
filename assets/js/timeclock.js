@@ -51,8 +51,8 @@ _timeclock.prototype.clockIn = _.debounce(function(positionId) {
 			$('#sectionClockedIn #clockPosition').html(result.positionName);
 			$('#sectionClockedIn #clockOffice').html(result.officeName);
 			$('#sectionClockedIn #clockInTime').data("clockedin", Date.now());
-			$('#sectionClockedIn').fadeIn();
-			$('#sectionClockedInSpacing').fadeIn();
+			$('#sectionClockedIn').toggle('drop', { direction: 'up' });
+			$('#sectionClockedInSpacing').show();
 		} else {
 			CozyHR.notify(result.error, {color: 'red', sound: true});
 		}
@@ -62,8 +62,9 @@ _timeclock.prototype.clockIn = _.debounce(function(positionId) {
 _timeclock.prototype.deleteClock = _.debounce(function() {
 	io.socket.post('/timeclock/deleteClock', function(result) {
 		if(result.success) {
-			$('#sectionClockedIn').fadeOut();
-			$('#sectionClockedInSpacing').fadeOut();
+			$('#sectionClockedIn').toggle('drop', { direction: 'up' }, function() {
+				$('#sectionClockedInSpacing').hide();
+			});
 		} else {
 			CozyHR.notify(result.error, {color: 'red', sound: true});
 		}
@@ -73,8 +74,8 @@ _timeclock.prototype.deleteClock = _.debounce(function() {
 _timeclock.prototype.clockOut = _.debounce(function() {
 	io.socket.post('/timeclock/clockOut', function(result) {
 		if(result.success) {
-			$('#sectionClockedIn').fadeOut();
-			$('#sectionClockedInSpacing').fadeOut();
+			$('#sectionClockedIn').toggle('drop', { direction: 'up' });
+			$('#sectionClockedInSpacing').hide();
 			io.socket.get('/timeclock/getClocks');
 		} else {
 			CozyHR.notify(result.error, {color: 'red', sound: true});
