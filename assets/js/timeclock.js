@@ -53,7 +53,6 @@ _timeclock.prototype.clockIn = _.debounce(function(positionId) {
 			$('#sectionClockedIn #clockInTime').data("clockedin", Date.now());
 			$('#sectionClockedIn').fadeIn();
 			$('#sectionClockedInSpacing').fadeIn();
-			CozyHR.notify('You have clocked in!', {color: 'green', sound: true});
 		} else {
 			CozyHR.notify(result.error, {color: 'red', sound: true});
 		}
@@ -65,7 +64,6 @@ _timeclock.prototype.deleteClock = _.debounce(function() {
 		if(result.success) {
 			$('#sectionClockedIn').fadeOut();
 			$('#sectionClockedInSpacing').fadeOut();
-			CozyHR.notify('Your clocked time has been deleted!', {color: 'green', sound: true});
 		} else {
 			CozyHR.notify(result.error, {color: 'red', sound: true});
 		}
@@ -77,7 +75,6 @@ _timeclock.prototype.clockOut = _.debounce(function() {
 		if(result.success) {
 			$('#sectionClockedIn').fadeOut();
 			$('#sectionClockedInSpacing').fadeOut();
-			CozyHR.notify('You have clocked out!', {color: 'green', sound: true});
 			io.socket.get('/timeclock/getClocks');
 		} else {
 			CozyHR.notify(result.error, {color: 'red', sound: true});
