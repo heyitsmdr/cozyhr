@@ -5,13 +5,12 @@
 			<div id="sectionClockedIn" class="section" style="<% if(clock.length == 0) { %>display:none<% } %>">
 				<div class="header green">
 						<div class="left">Clocked In</div>
-						<div class="right"><a href="#" onclick="CozyHR.pageHelper.instance.deleteClock()"><i class="fa fa-times"></i></a></div>
+						<div class="right"><a href="#" onclick="CozyHR.pageHelper.instance.clockOut()"><i class="fa fa-floppy-o"></i></a>&nbsp;&nbsp;<a href="#" onclick="CozyHR.pageHelper.instance.deleteClock()"><i class="fa fa-times"></i></a></div>
 				</div>
 				<div class="content green">
 					<div class="left">
 						<div><strong id="clockPosition"><% if(clock.length > 0) { %><%- clock[0].position.name %><% } %></strong></div>
 						<div id="clockOffice"><% if(clock.length > 0) { %><%- clock[0].office.name %><% } %></div>
-						<div><a href="#" onclick="CozyHR.pageHelper.instance.clockOut()">Save & Clock Out</a></div>
 					</div>
 					<div class="right">
 						<div id="clockInTime" data-clockedin="<% if(clock.length > 0) { %><%- clock[0].createdAtTS %><% } %>"></div>
