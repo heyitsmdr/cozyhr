@@ -38,36 +38,54 @@
       text-align: center;
     }
 
-    #sectionClockedIn .content {
-      overflow: auto;
-
+    #sectionClockedIn{
       .left {
-        text-align: left;
         float: left;
-        width: 50%;
       }
 
       .right {
-        text-align: right;
-        float: left;
-        width: 50%;
+        float: right;
+        a {
+          color: #87ca83;
 
-        #clockInTime {
-          color: #999;
-          font-size: 12px;
+          &:hover {
+            color: #c5eac3;
+          }
         }
       }
 
-      a {
-        font-size: 11px;
-        color: #999;
-        text-decoration: none;
+      .content {
+        overflow: auto;
 
-        &:hover {
-          color: #666;
+        .left {
+          text-align: left;
+          float: left;
+          width: 50%;
+        }
+
+        .right {
+          text-align: right;
+          float: left;
+          width: 50%;
+
+          #clockInTime {
+            color: #999;
+            font-size: 12px;
+          }
+        }
+
+        a {
+          font-size: 11px;
+          color: #999;
+          text-decoration: none;
+
+          &:hover {
+            color: #666;
+          }
         }
       }
     }
+
   }
 
   .sectionTimeclock {
