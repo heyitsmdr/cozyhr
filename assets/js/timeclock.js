@@ -119,7 +119,7 @@ _timeclock.prototype.getDayRange = function(clockInDay, clockOutDay) {
 	if(clockInDay === clockOutDay) {
 		return "<span class='day'>" + days[clockOutDay] + "</span>";
 	} else {
-		return "<span class='day'>" + days[clockInDay] + "</span>" + " - " + "<span class='day'>" + days[clockOutDay] + "</span>";
+		return "<span class='day'>" + days[clockInDay] +  " - " + days[clockOutDay] + "</span>";
 	}
 };
 
