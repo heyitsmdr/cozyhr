@@ -232,6 +232,21 @@ _admin.prototype.initRole = function() {
     $('#sickAccrualContainer').html(Mustache.render(CozyHR.templates['accrualSetting'], { id: 'sick' }));
     $('#vacaAccrualContainer').html(Mustache.render(CozyHR.templates['accrualSetting'], { id: 'vaca' }));
 
+    // Bind pay types
+    $('#btnPayTypeHourly').on('click', function() {
+      if($('#btnPayTypeHourly').hasClass('disabled')) {
+        $('#btnPayTypeHourly').removeClass('disabled');
+        $('#btnPayTypeSalary').addClass('disabled');
+      }
+    }.bind(this));
+
+    $('#btnPayTypeSalary').on('click', function() {
+      if($('#btnPayTypeSalary').hasClass('disabled')) {
+        $('#btnPayTypeSalary').removeClass('disabled');
+        $('#btnPayTypeHourly').addClass('disabled');
+      }
+    }.bind(this));
+
     // Bind delete role
     CozyHR.bindClick('#btnDeleteRole', function() {
       CozyHR.confirm('Do you really want to delete this role from your company?', {
