@@ -1,12 +1,14 @@
-<div id="pageAdmin" class="row sectionContainer">
+<div id="pageAdmin" class="sectionContainer">
   <%- partial('../../partials/breadcrumbs') %>
-  <div class="-1u 2u sidemenu">
-    <div class="head"><i class="fa fa-building-o"></i>&nbsp;<%= office.name  %></div>
-    <a class="item" href="?section=positions"><div class="<% if(selectedSection=="positions"){ %>selected<% } %>">Positions</div></a>
-  </div>
-  <div class="8u admincontent">
-    <% if(selectedSection=="positions"){ %>
-      <%- partial('partials/positions') %>
-    <% } %>
+  <div class="row">
+    <div class="-1u 2u sidemenu">
+      <div class="head"><i class="fa fa-building-o"></i>&nbsp;<%= office.name  %></div>
+      <a class="item" href="?section=positions"><div class="<% if(selectedSection=="positions"){ %>selected<% } %>">Positions</div></a>
+    </div>
+    <div class="8u admincontent">
+      <% if(selectedSection=="positions"){ %>
+        <%- partial('partials/positions') %>
+      <% } %>
+    </div>
   </div>
 </div>

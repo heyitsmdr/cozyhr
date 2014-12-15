@@ -1,79 +1,76 @@
-<div id="pageTimeclock">
+<div id="pageTimeclock" class="row">
 
-	<div class="row">
-		<div class="3u sectionContainer sectionWorkingOn">
-			<div id="sectionClockedIn" class="section" style="<% if(clock.length == 0) { %>display:none<% } %>">
-				<div class="header green">
-						<div class="left">Clocked In</div>
-						<div class="right"><a href="#" onclick="CozyHR.pageHelper.instance.clockOut()"><i class="fa fa-floppy-o"></i></a>&nbsp;&nbsp;<a href="#" onclick="CozyHR.pageHelper.instance.deleteClock()"><i class="fa fa-times"></i></a></div>
-				</div>
-				<div class="content green">
-					<div class="left">
-						<div><strong id="clockPosition"><% if(clock.length > 0) { %><%- clock[0].position.name %><% } %></strong></div>
-						<div id="clockOffice"><% if(clock.length > 0) { %><%- clock[0].office.name %><% } %></div>
-					</div>
-					<div class="right">
-						<div id="clockInTime" data-clockedin="<% if(clock.length > 0) { %><%- clock[0].createdAtTS %><% } %>"></div>
-					</div>
-				</div>
+	<div class="3u sectionContainer sectionWorkingOn">
+		<div id="sectionClockedIn" class="section" style="<% if(clock.length == 0) { %>display:none<% } %>">
+			<div class="header green">
+					<div class="left">Clocked In</div>
+					<div class="right"><a href="#" onclick="CozyHR.pageHelper.instance.clockOut()"><i class="fa fa-floppy-o"></i></a>&nbsp;&nbsp;<a href="#" onclick="CozyHR.pageHelper.instance.deleteClock()"><i class="fa fa-times"></i></a></div>
 			</div>
-			<div id="sectionClockedInSpacing" class="sectionSpace" style="<% if(clock.length == 0) { %>display:none<% } %>"></div>
-
-			<div class="section">
-				<div class="header">
-						Clock In / Out
+			<div class="content green">
+				<div class="left">
+					<div><strong id="clockPosition"><% if(clock.length > 0) { %><%- clock[0].position.name %><% } %></strong></div>
+					<div id="clockOffice"><% if(clock.length > 0) { %><%- clock[0].office.name %><% } %></div>
 				</div>
-				<div class="content">
-					<div class="label">Where are you working?</div>
-					<!-- Office Selection -->
-					<div class="office">
-						<select id="selOffice">
-							<% for(var i = 0; i < offices.length; i++) { %>
-							<option value="<%= offices[i].id %>"><%= offices[i].name %></option>
-							<% } %>
-						</select>
-					</div>
-					<div class="label">What are you working on?</div>
-					<div id="sectionClockablePositions">
-						<!-- Loaded via Mustache -->
-					</div>
+				<div class="right">
+					<div id="clockInTime" data-clockedin="<% if(clock.length > 0) { %><%- clock[0].createdAtTS %><% } %>"></div>
 				</div>
 			</div>
 		</div>
+		<div id="sectionClockedInSpacing" class="sectionSpace" style="<% if(clock.length == 0) { %>display:none<% } %>"></div>
 
-		<div class="9u sectionContainer sectionTimeclock">
-
-			<!-- Current Pay Period -->
-			<div class="clocksContainer">
-				<div class="head">
-					<div class="columnTitle worked">Current Pay Period</div>
-					<div class="columnTitle day">&nbsp;</div>
-					<div class="columnTitle clockinout">Clocked In</div>
-					<div class="columnTitle clockinout">Clocked Out</div>
-					<div class="columnTitle total">Total Time</div>
+		<div class="section">
+			<div class="header">
+					Clock In / Out
+			</div>
+			<div class="content">
+				<div class="label">Where are you working?</div>
+				<!-- Office Selection -->
+				<div class="office">
+					<select id="selOffice">
+						<% for(var i = 0; i < offices.length; i++) { %>
+						<option value="<%= offices[i].id %>"><%= offices[i].name %></option>
+						<% } %>
+					</select>
 				</div>
-				<div id="clocks">
-					<div class="loading"><i class="fa fa-spinner fa-spin"></i></div>
+				<div class="label">What are you working on?</div>
+				<div id="sectionClockablePositions">
+					<!-- Loaded via Mustache -->
 				</div>
 			</div>
-			<div class="totalHours">
-				<strong>Pay Period Hours:</strong> 5h
-			</div>
+		</div>
+	</div>
 
-			<!-- Previous Clocks -->
-			<div class="clocksContainer">
-				<div class="head">
-					<div class="columnTitle worked">Previous Pay Periods</div>
-					<div class="columnTitle day">&nbsp;</div>
-					<div class="columnTitle clockinout">Clocked In</div>
-					<div class="columnTitle clockinout">Clocked Out</div>
-					<div class="columnTitle total">Total Time</div>
-				</div>
-				<div id="clocksPrevious">
-					<div class="loading"><i class="fa fa-spinner fa-spin"></i></div>
-				</div>
-			</div>
+	<div class="9u sectionContainer sectionTimeclock">
 
+		<!-- Current Pay Period -->
+		<div class="clocksContainer">
+			<div class="head">
+				<div class="columnTitle worked">Current Pay Period</div>
+				<div class="columnTitle day">&nbsp;</div>
+				<div class="columnTitle clockinout">Clocked In</div>
+				<div class="columnTitle clockinout">Clocked Out</div>
+				<div class="columnTitle total">Total Time</div>
+			</div>
+			<div id="clocks">
+				<div class="loading"><i class="fa fa-spinner fa-spin"></i></div>
+			</div>
+		</div>
+		<div class="totalHours">
+			<strong>Pay Period Hours:</strong> 5h
+		</div>
+
+		<!-- Previous Clocks -->
+		<div class="clocksContainer">
+			<div class="head">
+				<div class="columnTitle worked">Previous Pay Periods</div>
+				<div class="columnTitle day">&nbsp;</div>
+				<div class="columnTitle clockinout">Clocked In</div>
+				<div class="columnTitle clockinout">Clocked Out</div>
+				<div class="columnTitle total">Total Time</div>
+			</div>
+			<div id="clocksPrevious">
+				<div class="loading"><i class="fa fa-spinner fa-spin"></i></div>
+			</div>
 		</div>
 
 	</div>

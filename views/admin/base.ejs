@@ -1,26 +1,28 @@
-<div id="pageAdmin" class="row sectionContainer">
+<div id="pageAdmin" class="sectionContainer">
   <%- partial('partials/breadcrumbs') %>
-  <div class="-1u 2u sidemenu">
-    <a class="item" href="/admin/general"><div class="<% if(selectedSection=="general"){ %>selected<% } %>">General</div></a>
-    <a class="item" href="/admin/employees"><div class="<% if(selectedSection=="employees"){ %>selected<% } %>">Employees</div></a>
-    <a class="item" href="/admin/roles"><div class="<% if(selectedSection=="roles"){ %>selected<% } %>">Roles</div></a>
-    <a class="item" href="/admin/offices"><div class="<% if(selectedSection=="offices"){ %>selected<% } %>">Offices & Positions</div></a>
-  </div>
-  <div class="8u admincontent">
-    <% if(selectedSection=="general"){ %>
-      <%- partial('partials/general') %>
-    <% } %>
+  <div class="row">
+    <div class="-1u 2u sidemenu">
+      <a class="item" href="/admin/general"><div class="<% if(selectedSection=="general"){ %>selected<% } %>">General</div></a>
+      <a class="item" href="/admin/employees"><div class="<% if(selectedSection=="employees"){ %>selected<% } %>">Employees</div></a>
+      <a class="item" href="/admin/roles"><div class="<% if(selectedSection=="roles"){ %>selected<% } %>">Roles</div></a>
+      <a class="item" href="/admin/offices"><div class="<% if(selectedSection=="offices"){ %>selected<% } %>">Offices & Positions</div></a>
+    </div>
+    <div class="8u admincontent">
+      <% if(selectedSection=="general"){ %>
+        <%- partial('partials/general') %>
+      <% } %>
 
-    <% if(selectedSection=="employees"){ %>
-      <%- partial('partials/employees') %>
-    <% } %>
+      <% if(selectedSection=="employees"){ %>
+        <%- partial('partials/employees') %>
+      <% } %>
 
-    <% if(selectedSection=="roles"){ %>
-      <%- partial('partials/roles') %>
-    <% } %>
+      <% if(selectedSection=="roles"){ %>
+        <%- partial('partials/roles') %>
+      <% } %>
 
-    <% if(selectedSection=="offices"){ %>
-      <%- partial('partials/offices') %>
-    <% } %>
+      <% if(selectedSection=="offices"){ %>
+        <%- partial('partials/offices') %>
+      <% } %>
+    </div>
   </div>
 </div>
