@@ -10,7 +10,7 @@ sails.on('close', function() {
 sails.stdout.on('data', function(data) {
   console.log('> ' + data.toString('utf8'));
 
-  if(data.toString('utf8').indexOf('Server lifted') > 0) {
+  if(data.toString('utf8').indexOf('Server lifted') > -1) {
     console.log('Success');
     process.exit(0);
   }
