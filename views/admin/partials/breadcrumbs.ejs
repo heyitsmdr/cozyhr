@@ -1,13 +1,15 @@
-<div class="-1u 10u breadcrumbs">
-  <div>
-    <a href="/"><%= req.session.userinfo.company.name %></a>
-    &nbsp;<i class="fa fa-angle-double-right"></i>&nbsp;<a href="/admin/general">Admin</a>
-    <% for(var i = 0; i < breadcrumbs.length; i++) { %>
-      <% if(breadcrumbs[i].href) { %>
-        &nbsp;<i class="fa fa-angle-double-right"></i>&nbsp;<a href="<%= breadcrumbs[i].href %>"><%= breadcrumbs[i].name %></a>
-      <% } else { %>
-        &nbsp;<i class="fa fa-angle-double-right"></i>&nbsp;<%= breadcrumbs[i].name %>
+<div class="row">
+  <div class="-1u 10u breadcrumbs">
+    <div>
+      <a href="/"><%= req.session.userinfo.company.name %></a>
+      &nbsp;<i class="fa fa-angle-double-right"></i>&nbsp;<a href="/admin/general">Admin</a>
+      <% for(var i = 0; i < breadcrumbs.length; i++) { %>
+        <% if(breadcrumbs[i].href) { %>
+          &nbsp;<i class="fa fa-angle-double-right"></i>&nbsp;<a href="<%= breadcrumbs[i].href %>"><%= breadcrumbs[i].name %></a>
+        <% } else { %>
+          &nbsp;<i class="fa fa-angle-double-right"></i>&nbsp;<%= breadcrumbs[i].name %>
+        <% } %>
       <% } %>
-    <% } %>
+    </div>
   </div>
 </div>

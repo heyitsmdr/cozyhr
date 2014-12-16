@@ -6,46 +6,10 @@
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-    <% if(typeof noSkelJs === 'undefined') { %>
-    <!-- Configure Skel.js -->
-    <script>
-      /* Skel.js */
-      window._skel_config = {
-        prefix: null,
-        normalizeCSS: true,
-        boxModel: 'border',
-        grid: { gutters: 20 },
-        breakpoints: {
-          wide: { range: "1200-", containers: 1140, grid: { gutters: 20 } },
-          narrow: { range: "481-1199", containers: 960 },
-          mobile: { range: "-480", containers: "fluid", lockViewport: true, grid: { collapse: true } }
-        }
-      }
-      /* Skel.js Panels */
-      <% if(req.session.authenticated) { %>
-        window._skel_panels_config = {
-          overlays: {
-            topMenu: {
-              position: "top-left",
-              width: "100%",
-              height: 41
-            },
-
-            bottomMenu: {
-              position: "bottom-left",
-              width: "100%",
-              height: 41
-            }
-          }
-        }
-      <% } %>
-    </script>
-    <% } %>
-
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
     <script src="/js/dependencies/jquery-1.11.1.min.js"></script>
-    <script src="/js/dependencies/skel.0.4.9.min.js"></script>
+    <script src="/js/dependencies/skel.2.1.0.min.js"></script>
     <script src="/js/dependencies/underscore.1.7.0-min.js"></script>
     <script src="/js/vendor/chosen.1.1.0/chosen.jquery.min.js"></script>
     <script src="/js/vendor/jbox.0.3.1/jBox.js"></script>
@@ -53,7 +17,7 @@
     <script src="/js/vendor/jquery.datatables.1.10.0/jquery.dataTables.min.js"></script>
     <script src="/js/vendor/moment.2.8.4/moment.min.js"></script>
     <script src="/js/vendor/mustache.0.8.2/mustache.js"></script>
-    <script src="/js/vendor/skel-panels.0.4.9/skel-panels.0.4.9.min.js"></script>
+    <script src="/js/vendor/skel-layers.2.0.0/skel-layers.min.js"></script>
     <script src="/js/vendor/soundjs.0.5.2/soundjs-0.5.2.min.js"></script>
     <script src="/js/vendor/sweetalert-0.3.2/sweet-alert.min.js"></script>
     <script src="/js/_client.js"></script>
@@ -75,6 +39,41 @@
     <link rel="stylesheet" href="/js/vendor/sweetalert-0.3.2/sweet-alert.css">
     <link rel="stylesheet" href="/styles/styles.css">
     <!--STYLES END-->
+
+    <% if(typeof noSkelJs === 'undefined') { %>
+    <!-- Configure Skel.js -->
+    <script>
+      /* Skel.js */
+      skel.init({
+        prefix: null,
+        normalizeCSS: true,
+        boxModel: 'border',
+        grid: { gutters: [40, 0] },
+        breakpoints: {
+          wide: { range: "1200-", containers: 1140, grid: { gutters: 20 } },
+          narrow: { range: "481-1199", containers: 960 },
+          mobile: { range: "-480", containers: "fluid", lockViewport: true, grid: { collapse: true } }
+        },
+        <% if(req.session.authenticated) { %>
+        plugins: {
+          layers: {
+            topMenu: {
+              position: "top-left",
+              width: "100%",
+              height: 41
+            },
+
+            bottomMenu: {
+              position: "bottom-left",
+              width: "100%",
+              height: 41
+            }
+          }
+        }
+        <% } %>
+      });
+    </script>
+    <% } %>
   </head>
 
   <body class="<%= (typeof bodyClass !== 'undefined')?bodyClass:'' %>">
