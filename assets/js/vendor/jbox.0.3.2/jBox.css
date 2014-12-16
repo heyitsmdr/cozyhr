@@ -3,6 +3,12 @@
 
 .jBox-wrapper {
 	text-align: left;
+}
+
+.jBox-wrapper,
+.jBox-wrapper * {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -268,7 +274,7 @@
 
 .jBox-image-container {
 	border-radius: 5px;
-	background: #000 center center no-repeat;
+	background: #fff center center no-repeat;
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -493,30 +499,38 @@ body[class*=" jBox-blockScroll-"] {
 }
 
 .jBox-loading .jBox-content {
-	min-height: 30px;
-	min-width: 30px;
+	min-height: 32px;
+	min-width: 38px;
 	opacity: 0;
 }
 
-.jBox-loading .jBox-container:before {
-	content: 'Loading…';
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 16px;
-	height: 16px;
-	margin-top: -10px;
-	margin-left: -10px;
-	text-align: center;
+.jBox-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
 }
-
-.jBox-loading .jBox-container:not(:required):before {
-	content: '';
-	border-radius: 50%;
-	border: 2px solid rgba(0, 0, 0, 0.3);
-	border-top-color: rgba(0, 0, 0, 0.6);
-	-webkit-animation: jBoxLoading .6s linear infinite;
-	animation: jBoxLoading .6s linear infinite;
+ 
+.jBox-spinner:before {
+    content: 'Loading…';
+    display: block;
+    width: 20px;
+    height: 20px;
+	text-align: center;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+ 
+.jBox-spinner:not(:required):before {
+    content: '';
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, .3);
+    border-top-color: rgba(0, 0, 0, .6);
+    animation: jBoxLoading .6s linear infinite;
+    -webkit-animation: jBoxLoading .6s linear infinite;
 }
 
 /* IE8 fixes */
@@ -544,9 +558,12 @@ body[class*=" jBox-blockScroll-"] {
 	border: 3px solid #aaa;
 }
 
-.jBox-IE8 .jBox-closeButton:after {
-	font-family: Verdana, sans-serif;
-	content: 'x';
-	text-align: center;
-	font-size: 18px;
+/* No SVG support fixes */
+
+.jBox-nosvg .jBox-closeButton:before {
+    font-family: Verdana, sans-serif;
+    content: 'x';
+    text-align: center;
+    font-size: 18px;
+    color: #888;
 }
