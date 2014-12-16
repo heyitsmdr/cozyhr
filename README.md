@@ -28,6 +28,6 @@ Vendor libraries:
 
     node worker/worker.js
 
-# Codeship Build Status
+# TravisCI Build Status
 
-[ ![Codeship Status for ethryx/cozyhr](https://codeship.com/projects/5a09bd60-efee-0131-5708-661bbcbf0c93/status?branch=master)](https://codeship.com/projects/27184)
+[![Build Status](https://magnum.travis-ci.com/ethryx/cozyhr.svg?token=ZGUsczNCbDSVMaWGduK6&branch=master)](https://magnum.travis-ci.com/ethryx/cozyhr)
