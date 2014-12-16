@@ -11,7 +11,7 @@ Dependency libraries:
 Vendor libraries:
 - Chosen 1.1.0
 - Font Awesome 4.2.0
-- jBox 0.3.1
+- jBox 0.3.2
 - jQuery UI 1.11.1
 - jQuery DataTables 1.10.0
 - Moment 2.8.4
