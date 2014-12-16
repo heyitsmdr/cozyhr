@@ -1,7 +1,33 @@
 # CozyHR
 
-a [Sails](http://sailsjs.org) application
+This application is built with [Sails](http://sailsjs.org) which is an MVC-framework for node.js. The view-side (client-side) does not use any type of framework. We've built page helper objects that surround each page.
 
-# Travis CI
+Dependency libraries:
+- jQuery 1.11.1
+- Sails
+- Skel 2.1.0
+- Underscore 1.7.0
+
+Vendor libraries:
+- Chosen 1.1.0
+- Font Awesome 4.2.0
+- jBox 0.3.1
+- jQuery UI 1.11.1
+- jQuery DataTables 1.10.0
+- Moment 2.8.4
+- Mustache 0.8.2
+- Skel Layers 2.0.0
+- SoundJS 0.5.2
+- SweetAlert 0.3.2
+
+# Running the Server
+
+    sails lift
+
+# Running the Worker Server
+
+    node worker/worker.js
+
+# Codeship Build Status
 
 [ ![Codeship Status for ethryx/cozyhr](https://codeship.com/projects/5a09bd60-efee-0131-5708-661bbcbf0c93/status?branch=master)](https://codeship.com/projects/27184)
