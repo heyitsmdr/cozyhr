@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "0.10"
+env:
+  - NODE_ENV="production"
+notifications:
+  slack: cozyhr:ttWJEKU6Cswdf8mSdW7K1XmT
