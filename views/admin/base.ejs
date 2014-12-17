@@ -6,6 +6,7 @@
       <a class="item" href="/admin/employees"><div class="<% if(selectedSection=="employees"){ %>selected<% } %>">Employees</div></a>
       <a class="item" href="/admin/roles"><div class="<% if(selectedSection=="roles"){ %>selected<% } %>">Roles</div></a>
       <a class="item" href="/admin/offices"><div class="<% if(selectedSection=="offices"){ %>selected<% } %>">Offices & Positions</div></a>
+      <a class="item" href="/admin/payroll"><div class="<% if(selectedSection=="payroll"){ %>selected<% } %>">Payroll</div></a>
     </div>
     <div class="8u admincontent">
       <% if(selectedSection=="general"){ %>
@@ -22,6 +23,10 @@
 
       <% if(selectedSection=="offices"){ %>
         <%- partial('partials/offices') %>
+      <% } %>
+
+      <% if(selectedSection=="payroll"){ %>
+        <%- partial('partials/payroll') %>
       <% } %>
     </div>
   </div>
