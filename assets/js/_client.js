@@ -154,7 +154,7 @@ CozyHR.notify = function(content, options) {
 };
 
 CozyHR.confirm = function(question, opt) {
-	swal({
+	sweetAlert({
 		title: "Are you sure?",
 		text: question,
 		type: "warning",
@@ -169,32 +169,30 @@ CozyHR.confirm = function(question, opt) {
 		if (isConfirm) {
 
 			var done = function() {
-				swal({
+				sweetAlert({
 					title: "Deleted!",
 					text: opt.confirmSuccess || "Deleted!",
 					type: "success",
-					closeOnConfirm: false
+					closeOnConfirm: true
 				}, function() {
-					swal('close');
 					if(typeof opt.confirmCallback === 'function')
 						opt.confirmCallback();
 				});
 			};
-
-			swal('close');
 
 			if(typeof opt.preConfirmCallback === 'function')
 				opt.preConfirmCallback(done);
 			else
 				done();
 		} else {
-			swal({
+			sweetAlert({
 				title: "Cancelled",
 				text: opt.cancelSuccess || "Safe!",
 				type: "error",
-				closeOnConfirm: false
+				closeOnConfirm: true,
+				closeOnCancel: true,
+				allowOutsideClick: true
 			}, function() {
-				swal('close');
 				if(typeof opt.cancelCallback === 'function')
 					opt.cancelCallback();
 			});
