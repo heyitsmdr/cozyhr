@@ -37,6 +37,11 @@ _timeclock.prototype.init = function() {
 		getPositionsAtOffice(localStorage['lastOffice'] || $('#selOffice option:first').val());
 
 		io.socket.get('/timeclock/getClocks');
+
+    if($('#sectionClockedIn').is(':visible')) {
+      $('#sectionClockIn').hide();
+    }
+
 	}.bind(this));
 
 	this.clockedInTimeUpdate();
@@ -53,6 +58,7 @@ _timeclock.prototype.clockIn = _.debounce(function(positionId) {
 			$('#sectionClockedIn #clockInTime').data("clockedin", Date.now());
 			$('#sectionClockedIn').toggle('drop', { direction: 'up' });
 			$('#sectionClockedInSpacing').show();
+      $('#sectionClockIn').hide('drop', {direction:'left'});
 		} else {
 			CozyHR.notify(result.error, {color: 'red', sound: true});
 		}
@@ -60,10 +66,12 @@ _timeclock.prototype.clockIn = _.debounce(function(positionId) {
 }, CozyHR.globals.DEFAULT_DEBOUNCE_TIMEOUT, true);
 
 _timeclock.prototype.deleteClock = _.debounce(function() {
-	io.socket.post('/timeclock/deleteClock', function(result) {
+  // TODO: Add confirmation.
+  io.socket.post('/timeclock/deleteClock', function(result) {
 		if(result.success) {
 			$('#sectionClockedIn').toggle('drop', { direction: 'up' }, function() {
 				$('#sectionClockedInSpacing').hide();
+        $('#sectionClockIn').show('drop');
 			});
 		} else {
 			CozyHR.notify(result.error, {color: 'red', sound: true});
@@ -75,7 +83,9 @@ _timeclock.prototype.clockOut = _.debounce(function() {
 	io.socket.post('/timeclock/clockOut', function(result) {
 		if(result.success) {
 			$('#sectionClockedIn').toggle('drop', { direction: 'up' });
-			$('#sectionClockedInSpacing').hide();
+			$('#sectionClockedInSpacing').hide(function() {
+        $('#sectionClockIn').show('drop');
+      });
 			io.socket.get('/timeclock/getClocks');
 		} else {
 			CozyHR.notify(result.error, {color: 'red', sound: true});
