@@ -1,0 +1,39 @@
+<div class="section">
+  <div class="content">
+    <i class="fa fa-info-circle"></i>&nbsp;Manage the payroll settings for <strong><%- req.session.userinfo.company.name %></strong> from here.
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    <i class="fa fa-usd"></i>&nbsp;&nbsp;Payroll
+  </div>
+
+  <div class="content">
+
+    <div id="payrollSettingsContainer">
+
+      <!-- Company Pay Period -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Pay Period End Date</div>
+          <div class="subtitle">Specify when your next pay period ends.</div>
+        </div>
+        <div class="setting"></div>
+      </div>
+
+      <!-- Save -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title green">Save</div>
+          <div class="subtitle green">Be sure to save when you're done!</div>
+        </div>
+        <div class="setting"><input type="button" id="btnSaveSettings" value="Save Settings"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

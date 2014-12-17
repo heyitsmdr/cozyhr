@@ -696,5 +696,19 @@ module.exports = {
         }
       }));
     }));
-  }
+  },
+
+  /**
+   * @via     HTTP
+   * @method  GET
+   */
+  payroll: function(req, res) {
+    ExceptionService.require(req, res, { GET: true });
+
+    res.view('admin/base', {
+      selectedPage: 'admin',
+      selectedSection: 'payroll',
+      breadcrumbs: [ { name: 'Payroll' } ]
+    });
+  },
 };
