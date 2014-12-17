@@ -4,7 +4,7 @@
 		<div id="sectionClockedIn" class="section" style="<% if(clock.length == 0) { %>display:none<% } %>">
 			<div class="header green">
 					<div class="left">Clocked In</div>
-					<div class="right"><a href="#" onclick="CozyHR.pageHelper.instance.clockOut()"><i class="fa fa-floppy-o"></i></a>&nbsp;&nbsp;<a href="#" onclick="CozyHR.pageHelper.instance.deleteClock()"><i class="fa fa-times"></i></a></div>
+					<div class="right"><a href="#" onclick="CozyHR.pageHelper.instance.deleteClock()"><i class="fa fa-close"></i></a>&nbsp;&nbsp;<a href="#" onclick="CozyHR.pageHelper.instance.clockOut()"><i class="fa fa-check"></i></a></div>
 			</div>
 			<div class="content green">
 				<div class="left">
@@ -18,9 +18,9 @@
 		</div>
 		<div id="sectionClockedInSpacing" class="sectionSpace" style="<% if(clock.length == 0) { %>display:none<% } %>"></div>
 
-		<div class="section">
+		<div id="sectionClockIn" class="section">
 			<div class="header">
-					Clock In / Out
+					Clock In
 			</div>
 			<div class="content">
 				<div class="label">Where are you working?</div>
