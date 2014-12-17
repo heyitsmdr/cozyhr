@@ -173,7 +173,7 @@ CozyHR.confirm = function(question, opt) {
 					title: "Deleted!",
 					text: opt.confirmSuccess || "Deleted!",
 					type: "success",
-					closeOnConfirm: true
+					closeOnConfirm: false
 				}, function() {
 					if(typeof opt.confirmCallback === 'function')
 						opt.confirmCallback();
@@ -189,12 +189,7 @@ CozyHR.confirm = function(question, opt) {
 				title: "Cancelled",
 				text: opt.cancelSuccess || "Safe!",
 				type: "error",
-				closeOnConfirm: true,
-				closeOnCancel: true,
 				allowOutsideClick: true
-			}, function() {
-				if(typeof opt.cancelCallback === 'function')
-					opt.cancelCallback();
 			});
 		}
 	});
