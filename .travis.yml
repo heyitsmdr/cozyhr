@@ -4,4 +4,4 @@ node_js:
 env:
   - NODE_ENV="production"
 notifications:
-  slack: cozyhr:ttWJEKU6Cswdf8mSdW7K1XmT
+  slack: cozyhr:PMCy9EE0hMD84Tc4DiCEuINx
