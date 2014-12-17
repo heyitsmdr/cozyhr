@@ -8,6 +8,7 @@ _timeclock.prototype.init = function() {
 		io.socket.on('clockUpdate', this.onClockUpdate.bind(this));
 
 		$('#selOffice').chosen({
+      width: '100%',
 			placeholder_text_single: 'Choose an Office'
 		});
 
@@ -37,10 +38,6 @@ _timeclock.prototype.init = function() {
 		getPositionsAtOffice(localStorage['lastOffice'] || $('#selOffice option:first').val());
 
 		io.socket.get('/timeclock/getClocks');
-
-    if($('#sectionClockedIn').is(':visible')) {
-      $('#sectionClockIn').hide();
-    }
 
 	}.bind(this));
 
