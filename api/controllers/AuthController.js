@@ -34,9 +34,9 @@ module.exports = {
    * @method  GET
    */
   session: function(req, res) {
-    var es = ExceptionService.require(req, res, { socket: true, GET: true });
+    ExceptionService.require(req, res, { socket: true, GET: true });
 
-    res.send('Mike Du Russel');
+    res.json( req.session );
   },
 
   /**

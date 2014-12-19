@@ -14,6 +14,7 @@
     <script src="/js/dependencies/underscore.1.7.0-min.js"></script>
     <script src="/js/vendor/angular-route.1.2.28/angular-route.min.js"></script>
     <script src="/js/vendor/angular-sails.1.0.5/angular-sails.min.js"></script>
+    <script src="/js/vendor/angular-sanitize.1.2.28/angular-sanitize.min.js"></script>
     <script src="/js/vendor/chosen.1.1.0/chosen.jquery.min.js"></script>
     <script src="/js/vendor/jbox.0.3.2/jBox.min.js"></script>
     <script src="/js/vendor/jquery-ui.1.11.1/jquery-ui.min.js"></script>
@@ -25,7 +26,9 @@
     <script src="/js/vendor/sweetalert-0.3.2/sweet-alert.min.js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/controllers/DashController.js"></script>
+    <script src="/js/directives/employeePicture.js"></script>
     <script src="/js/services/authUser.js"></script>
+    <script src="/js/services/feed.js"></script>
     <!--SCRIPTS END-->
 
     <!--STYLES-->
@@ -82,7 +85,7 @@
       <%- partial('topbar') %>
     <% } %>
 
-    <div id="mainContainer" class="container <%= (typeof extraContainerClass !== 'undefined')?extraContainerClass:'' %>" ng-view>
+    <div id="mainContainer" ng-show="appVisible" class="container <%= (typeof extraContainerClass !== 'undefined')?extraContainerClass:'' %>" ng-view>
 
     </div>
 

@@ -33,13 +33,13 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    controller: 'DashController',
-    action: 'home'
+    controller: 'RootController',
+    action: 'allRoutes'
   },
 
   '/dash': {
-    controller: 'DashController',
-    action: 'home'
+    controller: 'RootController',
+    action: 'allRoutes'
   },
 
   '/timeclock': {

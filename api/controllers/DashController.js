@@ -1,41 +1,11 @@
 var _ = require('lodash');
 
 module.exports = {
-
-	/**
-	 * @via     HTTP
-	 * @method  GET
-	 */
-	home: function(req, res) {
-		var es = ExceptionService.require(req, res, { GET: true });
-
-		Office.find({ company: req.session.userinfo.company.id })
-		.then(function(offices) {
-			res.view('dash/base', {
-				selectedPage: 'dash',
-				offices: offices,
-				mustacheTemplates: ['feedItem', 'feedItemComment', 'workingNow']
-			});
-		}).catch(es.wrap(function(e) {
-			throw ExceptionService.error(e);
-		}));
-	},
-
-	/**
-   * @via     HTTP
-   * @method  GET
-   */
-	sessionvars: function(req, res) {
-		ExceptionService.require(req, res, { GET: true });
-
-		res.send( req.session );
-	},
-
 	/**
    * @via     Socket
    * @method  GET
    */
-	getFeed: function(req, res) {
+	syncFeed: function(req, res) {
 		var es = ExceptionService.require(req, res, { socket: true, GET: true });
 
 		var filter = req.param('filter');
@@ -90,7 +60,7 @@ module.exports = {
 					officeName: ((_feed.office) ? _feed.office.name : 'Global')
 				});
 
-				req.socket.emit('feedUpdate', feedItems);
+				res.json(feedItems);
 			});
 		}).catch(es.wrap(function(err) {
 			throw ExceptionService.error(err);

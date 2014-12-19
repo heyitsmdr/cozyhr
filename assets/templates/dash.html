@@ -4,25 +4,25 @@
     <div class="sectionContainer sectionYou">
       <div class="section">
         <div class="content">
-          <a href="/admin/employee/<%- req.session.userinfo.id %>"><div class="picture" style="background-image:url('<%- req.session.userinfo.picture %>')"></div></a>
-          <div class="name"><strong>{{currentUser}}</strong></div>
-          <div class="position">Job title here.</div>
+          <employeepicture employee="session.userinfo"></employeepicture>
+          <div class="name"><strong ng-bind="session.userinfo.fullName"></strong></div>
+          <div class="position" ng-bind="session.userinfo.role.jobTitle"></div>
           <div class="sep"></div>
           <div class="head">You have accrued:</div>
           <div class="info-new">
             <!-- Paid Time Off (PTO) -->
             <div class="benefit">
-              <div class="amount"><a href="#"><%- req.session.userinfo.counter_pto.toFixed(2) %></a></div>
+              <div class="amount"><a href="#" ng-bind="session.userinfo.counter_pto"></a></div>
               <div class="desc">hours of PTO</div>
             </div>
             <!-- Sick Time -->
             <div class="benefit">
-              <div class="amount"><a href="#"><%- req.session.userinfo.counter_sick.toFixed(2) %></a></div>
+              <div class="amount"><a href="#" ng-bind="session.userinfo.counter_sick"></a></div>
               <div class="desc">hours of sick time</div>
             </div>
             <!-- Vacation Time -->
             <div class="benefit">
-              <div class="amount"><a href="#"><%- req.session.userinfo.counter_vaca.toFixed(2) %></a></div>
+              <div class="amount"><a href="#" ng-bind="session.userinfo.counter_vaca"></a></div>
               <div class="desc">hours of vacation time</div>
             </div>
           </div>
@@ -55,7 +55,18 @@
         </div>
       </div>
       <div id="subSectionCompanyFeedEntries">
-        <!-- Loaded via Mustache -->
+        <div id="fid-{{feedId}}" class="feeditem" ng-repeat="feed in feedData">
+          <employeepicture employee="session.userinfo" tooltip="true"></employeepicture>
+          <div class="action" ng-bind-html="feed.content"></div>
+          <!--<div class="date">{{date}} ({{officeName}})</div>
+          <div class="comments">
+            {{#showMoreComments}}
+            <div class="manyComments"><a href="#" onclick="CozyHR.pageHelper.instance.loadMoreComments('{{feedId}}')">Show more of the previous <strong><span class="commentsHidden">{{commentsHidden}}</span></strong> comments.</a></div>
+            {{/showMoreComments}}
+            {{{commentsHtml}}}
+          </div>
+          <div class="comment"><div class="picture small" style="background-image:url({{pictureUrl}})"></div><input class="writeComment" type="text" data-feedid="{{feedId}}" placeholder="Write a comment.."></div>-->
+        </div>
       </div>
     </div>
   </div>
