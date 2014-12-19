@@ -7,6 +7,7 @@ Cozy.controller('DashController', function($scope, $rootScope, $feed) {
 
   // Now, let's sync the feed
   $feed.sync().then(function(feedData) {
+    console.log(feedData);
     $scope.feedData = feedData;
   });
 });

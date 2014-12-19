@@ -4,7 +4,7 @@
     <div class="sectionContainer sectionYou">
       <div class="section">
         <div class="content">
-          <employeepicture employee="session.userinfo"></employeepicture>
+          <employeepicture employee="session.userinfo" picture="session.userinfo.picture"></employeepicture>
           <div class="name"><strong ng-bind="session.userinfo.fullName"></strong></div>
           <div class="position" ng-bind="session.userinfo.role.jobTitle"></div>
           <div class="sep"></div>
@@ -55,17 +55,22 @@
         </div>
       </div>
       <div id="subSectionCompanyFeedEntries">
-        <div id="fid-{{feedId}}" class="feeditem" ng-repeat="feed in feedData">
-          <employeepicture employee="session.userinfo" tooltip="true"></employeepicture>
+        <div id="fid-{{feed.feedid}}" class="feeditem" ng-repeat="feed in feedData">
+          <employeepicture tooltip="true" name="feed.authorName" job="feed.authorJobTitle" id="" picture="feed.picture"></employeepicture>
           <div class="action" ng-bind-html="feed.content"></div>
-          <!--<div class="date">{{date}} ({{officeName}})</div>
-          <div class="comments">
-            {{#showMoreComments}}
-            <div class="manyComments"><a href="#" onclick="CozyHR.pageHelper.instance.loadMoreComments('{{feedId}}')">Show more of the previous <strong><span class="commentsHidden">{{commentsHidden}}</span></strong> comments.</a></div>
-            {{/showMoreComments}}
-            {{{commentsHtml}}}
+          <div class="date">{{date | humanDate:1}} ({{feed.officeName}})</div>
+          <div class="comments" ng-if="feed.comments.length >= 1">
+            <div class="manyComments" ng-if="feed.comments.length > 5"><a href="#">Show more of the previous <strong>{{feed.comments.length - 5}}</strong> comments.</a></div>
+            <div id="cid-{{comment.id}}" ng-repeat="comment in feed.comments" data-timestamp="{{comment.timestamp}}" class="specificComment">
+              <!--{{{pictureHtml}}}-->
+              <div class="commentText" ng-bind-html="comment.content"></div>
+              <relativetime timestamp="comment.createdAt" class="commentTime"></relativetime>
+              <span class="commentLinks" ng-if="comment.author=true">
+                - <a href="#">Delete Comment</a>
+              </span>
+            </div>
           </div>
-          <div class="comment"><div class="picture small" style="background-image:url({{pictureUrl}})"></div><input class="writeComment" type="text" data-feedid="{{feedId}}" placeholder="Write a comment.."></div>-->
+          <!--<div class="comment"><div class="picture small" style="background-image:url({{pictureUrl}})"></div><input class="writeComment" type="text" data-feedid="{{feedId}}" placeholder="Write a comment.."></div>-->
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 Cozy.factory('$feed', function($q, $sails) {
 
   var feeds = null;
+  var filter = 'all';
 
   return {
     sync: function() {
@@ -11,7 +12,7 @@ Cozy.factory('$feed', function($q, $sails) {
         return deferred.promise;
       }
 
-      $sails.get('/dash/syncFeed', { filter: 'all', start: 0 })
+      $sails.get('/dash/syncFeed', { filter: filter, start: 0 })
         .success(function(data) {
           feeds = data;
           deferred.resolve(feeds);

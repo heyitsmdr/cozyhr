@@ -51,12 +51,12 @@ module.exports = {
 
 				feedItems.push({
 					authorName: _feed.userObj.fullName(),
+					authorJobTitle: _feed.userObj.role.jobTitle,
 					content: '<strong>' + _feed.userObj.fullName() + '</strong> ' + _feed.content,
 					date: _feed.createdAt,
 					feedid: _feed.id,
 					comments: _feed.comments || [],
-					picture: _feed.userObj.genPicture(false),
-					mePicture: _feed.userObj.picture,
+					picture: _feed.userObj.picture,
 					officeName: ((_feed.office) ? _feed.office.name : 'Global')
 				});
 
