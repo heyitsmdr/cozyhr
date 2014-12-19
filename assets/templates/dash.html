@@ -1,0 +1,84 @@
+<div id="pageDashboard" class="row">
+  <div class="3u">
+    <!-- You -->
+    <div class="sectionContainer sectionYou">
+      <div class="section">
+        <div class="content">
+          <a href="/admin/employee/<%- req.session.userinfo.id %>"><div class="picture" style="background-image:url('<%- req.session.userinfo.picture %>')"></div></a>
+          <div class="name"><strong>{{currentUser}}</strong></div>
+          <div class="position">Job title here.</div>
+          <div class="sep"></div>
+          <div class="head">You have accrued:</div>
+          <div class="info-new">
+            <!-- Paid Time Off (PTO) -->
+            <div class="benefit">
+              <div class="amount"><a href="#"><%- req.session.userinfo.counter_pto.toFixed(2) %></a></div>
+              <div class="desc">hours of PTO</div>
+            </div>
+            <!-- Sick Time -->
+            <div class="benefit">
+              <div class="amount"><a href="#"><%- req.session.userinfo.counter_sick.toFixed(2) %></a></div>
+              <div class="desc">hours of sick time</div>
+            </div>
+            <!-- Vacation Time -->
+            <div class="benefit">
+              <div class="amount"><a href="#"><%- req.session.userinfo.counter_vaca.toFixed(2) %></a></div>
+              <div class="desc">hours of vacation time</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Your Schedule -->
+    <div class="sectionContainer sectionYourSchedule">
+      <div class="section">
+        <div class="header">Your Schedule</div>
+        <div class="content">
+          <div>More stuff..</div>
+          <div>More stuff..</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="6u">
+    <!-- Company Feed -->
+    <div class="section sectionCompanyFeed">
+      <div class="header">
+        <div class="headerTitle"><h2>Company Feed<span id="ajax-loading"><i class="fa fa-spinner fa-spin"></i></span></h2></div>
+        <div class="headerFilter">
+          <select data-placeholder="Choose a feed filter.." id="feedFilter">
+            <option value="all">All Offices</option>
+            <% for(var i = 0; i < offices.length; i++) { %>
+              <option value="<%= offices[i].id %>"><%= offices[i].name %></option>
+            <% } %>
+          </select>
+        </div>
+      </div>
+      <div id="subSectionCompanyFeedEntries">
+        <!-- Loaded via Mustache -->
+      </div>
+    </div>
+  </div>
+  <div class="3u">
+    <!-- Birthdays -->
+    <div class="sectionContainer sectionCelebrations">
+      <div class="section">
+        <div class="header">Celebrations</div>
+        <div class="content">
+          <center>There are no celebrations today.</center>
+        </div>
+      </div>
+    </div>
+    <!-- Working Now -->
+    <div class="sectionContainer sectionWorkingNow">
+      <div class="section">
+        <div class="header">Working Now</div>
+        <div class="content">
+          <div id="subSectionWorkers">
+            <div class="loading"><i class="fa fa-spinner fa-spin"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -30,6 +30,16 @@ module.exports = {
   },
 
   /**
+   * @via     Socket
+   * @method  GET
+   */
+  session: function(req, res) {
+    var es = ExceptionService.require(req, res, { socket: true, GET: true });
+
+    res.send('Mike Du Russel');
+  },
+
+  /**
    * @via     HTTP
    * @method  POST
    */

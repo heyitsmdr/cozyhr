@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html class="<%= (typeof htmlClass !== 'undefined')?htmlClass:'' %>">
+<html class="<%= (typeof htmlClass !== 'undefined')?htmlClass:'' %>" ng-app="cozyhr-app" ng-controller="PageController">
   <head>
-    <title>CozyHR</title>
+    <title ng-bind="pageTitle()">CozyHR</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -12,6 +12,7 @@
     <script src="/js/dependencies/jquery-1.11.1.min.js"></script>
     <script src="/js/dependencies/skel.2.1.0.min.js"></script>
     <script src="/js/dependencies/underscore.1.7.0-min.js"></script>
+    <script src="/js/vendor/angular-route.1.2.28/angular-route.min.js"></script>
     <script src="/js/vendor/angular-sails.1.0.5/angular-sails.min.js"></script>
     <script src="/js/vendor/chosen.1.1.0/chosen.jquery.min.js"></script>
     <script src="/js/vendor/jbox.0.3.2/jBox.min.js"></script>
@@ -22,11 +23,9 @@
     <script src="/js/vendor/skel-layers.2.0.0/skel-layers.min.js"></script>
     <script src="/js/vendor/soundjs.0.5.2/soundjs-0.5.2.min.js"></script>
     <script src="/js/vendor/sweetalert-0.3.2/sweet-alert.min.js"></script>
-    <script src="/js/_client.js"></script>
-    <script src="/js/admin.js"></script>
-    <script src="/js/dashboard.js"></script>
-    <script src="/js/signin.js"></script>
-    <script src="/js/timeclock.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/controllers/DashController.js"></script>
+    <script src="/js/services/authUser.js"></script>
     <!--SCRIPTS END-->
 
     <!--STYLES-->
@@ -83,8 +82,8 @@
       <%- partial('topbar') %>
     <% } %>
 
-    <div id="mainContainer" class="container <%= (typeof extraContainerClass !== 'undefined')?extraContainerClass:'' %>">
-      <%- body %>
+    <div id="mainContainer" class="container <%= (typeof extraContainerClass !== 'undefined')?extraContainerClass:'' %>" ng-view>
+
     </div>
 
     <% if(req.session.authenticated) { %>
@@ -98,15 +97,6 @@
         </script>
       <% } %>
     <% } %>
-
-    <script>
-    <% if(req.session.authenticated) { %>
-      CozyHR.userId = "<%- req.session.userinfo.id %>";
-      CozyHR.env = "<%- ENV %>";
-    <% } else { %>
-      CozyHR.env = "<%- ENV %>";
-    <% } %>
-    </script>
 
     </body>
 </html>
