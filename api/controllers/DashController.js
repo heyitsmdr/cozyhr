@@ -43,20 +43,21 @@ module.exports = {
 				_feed.userObj = feedUsers[_feed.user];
 
 				_feed.comments.forEach(function(_comment) {
-					_comment.userObj = commentUsers[_comment.user];
-
-					_comment.authorName = _comment.userObj.fullName();
-					_comment.picture = _comment.userObj.genPicture(true);
+					_comment.authorId = commentUsers[_comment.user].id;
+					_comment.authorName = commentUsers[_comment.user].fullName();
+					_comment.authorPicture = commentUsers[_comment.user].picture;
+					_comment.authorJob = commentUsers[_comment.user].role.jobTitle;
 				});
 
 				feedItems.push({
 					authorName: _feed.userObj.fullName(),
 					authorJobTitle: _feed.userObj.role.jobTitle,
+					authorPicture: _feed.userObj.picture,
+					authorId: _feed.userObj.id,
 					content: '<strong>' + _feed.userObj.fullName() + '</strong> ' + _feed.content,
 					date: _feed.createdAt,
 					feedid: _feed.id,
 					comments: _feed.comments || [],
-					picture: _feed.userObj.picture,
 					officeName: ((_feed.office) ? _feed.office.name : 'Global')
 				});
 

@@ -4,7 +4,7 @@
     <div class="sectionContainer sectionYou">
       <div class="section">
         <div class="content">
-          <employeepicture employee="session.userinfo" picture="session.userinfo.picture"></employeepicture>
+          <employeepicture id="session.userinfo.id" picture="session.userinfo.picture"></employeepicture>
           <div class="name"><strong ng-bind="session.userinfo.fullName"></strong></div>
           <div class="position" ng-bind="session.userinfo.role.jobTitle"></div>
           <div class="sep"></div>
@@ -44,7 +44,7 @@
     <!-- Company Feed -->
     <div class="section sectionCompanyFeed">
       <div class="header">
-        <div class="headerTitle"><h2>Company Feed<span id="ajax-loading"><i class="fa fa-spinner fa-spin"></i></span></h2></div>
+        <div class="headerTitle"><h2>Company Feed<span id="ajax-loading" ng-show="loadingFeed"><i class="fa fa-spinner fa-spin"></i></span></h2></div>
         <div class="headerFilter">
           <select data-placeholder="Choose a feed filter.." id="feedFilter">
             <option value="all">All Offices</option>
@@ -55,14 +55,16 @@
         </div>
       </div>
       <div id="subSectionCompanyFeedEntries">
+        <!-- Feed -->
         <div id="fid-{{feed.feedid}}" class="feeditem" ng-repeat="feed in feedData">
-          <employeepicture tooltip="true" name="feed.authorName" job="feed.authorJobTitle" id="" picture="feed.picture"></employeepicture>
+          <employeepicture tooltip="true" name="feed.authorName" job="feed.authorJobTitle" id="feed.authorId" picture="feed.authorPicture"></employeepicture>
           <div class="action" ng-bind-html="feed.content"></div>
           <div class="date">{{date | humanDate:1}} ({{feed.officeName}})</div>
+          <!-- Comments -->
           <div class="comments" ng-if="feed.comments.length >= 1">
-            <div class="manyComments" ng-if="feed.comments.length > 5"><a href="#">Show more of the previous <strong>{{feed.comments.length - 5}}</strong> comments.</a></div>
-            <div id="cid-{{comment.id}}" ng-repeat="comment in feed.comments" data-timestamp="{{comment.timestamp}}" class="specificComment">
-              <!--{{{pictureHtml}}}-->
+            <div class="manyComments" ng-if="feed.comments.length > 5 && feedHasHiddenComments(feed.feedid) === true" ng-click="showMoreComments(feed.feedid)">Show more of the previous comments.</div>
+            <div id="cid-{{comment.id}}" ng-show="feedCommentIsVisible(feed.feedid,comment.id)" ng-repeat="comment in feed.comments" data-timestamp="{{comment.timestamp}}" class="specificComment">
+              <employeepicture id="comment.authorId" tooltip="true" name="comment.authorName" picture="comment.authorPicture" job="comment.authorJob" small="true"></employeepicture>
               <div class="commentText" ng-bind-html="comment.content"></div>
               <relativetime timestamp="comment.createdAt" class="commentTime"></relativetime>
               <span class="commentLinks" ng-if="comment.author=true">
@@ -70,8 +72,10 @@
               </span>
             </div>
           </div>
-          <!--<div class="comment"><div class="picture small" style="background-image:url({{pictureUrl}})"></div><input class="writeComment" type="text" data-feedid="{{feedId}}" placeholder="Write a comment.."></div>-->
+          <div class="comment"><employeepicture picture="session.userinfo.picture" small="true"></employeepicture><input class="writeComment" type="text" placeholder="Write a comment.."></div>
+          <!-- /Comments -->
         </div>
+        <!-- /Feed -->
       </div>
     </div>
   </div>

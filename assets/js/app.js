@@ -1,4 +1,4 @@
-var Cozy = angular.module('cozyhr-app', ['ng', 'ngRoute', 'ngSanitize', 'ngSails']);
+var Cozy = angular.module('cozyhr-app', ['ng', 'ngRoute', 'ngSanitize', 'ngTouch', 'ngSails']);
 
 Cozy.config(function($routeProvider, $locationProvider) {
   $routeProvider
@@ -15,7 +15,7 @@ Cozy.config(function($routeProvider, $locationProvider) {
     .hashPrefix('!');
 });
 
-Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser) {
+Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser, $q) {
 
   // First, let's set up third-party integrations.
   $(document).on('mouseover', '.tt', function() {
@@ -37,6 +37,9 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
   });
 
   // And now, set up global-page scope
+  $scope.includeContentLoaded = false;
+  $scope.appReady = false;
+
   $scope.pageTitle = function() {
     if($rootScope.subsection) {
       return 'CozyHR: ' + $rootScope.subsection;
@@ -44,6 +47,52 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
       return 'CozyHR';
     }
   };
+
+  var appDeferred = $q.defer();
+  $scope.promiseAppLoaded = appDeferred.promise;
+
+  $scope.$on('$includeContentLoaded', function() {
+    $scope.includeContentLoaded = true;
+
+    if($scope.appReady) {
+      appDeferred.resolve(true);
+    }
+  });
+
+  $scope.promiseAppLoaded.then(function() {
+    skel.init({
+      prefix: null,
+      normalizeCSS: true,
+      boxModel: 'border',
+      grid: { gutters: [40, 0] },
+      breakpoints: {
+        wide: { range: "1200-", containers: 1140, grid: { gutters: 20 } },
+        narrow: { range: "481-1199", containers: 960 },
+        mobile: { range: "-480", containers: "fluid", lockViewport: true, grid: { collapse: true } }
+      },
+      plugins: {
+        layers: {
+          topMenu: {
+            position: "top-left",
+            width: "100%",
+            height: 41
+          },
+
+          bottomMenu: {
+            position: "bottom-left",
+            width: "100%",
+            height: 41
+          }
+        }
+      }
+    });
+
+    $scope.appVisible = true;
+
+    ['#topMenu', '#bottomMenu'].forEach(function(_menu) {
+      $(_menu).hide().css({opacity: 1}).slideDown();
+    });
+  });
 
   // Next, set up rootScope (avail to all controllers)
   $rootScope.fancyDate = function(a, b, fancyReturn, opt) {
@@ -73,19 +122,20 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
       withinMonth: ((opt.withinMonth) ? opt.withinMonth : '%dd ago')
     };
 
-    if(!fancyReturn)
+    if(!fancyReturn) {
       return ret;
+    }
 
-    if(ret.days == 0 && ret.hours == 0 && ret.minutes == 0) {
+    if(ret.days === 0 && ret.hours === 0 && ret.minutes === 0) {
       return options.now.replace('%s', ret.seconds);
     }
-    else if(ret.days == 0 && ret.hours == 0 && ret.minutes >= 1) {
+    else if(ret.days === 0 && ret.hours === 0 && ret.minutes >= 1) {
       return options.withinHour.replace('%s', ret.seconds).replace('%m', ret.minutes);
     }
-    else if(ret.days == 0 && ret.hours >= 1) {
+    else if(ret.days === 0 && ret.hours >= 1) {
       return options.withinDay.replace('%s', ret.seconds).replace('%m', ret.minutes).replace('%h', ret.hours);
     }
-    else if(ret.days == 1) {
+    else if(ret.days === 1) {
       return options.yesterday.replace('%s', ret.seconds).replace('%m', ret.minutes).replace('%h', ret.hours);
     }
     else {
@@ -104,12 +154,10 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
   $authUser.getUserInfo().then(function() {
     $scope.session = $authUser.getSession();
 
-    console.log('$scope.session', $scope.session);
+    $scope.appReady = true;
 
-    ['#topMenu', '#bottomMenu'].forEach(function(_menu) {
-      $(_menu).hide().css({opacity: 1}).slideDown();
-
-      $scope.appVisible = true;
-    });
+    if($scope.includeContentLoaded) {
+      appDeferred.resolve(true);
+    }
   });
 });
