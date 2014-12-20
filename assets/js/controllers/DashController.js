@@ -8,16 +8,15 @@ Cozy.controller('DashController', function($scope, $rootScope, $feed) {
 
   // Next, let's set some scope variables
   $scope.loadingFeed = true;
+  $scope.feedIsSyncing = $feed.bindableFeedIsSyncing;
 
   // Now, let's sync the feed
-  $feed.sync().then(function(feedData) {
+  $feed.sync(true).then(function(feedData) {
     console.log(feedData);
 
     $scope.feedData = feedData;
     $scope.feedCommentIsVisible = $feed.bindableCommentIsVisible;
     $scope.feedHasHiddenComments = $feed.bindableHasHiddenComments;
-
-    $scope.loadingFeed = false;
   });
 
   // Finally, let's set up some scope-level methods

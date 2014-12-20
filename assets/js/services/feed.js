@@ -3,23 +3,28 @@ Cozy.factory('$feed', function($q, $sails, $timeout) {
   var feeds = null;
   var filter = 'all';
   var commentVisibilityTracker = {};
+  var syncing = true;
 
   return {
-    sync: function() {
+    sync: function(useCache) {
       var deferred = $q.defer();
 
-      if(feeds) {
+      if(useCache && feeds) {
         deferred.resolve(feeds);
         return deferred.promise;
       }
+
+      syncing = true;
 
       $sails.get('/dash/syncFeed', { filter: filter, start: 0 })
         .success(function(data) {
           feeds = data;
           this.initVisibility();
+          syncing = false;
           deferred.resolve(feeds);
         }.bind(this))
         .error(function() {
+          syncing = false;
           deferred.reject();
         });
 
@@ -86,6 +91,10 @@ Cozy.factory('$feed', function($q, $sails, $timeout) {
       } else {
         return false;
       }
+    },
+
+    bindableFeedIsSyncing: function() {
+      return syncing;
     }
   };
 });

@@ -3,10 +3,10 @@ Cozy.factory('$authUser', function($q, $sails) {
   var sessionData = null;
 
   return {
-    sync: function() {
+    sync: function(useCache) {
       var deferred = $q.defer();
 
-      if(sessionData) {
+      if(useCache && sessionData) {
         deferred.resolve(sessionData);
         return deferred.promise;
       }
@@ -26,20 +26,6 @@ Cozy.factory('$authUser', function($q, $sails) {
 
     isAuthenticated: function() {
       return (!!sessionData.authenticated);
-    },
-
-    getUserInfo: function() {
-      var deferred = $q.defer();
-
-      this.sync().then(function() {
-        if(this.isAuthenticated()) {
-          deferred.resolve(sessionData.userinfo);
-        } else {
-          deferred.reject();
-        }
-      }.bind(this));
-
-      return deferred.promise;
     },
 
     getSession: function() {

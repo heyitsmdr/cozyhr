@@ -151,7 +151,7 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
 
   // And finally, only show the app when authenticated.
   // The promise below will only succeed when authenticated.
-  $authUser.getUserInfo().then(function() {
+  $authUser.sync().then(function() {
     $scope.session = $authUser.getSession();
 
     $scope.appReady = true;
