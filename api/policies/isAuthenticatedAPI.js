@@ -17,5 +17,5 @@ module.exports = function(req, res, next) {
 
   // User is not allowed
   // (default res.forbidden() behavior can be overridden in `config/403.js`)
-  return res.json({"error": "Unauthorized -- you will need to login first."});
+  return res.forbidden();
 };

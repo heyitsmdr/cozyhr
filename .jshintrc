@@ -79,9 +79,17 @@
     "wsh"           : false,    // Windows Scripting Host
     "yui"           : false,    // Yahoo User Interface
 
-    // Custom Globals
-    "globals"       : {
+    // Custom Globals (false = read only, true = can read/write)
+    "globals": {
+        // Client-side
         "angular": false,
-        "Cozy"   : false
+        "Cozy"   : true,
+        // Server-side
+        "sails": false,
+        "ExceptionService": false,
+        "Office": false,
+        "PopUser": false,
+        "User": false,
+        "CompanyFeedComment": false
     }
 }

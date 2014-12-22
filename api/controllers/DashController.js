@@ -110,47 +110,37 @@ module.exports = {
 	writeComment: function(req, res) {
 		var es = ExceptionService.require(req, res, { socket: true, POST: true });
 
-		PopUser.one(req.session.userinfo.id, es.wrap(function(e, usr) {
-			if(e)
-				throw ExceptionService.error('Could not find user.');
+		// TODO: Check if feedid exists belongs to your company
 
-			CompanyFeedComment.create({
-				feed: req.param('feedid'),
-				user: req.session.userinfo.id,
-				content: req.param('comment')
-			}).exec(es.wrap(function(err, newComment){
-				if(err)
-					throw ExceptionService.error('Could not create new comment.');
+		User.findOne(req.session.userinfo.id)
+			.then(function() {
 
-				// Send to you
-				req.socket
-					.emit('newFeedComment', {
+				CompanyFeedComment.create({
+					feed: req.param('feedid'),
+					user: req.session.userinfo.id,
+					content: req.param('comment')
+				}).exec(es.wrap(function(err, newComment){
+					if(err) {
+						throw ExceptionService.error('Could not create new comment.');
+					}
+
+					newComment.authorId = req.session.userinfo.id;
+					newComment.authorJob = req.session.userinfo.role.jobTitle;
+					newComment.authorName = req.session.userinfo.fullName;
+					newComment.authorPicture = req.session.userinfo.picture;
+
+					// Update everyone
+					sails.io.sockets.in('cid-'+req.session.userinfo.company.id).emit('addedComment', {
 						feedId: req.param('feedid'),
-						commentId: newComment.id,
-						content: newComment.content,
-						timestamp: newComment.createdAt,
-						authorName: req.session.userinfo.fullName,
-						authorId: newComment.user,
-						picture: usr.genPicture(true)
-				});
+						comment: newComment
+					});
 
-				// Send to everyone listening within this company
-				req.socket
-					.broadcast.to('dash-cid-' + req.session.userinfo.company.id)
-						.emit('newFeedComment', {
-							feedId: req.param('feedid'),
-							commentId: newComment.id,
-							content: newComment.content,
-							timestamp: newComment.createdAt,
-							authorName: req.session.userinfo.fullName,
-							authorId: newComment.user,
-							picture: usr.genPicture(true)
-				});
-
-				res.json({ success: true });
+					res.json({ success: true });
+				}));
+			})
+			.catch(es.wrap(function() {
+				throw ExceptionService.error('Could not find user.');
 			}));
-
-		}));
 	},
 
 	/**
@@ -161,22 +151,24 @@ module.exports = {
 		var es = ExceptionService.require(req, res, { socket: true, POST: true });
 
 		CompanyFeedComment.findOne(req.param('commentId')).exec(es.wrap(function(err, comment) {
-			if(err)
+			if(err) {
 				throw ExceptionService.error('Could not find comment.');
+			}
 
 			if(comment) {
 				var feedId = comment.feed;
 				// Check if we're allowed to delete this
-				if(comment.user == req.session.userinfo.id) {
+				if(comment.user === req.session.userinfo.id) {
 					// Ok, let's delete.
 					CompanyFeedComment.destroy({ id: comment.id }, es.wrap(function(err) {
-						if(err)
+						if(err) {
 							throw ExceptionService.error('Could not delete comment.');
+						}
 
-						// Send to you
-						req.socket.emit('destroyFeedComment', { feedId: feedId, commentId: req.param('commentId') });
-						// Send to everyone listening within this company
-						req.socket.broadcast.to('dash-cid-' + req.session.userinfo.company.id).emit('destroyFeedComment', { feedId: feedId, commentId: req.param('commentId') });
+						// Update everyone
+						sails.io.sockets.in('cid-'+req.session.userinfo.company.id).emit('removedComment', { commentId: req.param('commentId') });
+
+						res.json({ success: true });
 					}));
 				} else {
 					throw ExceptionService.error('Tried to delete a comment with no ownership.');

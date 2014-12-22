@@ -25,6 +25,7 @@ module.exports.sockets = {
 
     if(session.authenticated) {
       socket.join('uid-' + session.userinfo.id);
+      socket.join('cid-' + session.userinfo.company.id);
     }
 
     socket._emit = socket.emit;

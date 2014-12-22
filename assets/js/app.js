@@ -1,4 +1,4 @@
-var Cozy = angular.module('cozyhr-app', ['ng', 'ngRoute', 'ngSanitize', 'ngTouch', 'ngSails']);
+var Cozy = angular.module('cozyhr-app', ['ng', 'ngRoute', 'ngSanitize', 'ngAnimate', 'ngTouch', 'ngSails']);
 
 Cozy.config(function($routeProvider, $locationProvider) {
   $routeProvider
@@ -95,6 +95,10 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
   });
 
   // Next, set up rootScope (avail to all controllers)
+  $rootScope.PAGES = {
+    DASHBOARD: 1
+  };
+
   $rootScope.fancyDate = function(a, b, fancyReturn, opt) {
     var _MS_PER_DAY = 1000 * 60 * 60 * 24;
     var _MS_PER_HOUR = 1000 * 60 * 60;
@@ -149,10 +153,26 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
     }
   };
 
+  $rootScope.notify = function(content, options) {
+    if(options === undefined) {
+      options = {};
+    }
+
+    return new jBox('Notice', {
+      content: content,
+      autoClose: 5000,
+      animation: {open: 'flip', close: 'flip'},
+      color: (options.color || 'black'),
+      audio: ((options.sound===true)?'/sounds/bling2':'')
+    });
+};
+
   // And finally, only show the app when authenticated.
   // The promise below will only succeed when authenticated.
   $authUser.sync().then(function() {
     $scope.session = $authUser.getSession();
+
+    console.log($scope.session);
 
     $scope.appReady = true;
 

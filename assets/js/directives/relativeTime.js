@@ -11,7 +11,9 @@ Cozy.directive('relativetime', function($rootScope, $interval) {
       });
 
       var updateElement = function() {
-        element.html( $rootScope.fancyDate(new Date(scope.timestamp), new Date(), true) );
+        var previousTimestamp = ( (scope.timestamp === 'now') ? Date.now() : scope.timestamp);
+
+        element.html( $rootScope.fancyDate(new Date(previousTimestamp), new Date(), true) );
       };
 
       var intervalId = $interval(function() {

@@ -44,9 +44,8 @@ module.exports.policies = {
   },
 
   'APIController': {
-    '*': ['isSocketTraffic', 'isAuthenticatedAPI'],
-    'role': ['isSocketTraffic', 'isAuthenticatedAPI', 'isCompanyAdmin'],
-    'roles': ['isSocketTraffic', 'isAuthenticatedAPI', 'isCompanyAdmin']
+    '*'           : ['isSocketTraffic', 'isAuthenticatedAPI'],
+    'syncOffices' : ['isSocketTraffic', 'isAuthenticatedAPI'],
   }
 
   /***************************************************************************
