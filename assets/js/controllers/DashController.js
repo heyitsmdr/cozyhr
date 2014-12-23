@@ -1,6 +1,6 @@
 Cozy.controller('DashController', function($scope, $rootScope, $feed, $offices, $workers) {
   $rootScope.subsection = 'Dashboard';
-  $rootScope.pageId = 1;
+  $rootScope.pageId = $rootScope.PAGES.DASHBOARD;
 
   // First, let's set up Chosen
   $('#feedFilter').chosen({

@@ -6,6 +6,10 @@ Cozy.config(function($routeProvider, $locationProvider) {
       templateUrl: '/templates/dash.html',
       controller: 'DashController'
     })
+    .when('/admin/:subpage', {
+      templateUrl: '/templates/admin.html',
+      controller: 'AdminController'
+    })
     .otherwise({
       redirectTo: '/dash'
   });
@@ -103,6 +107,7 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
 
   // Next, set up rootScope (avail to all controllers)
   $rootScope.PAGES = {
+    ADMIN: 0,
     DASHBOARD: 1
   };
 

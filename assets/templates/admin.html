@@ -1,0 +1,28 @@
+<div id="pageAdmin" class="sectionContainer">
+
+  <div class="row">
+    <div class="-1u 10u breadcrumbs">
+      <div>
+        <a href="/#!/admin/general" ng-bind="session.userinfo.company.name"></a>
+        &nbsp;<i class="fa fa-angle-double-right"></i>&nbsp;<a href="/#!/admin/general">Admin</a>
+        <span ng-repeat="crumb in crumbs">
+        &nbsp;<i class="fa fa-angle-double-right"></i>&nbsp;<a href="{{crumb.location}}">{{crumb.name}}</a>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="-1u 2u sidemenu">
+      <a class="item" href="/admin/general"><div class="">General</div></a>
+      <a class="item" href="/admin/employees"><div class="">Employees</div></a>
+      <a class="item" href="/admin/roles"><div class="">Roles</div></a>
+      <a class="item" href="/admin/offices"><div class="">Offices & Positions</div></a>
+    </div>
+    <div class="8u admincontent">
+
+      Content..
+
+    </div>
+  </div>
+</div>
