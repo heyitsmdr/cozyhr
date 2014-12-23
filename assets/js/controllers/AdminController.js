@@ -4,4 +4,5 @@ Cozy.controller('AdminController', function($scope, $rootScope, $routeParams) {
 
   $scope.crumbs = [{ name: 'Blah', location: '/#!/dash' }];
 
+  $scope.adminsection = $routeParams.subpage;
 });

@@ -14,14 +14,14 @@
 
   <div class="row">
     <div class="-1u 2u sidemenu">
-      <a class="item" href="/admin/general"><div class="">General</div></a>
-      <a class="item" href="/admin/employees"><div class="">Employees</div></a>
-      <a class="item" href="/admin/roles"><div class="">Roles</div></a>
-      <a class="item" href="/admin/offices"><div class="">Offices & Positions</div></a>
+      <a class="item" href="/#!/admin/general"><div ng-class="{selected: adminsection === 'general'}">General</div></a>
+      <a class="item" href="/#!/admin/employees"><div class="">Employees</div></a>
+      <a class="item" href="/#!/admin/roles"><div class="">Roles</div></a>
+      <a class="item" href="/#!/admin/offices"><div class="">Offices & Positions</div></a>
     </div>
     <div class="8u admincontent">
 
-      Content..
+      <div ng-include="'templates/admin-includes/'+adminsection+'.html'"></div>
 
     </div>
   </div>
