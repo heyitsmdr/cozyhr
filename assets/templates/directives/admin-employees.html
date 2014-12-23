@@ -1,0 +1,72 @@
+<div class="section">
+  <div class="content">
+    <i class="fa fa-info-circle"></i>&nbsp;Manage the employees at <strong>{{session.userinfo.company.name}}</strong> from here.
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Invite a New Employee
+  </div>
+
+  <div class="content">
+    Employee Email:&nbsp;
+    <input type="text" placeholder="Employee Email" ng-model="inviteEmployeeEmail">&nbsp;
+    <select id="selNewEmployeeRole">
+      <option ng-repeat="role in roles" value="{{role.id}}">{{role.jobTitle}}</option>
+    </select>&nbsp;
+    <input type="button" value="Invite Employee" ng-click="sendInvite()">
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section" ng-if="invites.length > 0">
+  <div class="header">
+    Invited Employees
+  </div>
+
+  <div class="content">
+    You've invited the following employees:
+    <ul>
+      <li ng-repeat="invite in invites">{{invite.inviteEmail}} in <strong>{{invite.invitedRole.jobTitle}}</strong> (<a href="#">resend email</a>) (<a href="#">delete invite</a>)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="sectionSpace" ng-if="invites.length > 0"></div>
+
+<div class="section">
+  <div class="header">
+    Employees
+  </div>
+
+  <div class="content">
+
+    <table id="companyEmployees" class="display" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th class="left-align" width="50%">Employee</th>
+          <th class="left-align" width="35%">Job Title (Role)</th>
+          <th width="15%">Office</th>
+        </tr>
+      </thead>
+
+      <tbody>
+      <% for(var i = 0; i < employees.length; i++) { %>
+        <tr>
+          <td data-order="<%= employees[i].lastName + ', ' + employees[i].firstName %>">
+            <a href="/admin/employee/<%= employees[i].id %>"><div class="picture" style="background-image:url('<%= employees[i].picture %>')"></div></a>
+            <div class="name"><a href="/admin/employee/<%= employees[i].id %>"><%= employees[i].lastName + ', ' + employees[i].firstName %></a><br><span class="email"><%= employees[i].email %></span></div>
+          </td>
+          <td><a href="/admin/role/<%= employees[i].role.id %>"><div class="position"><%= employees[i].role.jobTitle %></div></a></td>
+          <td><div class="office">NYC</div></td>
+        </tr>
+      <% } %>
+      </tbody>
+    </table>
+
+  </div>
+</div>

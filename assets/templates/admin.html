@@ -15,13 +15,27 @@
   <div class="row">
     <div class="-1u 2u sidemenu">
       <a class="item" href="/#!/admin/general"><div ng-class="{selected: adminsection === 'general'}">General</div></a>
-      <a class="item" href="/#!/admin/employees"><div class="">Employees</div></a>
-      <a class="item" href="/#!/admin/roles"><div class="">Roles</div></a>
-      <a class="item" href="/#!/admin/offices"><div class="">Offices & Positions</div></a>
+      <a class="item" href="/#!/admin/employees"><div ng-class="{selected: adminsection === 'employees'}">Employees</div></a>
+      <a class="item" href="/#!/admin/roles"><div ng-class="{selected: adminsection === 'roles'}">Roles</div></a>
+      <a class="item" href="/#!/admin/offices"><div ng-class="{selected: adminsection === 'offices'}">Offices & Positions</div></a>
     </div>
     <div class="8u admincontent">
 
-      <div ng-include="'templates/admin-includes/'+adminsection+'.html'"></div>
+      <div ng-if="adminsection === 'general'">
+        <admingeneral></admingeneral>
+      </div>
+
+      <div ng-if="adminsection === 'employees'">
+        <adminemployees></adminemployees>
+      </div>
+
+      <div ng-if="adminsection === 'roles'">
+
+      </div>
+
+      <div ng-if="adminsection === 'offices'">
+
+      </div>
 
     </div>
   </div>

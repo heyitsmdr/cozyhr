@@ -1,0 +1,81 @@
+<div class="section">
+  <div class="header">
+    Your Company
+  </div>
+
+  <div class="content">
+
+    <div ng-show="viewport==='general'" class="subSectionContainer">
+
+      <!-- Company Name -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Name</div>
+          <div class="subtitle">The full name of your company.</div>
+        </div>
+        <div class="setting"><input type="text" ng-model="companyName"></div>
+      </div>
+
+      <!-- Company Subdomain -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">CozyHR Subdomain</div>
+          <div class="subtitle">This is the subdomain used to access your CozyHR portal.</div>
+        </div>
+        <div class="setting"><input type="text" ng-model="session.userinfo.company.host" disabled="disabled"><input type="button" value="Change Subdomain" ng-click="viewport='subdomain'"></div>
+      </div>
+
+      <!-- Save -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title green">Save</div>
+          <div class="subtitle green">Be sure to save when you're done!</div>
+        </div>
+        <div class="setting"><input type="button" ng-click="save()" value="Save Settings"></div>
+      </div>
+
+    </div>
+
+    <div ng-show="viewport==='subdomain'" class="subSectionContainer">
+
+      <!-- Disclaimer -->
+      <div class="settingWrapper">
+        <div class="info-alone red">
+          <strong>Warning!</strong> Changing the subdomain will require everyone to access your HR portal using a new link. The old link will <strong>not</strong> redirect to the new link. Furthermore, everyone currently logged in will be logged out (including yourself) and will require a new login session at the new URL. Proceed with caution.
+        </div>
+      </div>
+
+      <!-- Current Subdomain -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Current Subdomain</div>
+          <div class="subtitle">This is the current subdomain used to access your CozyHR portal.</div>
+        </div>
+        <div class="setting"><input type="text" ng-model="session.userinfo.company.host" disabled="disabled"></div>
+      </div>
+
+      <!-- New Subdomain -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">New Subdomain</div>
+          <div class="subtitle">This will be the new subdomain used to access your CozyHR portal.</div>
+        </div>
+        <div class="setting"><input type="text" ng-model="companyHost"></div>
+      </div>
+
+      <!-- Save -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title green">Save</div>
+          <div class="subtitle green">Be sure to save when you're done!</div>
+        </div>
+        <div class="setting">
+          <input type="button" value="Go back" ng-click="viewport='general'">
+          <input type="button" value="Change Subdomain" ng-click="changeSubdomain()">
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

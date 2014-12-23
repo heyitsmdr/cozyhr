@@ -1,44 +1,30 @@
 module.exports = {
   /**
-   * @via     HTTP
+   * @via     Socket
    * @method  GET
    */
-  general: function(req, res) {
-    ExceptionService.require(req, res, { GET: true });
-
-    res.view('admin/base', {
-      selectedPage: 'admin',
-      selectedSection: 'general',
-      breadcrumbs: [ { name: 'General' } ]
-    });
-  },
-
-  /**
-   * @via     HTTP
-   * @method  GET
-   */
-  employees: function(req, res) {
-    var es = ExceptionService.require(req, res, { GET: true });
+  getEmployees: function(req, res) {
+    var es = ExceptionService.require(req, res, { socket: true, GET: true });
 
     PopUser.many({company: req.session.userinfo.company.id}, {sort: 'lastName ASC'}, es.wrap(function (e, employees) {
-      if(e)
+      if(e) {
         throw ExceptionService.error('Could not find user.');
+      }
 
       Role.find({ companyId: req.session.userinfo.company.id }).exec(es.wrap(function(e, roles) {
-        if(e)
+        if(e) {
           throw ExceptionService.error('Could not get roles for company.');
+        }
 
         Invite.find({ invitedTo: req.session.userinfo.company.id }).populate('invitedRole').exec(es.wrap(function(e, invites) {
-          if(e)
+          if(e) {
             throw ExceptionService.error('Could not find invites for company.');
+          }
 
-          res.view('admin/base', {
-            selectedPage: 'admin',
-            selectedSection: 'employees',
-            breadcrumbs: [ { name: 'Employees' } ],
+          res.json({
             employees: employees,
-            allRoles: roles,
-            allInvites: invites
+            roles: roles,
+            invites: invites
           });
         }));
       }));
@@ -55,22 +41,24 @@ module.exports = {
     var invitedEmail = req.param('email');
     var invitedRole = req.param('role');
 
-    if(invitedEmail.indexOf('@') == -1 || invitedEmail.indexOf('@') == -1) {
+    if(invitedEmail.indexOf('@') === -1 || invitedEmail.indexOf('@') === -1) {
       throw ExceptionService.error('Invalid email format.', { fatal: false });
     }
 
     Invite.findOne({ inviteEmail: invitedEmail.toLowerCase() }).exec(es.wrap(function(e, invites) {
-      if(e || invites)
+      if(e || invites) {
         throw ExceptionService.error('Email was already invited.', { fatal: false });
+      }
 
       User.findOne({ email: invitedEmail }).exec(es.wrap(function(e, users) {
-        if(e || users)
+        if(e || users) {
           throw ExceptionService.error('Email already exists in our database.', { fatal: false });
+        }
 
         Role.findOne(invitedRole).exec(es.wrap(function(e, role) {
           if(e || !role) {
             throw ExceptionService.error('Role does not exist.');
-          } else if(role.companyId != req.session.userinfo.company.id) {
+          } else if(role.companyId !== req.session.userinfo.company.id) {
             throw ExceptionService.error('Role does not belong to this company.');
           } else {
             Invite.create({
@@ -100,8 +88,7 @@ module.exports = {
               res.json({
                 success: true,
                 email: invitedEmail,
-                token: inviteKey,
-                companyName: req.session.userinfo.company.name
+                role: role
               });
             }));
           }

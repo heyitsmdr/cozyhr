@@ -3,9 +3,7 @@ Cozy.controller('DashController', function($scope, $rootScope, $feed, $offices, 
   $rootScope.pageId = $rootScope.PAGES.DASHBOARD;
 
   // First, let's set up Chosen
-  $('#feedFilter').chosen({
-    placeholder_text_single: 'Select a filter'
-  });
+  $('#feedFilter').chosen();
 
   $('#feedFilter').on('change', function(evt, params) {
     localStorage.lastDashFeedFilter = params.selected;
