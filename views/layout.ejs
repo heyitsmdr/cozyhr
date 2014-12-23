@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html class="<%= (typeof htmlClass !== 'undefined')?htmlClass:'' %>" ng-app="cozyhr-app" ng-controller="PageController">
-  <head>
+<html ng-app="cozyhr-app" ng-controller="PageController">
+    <head>
     <title ng-bind="pageTitle()">CozyHR</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
@@ -49,18 +49,18 @@
     <link rel="stylesheet" href="/js/vendor/sweetalert-0.3.2/sweet-alert.css">
     <link rel="stylesheet" href="/styles/styles.css">
     <!--STYLES END-->
-  </head>
+    </head>
 
-  <body class="<%= (typeof bodyClass !== 'undefined')?bodyClass:'' %>">
-    <!-- Header Injection Point -->
-    <div ng-include="'templates/includes/header.html'"></div>
+    <body>
 
-    <!-- Page Content Injection Point -->
-    <div id="mainContainer" ng-show="appVisible" class="container" ng-view></div>
+        <!-- Header Injection Point -->
+        <div ng-include="'templates/includes/header.html'"></div>
 
-    <% if(req.session.authenticated) { %>
-      <%- partial('bottombar') %>
-    <% } %>
+        <!-- Page Content Injection Point -->
+        <div id="mainContainer" ng-show="appVisible" class="container" ng-view></div>
+
+        <!-- Footer Injection Point -->
+        <div ng-include="'templates/includes/footer.html'"></div>
 
     </body>
 </html>

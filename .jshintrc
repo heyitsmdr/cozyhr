@@ -85,9 +85,11 @@
         "angular": false,
         "Cozy"   : true,
         // Server-side
+        "_": false,
         "sails": false,
         "ExceptionService": false,
         "Office": false,
+        "Clock": false,
         "PopUser": false,
         "User": false,
         "CompanyFeedComment": false

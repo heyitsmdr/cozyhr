@@ -39,6 +39,7 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
   // And now, set up global-page scope
   $scope.includeContentLoaded = false;
   $scope.appReady = false;
+  $scope.contentLoadedCount = 0;
 
   $scope.pageTitle = function() {
     if($rootScope.subsection) {
@@ -51,7 +52,13 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
   var appDeferred = $q.defer();
   $scope.promiseAppLoaded = appDeferred.promise;
 
-  $scope.$on('$includeContentLoaded', function() {
+  $scope.$on('$includeContentLoaded', function(event) {
+    $scope.contentLoadedCount++;
+
+    if($scope.contentLoadedCount < 2) {
+      return;
+    }
+
     $scope.includeContentLoaded = true;
 
     if($scope.appReady) {

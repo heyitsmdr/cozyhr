@@ -69,13 +69,11 @@ Cozy.factory('$feed', function($q, $sails, $timeout, $rootScope) {
           feeds = data;
           this.checkVisibility();
           syncing = false;
-          commentPendingSync = false;
-          console.log(feeds);
+          console.log('$feed', feeds);
           deferred.resolve(feeds);
         }.bind(this))
         .error(function() {
           syncing = false;
-          commentPendingSync = false;
           deferred.reject();
         });
 
@@ -197,7 +195,7 @@ Cozy.factory('$feed', function($q, $sails, $timeout, $rootScope) {
       if(feeds) {
         return feeds;
       } else {
-        return [];
+        return [ ];
       }
     }
   };

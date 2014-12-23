@@ -92,7 +92,12 @@
         <div class="header">Working Now</div>
         <div class="content">
           <div id="subSectionWorkers">
-            <div class="loading"><i class="fa fa-spinner fa-spin"></i></div>
+            <div class="loading" ng-show="workersIsSyncing()"><i class="fa fa-spinner fa-spin"></i></div>
+            <div class="worker" ng-repeat="worker in clockedWorkers()">
+              <employeepicture id="worker.workerId" tooltip="true" name="worker.workerName" picture="worker.workerPicture" job="worker.workerJob"></employeepicture>
+              <div class="name" ng-bind="worker.workerName"></div>
+              <div class="info">{{worker.clockedPosition}} @ {{worker.clockedLocation}}</div>
+            </div>
           </div>
         </div>
       </div>

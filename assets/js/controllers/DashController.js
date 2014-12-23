@@ -1,4 +1,4 @@
-Cozy.controller('DashController', function($scope, $rootScope, $feed, $offices) {
+Cozy.controller('DashController', function($scope, $rootScope, $feed, $offices, $workers) {
   $rootScope.subsection = 'Dashboard';
   $rootScope.pageId = 1;
 
@@ -8,19 +8,23 @@ Cozy.controller('DashController', function($scope, $rootScope, $feed, $offices) 
   });
 
   $('#feedFilter').on('change', function(evt, params) {
-    localStorage['lastDashFeedFilter'] = params.selected;
+    localStorage.lastDashFeedFilter = params.selected;
 
     $feed.setFilter( params.selected );
   });
 
   // Next, let's set some scope variables
   $scope.feedIsSyncing = $feed.bindableFeedIsSyncing;
-  $scope.companyOffices = $offices.bindableGetOffices;
+  $scope.feedCommentIsVisible = $feed.bindableCommentIsVisible;
+  $scope.feedHasHiddenComments = $feed.bindableHasHiddenComments;
   $scope.feedData = $feed.bindableGetFeed;
+  $scope.companyOffices = $offices.bindableGetOffices;
+  $scope.workersIsSyncing = $workers.bindableIsSyncing;
+  $scope.clockedWorkers = $workers.bindableGetWorkers;
 
   $scope.$watch('companyOffices()', function() {
     $scope.$evalAsync(function() {
-      $('#feedFilter').trigger('chosen:updated');
+      $('#feedFilter').val( localStorage.lastDashFeedFilter || $('#feedFilter option:first').val() ).trigger('chosen:updated');
     });
   }, true);
 
@@ -47,13 +51,13 @@ Cozy.controller('DashController', function($scope, $rootScope, $feed, $offices) 
   };
 
   // Now, let's sync the feed
-  $feed.resetVisibility().sync().then(function() {
-    $scope.feedCommentIsVisible = $feed.bindableCommentIsVisible;
-    $scope.feedHasHiddenComments = $feed.bindableHasHiddenComments;
-  });
+  $feed.resetVisibility().sync();
 
   // Then, let's sync the offices
   $offices.sync(true);
+
+  // And then, let's sync the workers
+  $workers.sync(true);
 
   // Finally, let's set up some scope-level methods
   $scope.showMoreComments = function(feedId) {
