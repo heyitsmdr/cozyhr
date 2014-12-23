@@ -14,6 +14,7 @@ Cozy.factory('$offices', function($q, $sails) {
       $sails.get('/api/syncOffices')
         .success(function(companyOffices) {
           offices = companyOffices;
+          console.log('$offices', offices);
           deferred.resolve(offices);
         })
         .error(function() {
