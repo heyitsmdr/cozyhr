@@ -37,7 +37,8 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
 
   // Then, set up global socket events (can happen anywhere in the app)
   $sails.on('exception', function(exceptionData) {
-    //CozyHR.exception(exceptionData.stack);
+    console.log("%c E X E C E P T I O N ", "color: #fff; background-color: #000");
+    console.log(exceptionData);
   });
 
   // And now, set up global-page scope

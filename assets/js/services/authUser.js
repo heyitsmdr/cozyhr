@@ -1,4 +1,4 @@
-Cozy.factory('$authUser', function($q, $sails) {
+Cozy.factory('$authUser', function($q, $cozy) {
 
   var sessionData = null;
 
@@ -11,7 +11,7 @@ Cozy.factory('$authUser', function($q, $sails) {
         return deferred.promise;
       }
 
-      $sails.get('/auth/session')
+      $cozy.get('/auth/session')
         .success(function(data) {
           sessionData = data;
 

@@ -1,4 +1,4 @@
-Cozy.factory('$offices', function($q, $sails) {
+Cozy.factory('$offices', function($q, $cozy) {
 
   var offices = null;
 
@@ -11,7 +11,7 @@ Cozy.factory('$offices', function($q, $sails) {
         return deferred.promise;
       }
 
-      $sails.get('/api/syncOffices')
+      $cozy.get('/api/syncOffices')
         .success(function(companyOffices) {
           offices = companyOffices;
           console.log('$offices', offices);

@@ -98,11 +98,11 @@ module.exports = {
   },
 
   /**
-   * @via     HTTP
-   * @method  GET
+   * @via     Socket
+   * @method  POST
    */
   deleteInvite: function(req, res) {
-    var es = ExceptionService.require(req, res, { GET: true });
+    var es = ExceptionService.require(req, res, { socket: true, POST: true });
 
     var inviteKey = req.param('id');
 
@@ -120,7 +120,7 @@ module.exports = {
           throw ExceptionService.error('Error deleting invite key.');
         }
 
-        res.redirect('/admin/employees');
+        res.json({ success: true });
       }));
     }));
   },
@@ -272,28 +272,30 @@ module.exports = {
   },
 
   /**
-   * @via     HTTP
+   * @via     Socket
    * @method  GET
    */
   getRoles: function(req, res) {
-    var es = ExceptionService.require(req, res, { GET: true });
+    var es = ExceptionService.require(req, res, { socket: true, GET: true });
 
     // Get all the roles for the company
     Role.find({ companyId: req.session.userinfo.company.id }).exec(es.wrap(function(e, roles) {
-      if(e)
+      if(e) {
         throw ExceptionService.error('Could not get roles within company.');
+      }
 
       // Count the employees asynchonously
       async.each(roles, es.wrap(function(role, done) {
         User.find({ role: role.id }).exec(es.wrap(function(e, usrs) {
-          if(e)
+          if(e) {
             throw ExceptionService.error('Error counting users for role.');
+          }
           role.employeeCount = usrs.length;
           done(); // go to next permission/role
         }));
       }), es.wrap(function() {
         // Send to view
-        res.json({"data": roles});
+        res.json(roles);
       }));
     }));
   },

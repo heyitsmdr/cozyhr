@@ -1,4 +1,4 @@
-Cozy.factory('$feed', function($q, $sails, $timeout, $rootScope) {
+Cozy.factory('$feed', function($q, $cozy, $timeout, $rootScope) {
 
   var feeds = null;
   var filter = 'all';
@@ -15,7 +15,6 @@ Cozy.factory('$feed', function($q, $sails, $timeout, $rootScope) {
 
     _onAddedComment: function(response) {
       if($rootScope.pageId === $rootScope.PAGES.DASHBOARD) {
-        console.log('Adding comment', response);
         // Add to feeds
         feeds.forEach(function(_feed) {
           if(_feed.feedid === response.feedId) {
@@ -29,7 +28,6 @@ Cozy.factory('$feed', function($q, $sails, $timeout, $rootScope) {
 
     _onRemovedComment: function(response) {
       if($rootScope.pageId === $rootScope.PAGES.DASHBOARD) {
-        console.log('Removing comment', response);
         // Remove from feeds
         feeds.forEach(function(_feed) {
           _feed.comments = _feed.comments.filter(function(_comment) {
@@ -56,15 +54,15 @@ Cozy.factory('$feed', function($q, $sails, $timeout, $rootScope) {
       }
 
       if(sailsEvents === null) {
-        $sails.on('dashSync', this._onDashSync.bind(this));
-        $sails.on('addedComment', this._onAddedComment.bind(this));
-        $sails.on('removedComment', this._onRemovedComment.bind(this));
+        $cozy.on('dashSync', this._onDashSync.bind(this));
+        $cozy.on('addedComment', this._onAddedComment.bind(this));
+        $cozy.on('removedComment', this._onRemovedComment.bind(this));
         sailsEvents = true;
       }
 
       syncing = true;
 
-      $sails.get('/dash/syncFeed', { filter: filter, start: 0 })
+      $cozy.get('/dash/syncFeed', { filter: filter, start: 0 })
         .success(function(data) {
           feeds = data;
           this.checkVisibility();
@@ -138,7 +136,12 @@ Cozy.factory('$feed', function($q, $sails, $timeout, $rootScope) {
     writeComment: function(feedId, comment) {
       var deferred = $q.defer();
 
-      $sails.post('/dash/writeComment', { feedid: feedId, comment: comment })
+      if(!comment || comment.replace(/ /g, '').length === 0) {
+        deferred.reject();
+        return deferred.promise;
+      }
+
+      $cozy.post('/dash/writeComment', { feedid: feedId, comment: comment })
         .success(function(response) {
           if(response.success) {
             deferred.resolve();
@@ -153,7 +156,7 @@ Cozy.factory('$feed', function($q, $sails, $timeout, $rootScope) {
     removeComment: function(commentId) {
       var deferred = $q.defer();
 
-      $sails.post('/dash/removeComment', { commentId: commentId })
+      $cozy.post('/dash/removeComment', { commentId: commentId })
         .success(function(response) {
           if(response.success) {
             deferred.resolve();

@@ -13,7 +13,7 @@
 
   <div class="content">
     Employee Email:&nbsp;
-    <input type="text" placeholder="Employee Email" ng-model="inviteEmployeeEmail">&nbsp;
+    <input type="text" placeholder="Employee Email" ng-model="inviteEmployeeEmail" ng-enter="sendInvite()">&nbsp;
     <select id="selNewEmployeeRole">
       <option ng-repeat="role in roles" value="{{role.id}}">{{role.jobTitle}}</option>
     </select>&nbsp;
@@ -31,7 +31,7 @@
   <div class="content">
     You've invited the following employees:
     <ul>
-      <li ng-repeat="invite in invites">{{invite.inviteEmail}} in <strong>{{invite.invitedRole.jobTitle}}</strong> (<a href="#">resend email</a>) (<a href="#">delete invite</a>)</li>
+      <li ng-repeat="invite in invites">{{invite.inviteEmail}} in <strong>{{invite.invitedRole.jobTitle}}</strong> (<a href="#">resend email</a>) (<span ng-click="deleteInvite(invite.id)">delete invite</span>)</li>
     </ul>
   </div>
 </div>
@@ -55,16 +55,14 @@
       </thead>
 
       <tbody>
-      <% for(var i = 0; i < employees.length; i++) { %>
-        <tr>
-          <td data-order="<%= employees[i].lastName + ', ' + employees[i].firstName %>">
-            <a href="/admin/employee/<%= employees[i].id %>"><div class="picture" style="background-image:url('<%= employees[i].picture %>')"></div></a>
-            <div class="name"><a href="/admin/employee/<%= employees[i].id %>"><%= employees[i].lastName + ', ' + employees[i].firstName %></a><br><span class="email"><%= employees[i].email %></span></div>
+        <tr ng-repeat="employee in employees">
+          <td data-order="{{employee.lastName}}, {{employee.firstName}}">
+            <a href="/#!/employee/{{employee.id}}"><div class="picture" style="background-image:url('{{employee.picture}}')"></div></a>
+            <div class="name"><a href="/#!/employee/{{employee.id}}">{{employee.lastName}}, {{employee.firstName}}</a><br><span class="email">{{employee.email}}</span></div>
           </td>
-          <td><a href="/admin/role/<%= employees[i].role.id %>"><div class="position"><%= employees[i].role.jobTitle %></div></a></td>
-          <td><div class="office">NYC</div></td>
+          <td><a href="/#!/admin/role/{{employee.role.id}}"><div class="position">{{employee.role.jobTitle}}</div></a></td>
+          <td><div class="office">-</div></td>
         </tr>
-      <% } %>
       </tbody>
     </table>
 

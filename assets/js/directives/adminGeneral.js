@@ -1,4 +1,4 @@
-Cozy.directive('admingeneral', function($sails, $rootScope, $bounce) {
+Cozy.directive('admingeneral', function($cozy, $rootScope, $bounce) {
   return {
     restrict: 'E',
     templateUrl: 'templates/directives/admin-general.html',
@@ -8,12 +8,12 @@ Cozy.directive('admingeneral', function($sails, $rootScope, $bounce) {
       $scope.companyHost = $scope.session.userinfo.company.host.replace('.cozyhr.com', '');
       $scope.viewport = 'general';
 
-      $sails.get('/admin/getGeneralSettings').then(function() {
+      $cozy.get('/admin/getGeneralSettings').then(function() {
 
       });
 
       $scope.save = $bounce(function() {
-        $sails.post('/admin/saveGeneral', {
+        $cozy.post('/admin/saveGeneral', {
           companyName: $scope.companyName
         })
         .then(function(response) {
@@ -26,7 +26,7 @@ Cozy.directive('admingeneral', function($sails, $rootScope, $bounce) {
       });
 
       $scope.changeSubdomain = $bounce(function() {
-        $sails.post('/admin/saveNewSubdomain', {
+        $cozy.post('/admin/saveNewSubdomain', {
           subdomain: $scope.companyHost
         })
         .then(function(response) {

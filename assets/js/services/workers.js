@@ -1,4 +1,4 @@
-Cozy.factory('$workers', function($q, $sails) {
+Cozy.factory('$workers', function($q, $cozy) {
 
   var workers = null;
   var syncing = false;
@@ -14,7 +14,7 @@ Cozy.factory('$workers', function($q, $sails) {
 
       syncing = true;
 
-      $sails.get('/api/syncWorkers')
+      $cozy.get('/api/syncWorkers')
         .success(function(clockedInWorkers) {
           workers = clockedInWorkers;
           syncing = false;

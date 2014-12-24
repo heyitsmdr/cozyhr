@@ -45,11 +45,6 @@ module.exports.routes = {
   '/timeclock': {
     controller: 'TimeclockController',
     action: 'index'
-  },
-
-  '/admin': {
-    controller: 'AdminController',
-    action: 'general'
   }
 
   /***************************************************************************

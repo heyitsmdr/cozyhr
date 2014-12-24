@@ -1,4 +1,4 @@
-Cozy.directive('adminemployees', function($sails, $rootScope, $bounce) {
+Cozy.directive('adminemployees', function($cozy, $rootScope, $bounce, $timeout) {
   return {
     restrict: 'E',
     templateUrl: 'templates/directives/admin-employees.html',
@@ -7,10 +7,26 @@ Cozy.directive('adminemployees', function($sails, $rootScope, $bounce) {
         width: '200px'
       });
 
-      $sails.get('/admin/getEmployees')
+      $scope.$watch('employees', function(newValue) {
+        if(!newValue) {
+          return;
+        }
+
+        $timeout(function() {
+          $('#companyEmployees').dataTable({
+            pageLength: 50,
+            language: {
+              emptyTable: "There are no employees to display here."
+            }
+          });
+        });
+      });
+
+      $cozy.get('/admin/getEmployees')
         .then(function(response) {
           $scope.roles = response.roles;
           $scope.invites = response.invites;
+          $scope.employees = response.employees;
         });
 
       $scope.$watch('roles', function() {
@@ -24,7 +40,7 @@ Cozy.directive('adminemployees', function($sails, $rootScope, $bounce) {
           return;
         }
 
-        $sails.post('/admin/createInvite', {
+        $cozy.post('/admin/createInvite', {
           email: $scope.inviteEmployeeEmail,
           role: $('#selNewEmployeeRole').val()
         })
@@ -44,7 +60,23 @@ Cozy.directive('adminemployees', function($sails, $rootScope, $bounce) {
             $rootScope.notify(response.error, { color: 'red' });
           }
         });
+      });
 
+      $scope.deleteInvite = $bounce(function(inviteId) {
+        $cozy.post('/admin/deleteInvite', {
+          id: inviteId
+        })
+        .then(function(response) {
+          if(response.success) {
+            $scope.invites = $scope.invites.filter(function(_invite) {
+              if(_invite.id === inviteId) {
+                return false;
+              } else {
+                return true;
+              }
+            });
+          }
+        });
       });
     }
 
