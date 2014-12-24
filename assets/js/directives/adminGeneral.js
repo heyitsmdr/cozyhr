@@ -1,4 +1,4 @@
-Cozy.directive('admingeneral', function($cozy, $rootScope, $bounce) {
+Cozy.directive('adminGeneral', function($cozy, $rootScope, $bounce) {
   return {
     restrict: 'E',
     templateUrl: 'templates/directives/admin-general.html',

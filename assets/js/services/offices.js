@@ -24,12 +24,35 @@ Cozy.factory('$offices', function($q, $cozy) {
       return deferred.promise;
     },
 
+    getOfficeById: function(officeId) {
+      var deferred = $q.defer();
+
+      if(offices) {
+        var officesById = _.indexBy(offices, 'id');
+        if(officesById[officeId]) {
+          deferred.resolve(officesById[officeId]);
+          return deferred.promise;
+        }
+      }
+
+      this.sync(false).then(function() {
+        var officesById = _.indexBy(offices, 'id');
+        if(officesById[officeId]) {
+          deferred.resolve( officesById[officeId] );
+        } else {
+          deferred.reject();
+        }
+      });
+
+      return deferred.promise;
+    },
+
     bindableGetOffices: function() {
       if(offices) {
         return offices;
       } else {
         return [];
       }
-    }
+    },
   };
 });

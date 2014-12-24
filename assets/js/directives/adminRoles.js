@@ -1,12 +1,13 @@
-Cozy.directive('adminroles', function($cozy, $rootScope, $bounce) {
+Cozy.directive('adminRoles', function($cozy, $rootScope, $bounce) {
   return {
     restrict: 'E',
     templateUrl: 'templates/directives/admin-roles.html',
     link: function($scope) {
 
-      $cozy.get('/admin/getRoles', function(response) {
-        $scope.roles = response;
-      });
+      $cozy.get('/admin/getRoles')
+        .then(function(response) {
+          $scope.roles = response;
+        });
 
       $scope.$watch('roles', function(newValue) {
         $('#companyRoles').dataTable({
@@ -16,7 +17,7 @@ Cozy.directive('adminroles', function($cozy, $rootScope, $bounce) {
             { "data": "jobTitle", "render": function(d,t,r,m) { return "<a href='/#!/admin/role/" + r.id + "'>"+d+"</a>"; } },
             { "data": "employeeCount" }
           ],
-          "data": newValue
+          "data": $scope.roles || []
         });
       });
 

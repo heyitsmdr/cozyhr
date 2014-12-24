@@ -1,0 +1,62 @@
+<div class="section">
+  <div class="content">
+    <i class="fa fa-info-circle"></i>&nbsp;&nbsp;Manage all of the clockable positions at the <strong>{{officeName}}</strong> office from here.
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Create a New Position for {{officeName}}
+  </div>
+
+  <div class="content">
+    Position Name:&nbsp;
+    <input type="text" placeholder="Position Name" ng-model="positionName" ng-enter="createPosition()">&nbsp;
+    <input type="button" value="Create Position" ng-click="createPosition()">
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Positions at {{officeName}}
+  </div>
+
+  <div class="content">
+    <table id="companyOfficePositions" class="display" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th class="left-align">Position Name</th>
+          <th class="center-align" width="2%"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- Data will load via AJAX -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header red">
+    Danger Zone
+  </div>
+
+  <div class="content">
+
+    <!-- Delete Office -->
+    <div class="settingWrapper">
+      <div class="info">
+        <div class="title red">Delete Office</div>
+        <div class="subtitle red">If you would like to delete the office entirely, you can click the button below.<br>Employees will no longer be able to clock in to positions here.<br><strong>There is no way to undo this action.</strong></div>
+      </div>
+      <div class="setting right"><input type="button" class="red margin20 large" value="Delete Office"></div>
+    </div>
+  </div>
+</div>

@@ -71,12 +71,29 @@ Cozy.config(function($routeProvider, $locationProvider) {
         factory: mustBeAuthenticated
       }
     })
+    .when('/admin/:subpage/:id/:subsection', {
+      templateUrl: '/templates/admin.html',
+      controller: 'AdminController',
+      resolve: {
+        factory: mustBeAuthenticatedWithAdmin,
+      }
+    })
+    .when('/admin/:subpage/:id', {
+      templateUrl: '/templates/admin.html',
+      controller: 'AdminController',
+      resolve: {
+        factory: mustBeAuthenticatedWithAdmin,
+      }
+    })
     .when('/admin/:subpage', {
       templateUrl: '/templates/admin.html',
       controller: 'AdminController',
       resolve: {
         factory: mustBeAuthenticatedWithAdmin,
       }
+    })
+    .when('/admin', {
+      redirectTo: '/admin/general'
     })
     .otherwise({
       redirectTo: '/dash'

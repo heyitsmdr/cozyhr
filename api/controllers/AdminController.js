@@ -304,12 +304,13 @@ module.exports = {
    * @via     Socket
    * @method  POST
    */
-  newRole: function(req, res) {
+  createRole: function(req, res) {
     var es = ExceptionService.require(req, res, { socket: true, POST: true });
 
     Role.find({ jobTitle: req.param('roleName') }).exec(es.wrap(function(e, roles) {
-      if(e)
+      if(e) {
         throw ExceptionService.error('Error checking roles.');
+      }
 
       if(roles.length > 0) {
         throw ExceptionService.error('You already have a role with the same name.', { fatal: false });
@@ -458,20 +459,22 @@ module.exports = {
 
     // Get all the offices for the company
     Office.find({ company: req.session.userinfo.company.id }).exec(es.wrap(function(e, offices) {
-      if(e)
+      if(e) {
         throw ExceptionService.error('Could not find office.');
+      }
 
       // Count the positions at each office asynchonously
       async.each(offices, es.wrap(function(office, done) {
         Position.find({ office: office.id }).exec(es.wrap(function(e, positions) {
-          if(e)
+          if(e) {
             throw ExceptionService.error('Could not get positions at office.');
+          }
           office.positionCount = positions.length;
           done();
         }));
       }), es.wrap(function() {
         // Send to view
-        res.json({"data": offices});
+        res.json(offices);
       }));
     }));
   },
@@ -480,23 +483,25 @@ module.exports = {
    * @via     Socket
    * @method  POST
    */
-  newOffice: function(req, res) {
+  createOffice: function(req, res) {
     var es = ExceptionService.require(req, res, { socket: true, POST: true });
 
     Office.find({ name: req.param('officeName'), company: req.session.userinfo.company.id }).exec(es.wrap(function(e, offices) {
-      if(e)
+      if(e) {
         throw ExceptionService.error('Error checking for offices.');
+      }
 
-      if(offices.length == 0) {
+      if(offices.length === 0) {
         // Create a new role
         Office.create({
           company: req.session.userinfo.company.id,
           name: req.param('officeName')
         }).exec(es.wrap(function(err, newOffice) {
-          if(err)
+          if(err) {
             throw ExceptionService.error('Could not create new office.');
+          }
 
-          res.json({"success": true, "office": newOffice})
+          res.json({"success": true, "office": newOffice});
         }));
       } else {
         throw ExceptionService.error('You already have an office with the same name.', { fatal: false });
@@ -614,7 +619,7 @@ module.exports = {
       }
 
       // same company?
-      if(office.company != req.session.userinfo.company.id) {
+      if(office.company !== req.session.userinfo.company.id) {
         throw ExceptionService.error('Office does not belong to this company.');
       }
 
@@ -623,7 +628,7 @@ module.exports = {
         positions.forEach(function(_position) {
           _position.delete = _position.id;
         });
-        res.json({"data": positions});
+        res.json(positions);
       }));
     }));
   },
@@ -632,14 +637,14 @@ module.exports = {
    * @via     Socket
    * @method  POST
    */
-  newOfficePosition: function(req, res) {
+  createOfficePosition: function(req, res) {
     var es = ExceptionService.require(req, res, { socket: true, POST: true });
 
     Office.findOne({ id: req.param('officeId') }).exec(es.wrap(function(e, office) {
       if(e || !office) {
         throw ExceptionService.error('Office not found.');
       }
-      if(office.company != req.session.userinfo.company.id) {
+      if(office.company !== req.session.userinfo.company.id) {
         throw ExceptionService.error('Office does not belong to this company.');
       }
       Position.find({ office: office.id, name: req.param('positionName') }).exec(es.wrap(function(e, positions) {
@@ -653,10 +658,11 @@ module.exports = {
           company: req.session.userinfo.company.id,
           name: req.param('positionName')
         }).exec(es.wrap(function(err, newPosition) {
-          if(err)
+          if(err) {
             throw ExceptionService.error('Error creating new position.');
+          }
 
-          res.json({"success": true, "position": newPosition})
+          res.json({"success": true, "position": newPosition});
         }));
       }));
     }));
@@ -673,7 +679,7 @@ module.exports = {
       if(e || !position) {
         throw ExceptionService.error('Position not found.');
       }
-      if(position.company != req.session.userinfo.company.id) {
+      if(position.company !== req.session.userinfo.company.id) {
         throw ExceptionService.error('Position does not belong to this company.');
       }
 

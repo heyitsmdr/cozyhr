@@ -13,28 +13,40 @@
   </div>
 
   <div class="row">
-    <div class="-1u 2u sidemenu">
-      <a class="item" href="/#!/admin/general"><div ng-class="{selected: adminsection === 'general'}">General</div></a>
-      <a class="item" href="/#!/admin/employees"><div ng-class="{selected: adminsection === 'employees'}">Employees</div></a>
-      <a class="item" href="/#!/admin/roles"><div ng-class="{selected: adminsection === 'roles'}">Roles</div></a>
-      <a class="item" href="/#!/admin/offices"><div ng-class="{selected: adminsection === 'offices'}">Offices & Positions</div></a>
+    <!-- Default Sidebar -->
+    <div class="-1u 2u sidemenu" ng-show="sidebarType==='default'">
+      <a class="item" href="/#!/admin/general"><div ng-class="{selected: adminSection === 'general'}">General</div></a>
+      <a class="item" href="/#!/admin/employees"><div ng-class="{selected: adminSection === 'employees'}">Employees</div></a>
+      <a class="item" href="/#!/admin/roles"><div ng-class="{selected: adminSection === 'roles'}">Roles</div></a>
+      <a class="item" href="/#!/admin/offices"><div ng-class="{selected: adminSection === 'offices'}">Offices & Positions</div></a>
+      <a class="item" href="/#!/admin/billing"><div ng-class="{selected: adminSection === 'billing'}">Billing</div></a>
     </div>
+    <!-- Office Sidebar -->
+    <div class="-1u 2u sidemenu" ng-show="sidebarType==='office'">
+      <div class="head"><i class="fa fa-building-o"></i>&nbsp;&nbsp;{{officeName}}</div>
+      <a class="item" href="/#!/admin/office/{{id}}/positions"><div ng-class="{selected: adminSubsection === 'positions'}">Positions</div></a>
+    </div>
+
     <div class="8u admincontent">
 
-      <div ng-if="adminsection === 'general'">
-        <admingeneral></admingeneral>
+      <div ng-if="adminSection === 'general'">
+        <admin-general></admin-general>
       </div>
 
-      <div ng-if="adminsection === 'employees'">
-        <adminemployees></adminemployees>
+      <div ng-if="adminSection === 'employees'">
+        <admin-employees></admin-employees>
       </div>
 
-      <div ng-if="adminsection === 'roles'">
-        <adminroles></adminroles>
+      <div ng-if="adminSection === 'roles'">
+        <admin-roles></admin-roles>
       </div>
 
-      <div ng-if="adminsection === 'offices'">
+      <div ng-if="adminSection === 'offices'">
+        <admin-offices></admin-offices>
+      </div>
 
+      <div ng-if="adminSection === 'office' && adminSubsection === 'positions'">
+        <admin-office-positions></admin-office-positions>
       </div>
 
     </div>

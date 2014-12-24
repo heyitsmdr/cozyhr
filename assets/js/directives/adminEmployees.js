@@ -1,4 +1,4 @@
-Cozy.directive('adminemployees', function($cozy, $rootScope, $bounce, $timeout) {
+Cozy.directive('adminEmployees', function($cozy, $rootScope, $bounce, $timeout) {
   return {
     restrict: 'E',
     templateUrl: 'templates/directives/admin-employees.html',

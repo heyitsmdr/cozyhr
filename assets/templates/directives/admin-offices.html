@@ -1,0 +1,44 @@
+<div class="section">
+  <div class="content">
+    <i class="fa fa-info-circle"></i>&nbsp;&nbsp;Manage all of the offices and their associated positions at <strong>{{session.userinfo.company.name}}</strong> from here.
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Construct a New Office
+  </div>
+
+  <div class="content">
+    Office Name:&nbsp;
+    <input type="text" placeholder="Office Name" ng-model="officeName" ng-enter="createOffice()">&nbsp;
+    <input type="button" value="Construct Office" ng-click="createOffice()">
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    <i class="fa fa-building-o"></i>&nbsp;&nbsp;Offices
+  </div>
+
+  <div class="content">
+
+    <table id="companyOffices" class="display" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th class="left-align">Office Name</th>
+          <th class="center-align" width="15%">Positions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- Data will load via AJAX -->
+      </tbody>
+    </table>
+
+  </div>
+</div>

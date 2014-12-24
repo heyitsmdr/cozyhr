@@ -1,4 +1,4 @@
-Cozy.controller('DashController', function($scope, $rootScope, $feed, $offices, $workers) {
+Cozy.controller('DashController', function($scope, $rootScope, $feed, $offices, $workers, $bounce) {
   $rootScope.subsection = 'Dashboard';
   $rootScope.pageId = $rootScope.PAGES.DASHBOARD;
 
@@ -26,7 +26,7 @@ Cozy.controller('DashController', function($scope, $rootScope, $feed, $offices, 
     });
   }, true);
 
-  $scope.writeComment = function(feedId, event) {
+  $scope.writeComment = $bounce(function(feedId, event) {
     if(event.keyCode === 13) {
       $(event.target).prop({ disabled: true });
       $(event.target).css({ color: '#ccc' });
@@ -39,14 +39,14 @@ Cozy.controller('DashController', function($scope, $rootScope, $feed, $offices, 
             .focus();
         });
     }
-  };
+  });
 
-  $scope.removeComment = function(commentId) {
+  $scope.removeComment = $bounce(function(commentId) {
     $feed.removeComment(commentId)
       .catch(function() {
         $rootScope.notify('There was an error deleting the comment.', { color: 'red' });
       });
-  };
+  });
 
   // Now, let's sync the feed
   $feed.resetVisibility().sync();
