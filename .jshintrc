@@ -84,6 +84,8 @@
         // Client-side
         "angular": false,
         "Cozy"   : true,
+        "skel": false,
+        "jBox": false,
         // Server-side
         "_": false,
         "sails": false,

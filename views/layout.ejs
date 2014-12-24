@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="cozyhr-app" ng-controller="PageController">
+<html ng-app="cozyhr-app" ng-controller="PageController" ng-class="{signin: $root.session.authenticated !== true}">
     <head>
     <title ng-bind="pageTitle()">CozyHR</title>
 
@@ -28,6 +28,8 @@
     <script src="/js/app.js"></script>
     <script src="/js/controllers/AdminController.js"></script>
     <script src="/js/controllers/DashController.js"></script>
+    <script src="/js/controllers/SigninController.js"></script>
+    <script src="/js/controllers/SignoutController.js"></script>
     <script src="/js/directives/adminEmployees.js"></script>
     <script src="/js/directives/adminGeneral.js"></script>
     <script src="/js/directives/adminRoles.js"></script>
@@ -57,7 +59,7 @@
     <!--STYLES END-->
     </head>
 
-    <body>
+    <body ng-class="{signin: $root.session.authenticated !== true}">
 
         <!-- Header Injection Point -->
         <div ng-include="'templates/includes/header.html'"></div>

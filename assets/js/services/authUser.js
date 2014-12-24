@@ -1,4 +1,4 @@
-Cozy.factory('$authUser', function($q, $cozy) {
+Cozy.factory('$authUser', function($q, $cozy, $rootScope) {
 
   var sessionData = null;
 
@@ -14,6 +14,8 @@ Cozy.factory('$authUser', function($q, $cozy) {
       $cozy.get('/auth/session')
         .success(function(data) {
           sessionData = data;
+
+          $rootScope.session = sessionData;
 
           deferred.resolve(sessionData);
         })

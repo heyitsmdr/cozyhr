@@ -1,14 +1,82 @@
 var Cozy = angular.module('cozyhr-app', ['ng', 'ngRoute', 'ngSanitize', 'ngAnimate', 'ngTouch', 'ngSails']);
 
+var companyInfo = function($q, $cozy, $location) {
+  var deferred = $q.defer();
+
+  $cozy.get('/auth/getCompanyInfo', {
+    host: $location.host().replace('.dev', '')
+  })
+  .then(function(response) {
+    deferred.resolve(response);
+  });
+
+  return deferred.promise;
+};
+
+var mustBeAuthenticated = function($q, $rootScope, $location, $authUser) {
+  var deferred = $q.defer();
+
+  $authUser.sync(true).then(function() {
+    console.log($rootScope.session);
+
+    if($rootScope.session.authenticated) {
+      deferred.resolve(true);
+    } else {
+      deferred.reject();
+      $location.path('/signin');
+    }
+  });
+
+  return deferred.promise;
+};
+
+var mustBeAuthenticatedWithAdmin = function($q, $rootScope, $location, $authUser) {
+  var deferred = $q.defer();
+
+  mustBeAuthenticated($q, $rootScope, $location, $authUser)
+    .then(function() {
+      if($rootScope.session.userinfo.role.companyAdmin) {
+        deferred.resolve(true);
+      } else {
+        deferred.reject();
+      }
+    })
+    .catch(function() {
+      deferred.reject();
+    });
+
+  return deferred.promise;
+};
+
 Cozy.config(function($routeProvider, $locationProvider) {
   $routeProvider
+    .when('/signin', {
+      templateUrl: '/templates/signin.html',
+      controller: 'SigninController',
+      resolve: {
+        companyData: companyInfo
+      }
+    })
+    .when('/signout', {
+      controller: 'SignoutController',
+      template: '',
+      resolve: {
+        factory: mustBeAuthenticated
+      }
+    })
     .when('/dash', {
       templateUrl: '/templates/dash.html',
-      controller: 'DashController'
+      controller: 'DashController',
+      resolve: {
+        factory: mustBeAuthenticated
+      }
     })
     .when('/admin/:subpage', {
       templateUrl: '/templates/admin.html',
-      controller: 'AdminController'
+      controller: 'AdminController',
+      resolve: {
+        factory: mustBeAuthenticatedWithAdmin,
+      }
     })
     .otherwise({
       redirectTo: '/dash'
@@ -19,7 +87,7 @@ Cozy.config(function($routeProvider, $locationProvider) {
     .hashPrefix('!');
 });
 
-Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser, $q) {
+Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser, $q, $location) {
 
   // First, let's set up third-party integrations.
   $(document).on('mouseover', '.tt', function() {
@@ -37,13 +105,12 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
 
   // Then, set up global socket events (can happen anywhere in the app)
   $sails.on('exception', function(exceptionData) {
-    console.log("%c E X E C E P T I O N ", "color: #fff; background-color: #000");
-    console.log(exceptionData);
+    console.log("%c E X C E P T I O N ", "color: #fff; background-color: #000");
+    console.log(exceptionData.stack);
   });
 
   // And now, set up global-page scope
   $scope.includeContentLoaded = false;
-  $scope.appReady = false;
   $scope.contentLoadedCount = 0;
 
   $scope.pageTitle = function() {
@@ -57,7 +124,7 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
   var appDeferred = $q.defer();
   $scope.promiseAppLoaded = appDeferred.promise;
 
-  $scope.$on('$includeContentLoaded', function(event) {
+  $scope.$on('$includeContentLoaded', function() {
     $scope.contentLoadedCount++;
 
     if($scope.contentLoadedCount < 2) {
@@ -66,9 +133,7 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
 
     $scope.includeContentLoaded = true;
 
-    if($scope.appReady) {
-      appDeferred.resolve(true);
-    }
+    appDeferred.resolve(true);
   });
 
   $scope.promiseAppLoaded.then(function() {
@@ -101,8 +166,20 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
 
     $scope.appVisible = true;
 
-    ['#topMenu', '#bottomMenu'].forEach(function(_menu) {
-      $(_menu).hide().css({opacity: 1}).slideDown();
+    $scope.$watch('session.authenticated', function(newValue) {
+      if(newValue === true) {
+        $scope.$evalAsync(function() {
+          ['#topMenu', '#bottomMenu'].forEach(function(_menu) {
+            $(_menu).hide().css({opacity: 1}).slideDown();
+          });
+        });
+      } else {
+        $scope.$evalAsync(function() {
+          ['#topMenu', '#bottomMenu'].forEach(function(_menu) {
+            $(_menu).slideUp();
+          });
+        });
+      }
     });
   });
 
@@ -178,19 +255,5 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
       color: (options.color || 'black'),
       audio: ((options.sound===true)?'/sounds/bling2':'')
     });
-};
-
-  // And finally, only show the app when authenticated.
-  // The promise below will only succeed when authenticated.
-  $authUser.sync().then(function() {
-    $scope.session = $authUser.getSession();
-
-    console.log($scope.session);
-
-    $scope.appReady = true;
-
-    if($scope.includeContentLoaded) {
-      appDeferred.resolve(true);
-    }
-  });
+  };
 });

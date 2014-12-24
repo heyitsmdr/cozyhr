@@ -11,6 +11,10 @@ body.signin {
   background: url(../images/signin/bg@2x.png);
   background-repeat: repeat;
   background-size: 300px 295px;
+
+  #skel-layers-wrapper {
+    height: 100%;
+  }
 }
 
 #mainContainer {
@@ -58,8 +62,6 @@ body.signin {
 }
 
 #mainContainer #pageSignin {
-  display: none;
-
   .intro-company {
     .altfont(33px, #fff);
     text-align: center;
@@ -80,7 +82,7 @@ body.signin {
 
       input {
         width: 250px;
-        height: 25px;
+        height: 35px;
         border: 1px solid rgba(40, 40, 40, 1);
         background-color: rgba(40, 40, 40, 0.4);
         border-radius: 5px;

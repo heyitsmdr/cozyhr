@@ -3,30 +3,29 @@ var bcrypt = require('bcrypt');
 module.exports = {
 
   /**
-   * @via     HTTP
+   * @via     Socket
    * @method  GET
    */
-  signin: function(req, res) {
-    var es = ExceptionService.require(req, res, { GET: true });
+  getCompanyInfo: function(req, res) {
+    var es = ExceptionService.require(req, res, { socket: true, GET: true });
 
-    // check if already signed in
-    if(req.session.authenticated) {
-      return res.redirect('/dash');
-    }
-
-    var fromHost = req.host.toLowerCase();
-
-    if(fromHost.indexOf('.dev') > -1) {
-      fromHost = fromHost.replace('.dev', '');
-    }
-
-    Company.findOne({ host: fromHost }).exec(es.wrap(function(e, company) {
-      if(e || !company) {
-        res.view({ htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin failed", errorMessage: "No company exists under this domain." });
-      } else {
-        res.view({ companyInfo: company, htmlClass: "signin", noSkelJs: true, bodyClass: "signin", extraContainerClass: "signin" });
-      }
-    }));
+    Company
+      .findOne({ host: req.param('host') })
+      .then(function(company) {
+        if(company) {
+          res.json({
+            companyExists: true,
+            companyName: company.name
+          });
+        } else {
+          res.json({
+            companyExists: false
+          });
+        }
+      })
+      .catch(es.wrap(function(err) {
+        throw ExceptionService.error(err);
+      }));
   },
 
   /**
@@ -40,80 +39,82 @@ module.exports = {
   },
 
   /**
-   * @via     HTTP
+   * @via     Socket
    * @method  POST
    */
-  attemptLogin: function(req, res) {
-    var es = ExceptionService.require(req, res, { POST: true });
+  attemptSignin: function(req, res) {
+    var es = ExceptionService.require(req, res, { socket: true, POST: true });
 
     if(!req.param('email') || !req.param('password')) {
       throw ExceptionService.error('Invalid parameters.', { fatal: false });
     }
 
-    var action = req.param('btnLogin') || req.param('btnRegister');
-    switch(action) {
-      case 'Register':
-        User.findOneByEmail(req.param('email').toLowerCase()).exec(function(err, user){
-          if(!user) {
-            // Create the user
-            User.create({
-              firstName: req.param('firstname'),
-              lastName: req.param('lastname'),
-              email: req.param('email'),
-              password: req.param('password')
-            }).exec(function(err, user) {
-              // Create the company
-              Company.create({
-                name: 'Green Leaf, Inc'
-              }).exec(function(err, company){
-                // Save the company id to the user
-                user.companyId = company.id;
-                user.save(function(err){
-                  // Add an entry to the newsfeed
-                  CompanyFeed.create({
-                    companyId: company.id,
-                    userId: user.id,
-                    content: 'created a new human resources portal for <strong>' + company.name + '</strong>!'
-                  }).exec(function(err, feed){
-                    res.redirect('/auth/signin');
-                  });
-                });
-              });
-            });
-          } else {
-            res.send('A user already exists with that email');
-          }
-        });
-        break;
-      default:
-        PopUser.one({ email: req.param('email') }, es.wrap(function(e, user) {
-          if(e || !user) {
+    PopUser.one({ email: req.param('email') }, es.wrap(function(e, user) {
+      if(e || !user) {
+        MetricService.increment('signin.failed');
+        throw ExceptionService.error('The email address has not been found.', { fatal: false });
+      } else {
+        bcrypt.compare(req.param('password'), user.password, es.wrap(function (err, match) {
+          if(!match) {
             MetricService.increment('signin.failed');
-            return res.json({error: 'The email address has not been found.'});
+            throw ExceptionService.error('The password for this account is not correct.<br><br><a href="/#!/recover">Did you forget your password?</a>', { fatal: false });
           } else {
-            bcrypt.compare(req.param('password'), user.password, es.wrap(function (err, match) {
-              if(!match) {
-                MetricService.increment('signin.failed');
-                return res.json({error: 'The password for this account is not correct.<br><br><a href="/auth/recover">Did you forget your password?</a>'});
-              } else {
-                // check host
-                if(user.company.host != req.host.toLowerCase().replace('.dev', '')) {
-                  MetricService.increment('signin.failed');
-                  return res.json({error: 'The email address does not belong to this company.'});
-                }
-                // all good! open the gates |==> <==|
-                MetricService.increment('signin.success');
-                req.session.userinfo = user;
-                req.session.userinfo.fullName = user.fullName();
-                req.session.authenticated = true;
-                req.session.globalAdmin = user.admin || false;
-                res.json({success: true});
-              }
-            }));
+            // check host
+            if(user.company.host !== req.param('host')) {
+              MetricService.increment('signin.failed');
+              throw ExceptionService.error('The email address does not belong to this company.', { fatal: false });
+            }
+            // all good! open the gates |==> <==|
+            MetricService.increment('signin.success');
+            req.session.userinfo = user;
+            req.session.userinfo.fullName = user.fullName();
+            req.session.authenticated = true;
+            req.session.globalAdmin = user.admin || false;
+            res.json({success: true});
           }
         }));
-        break;
-    }
+      }
+    }));
+  },
+
+  /**
+   * @via     Socket
+   * @method  POST
+   */
+  attemptRegister: function() {
+    var es = ExceptionService.require(req, res, { socket: true, POST: true });
+
+    User.findOneByEmail(req.param('email').toLowerCase()).exec(function(err, user){
+      if(!user) {
+        // Create the user
+        User.create({
+          firstName: req.param('firstname'),
+          lastName: req.param('lastname'),
+          email: req.param('email'),
+          password: req.param('password')
+        }).exec(function(err, user) {
+          // Create the company
+          Company.create({
+            name: 'Green Leaf, Inc'
+          }).exec(function(err, company){
+            // Save the company id to the user
+            user.companyId = company.id;
+            user.save(function(err){
+              // Add an entry to the newsfeed
+              CompanyFeed.create({
+                companyId: company.id,
+                userId: user.id,
+                content: 'created a new human resources portal for <strong>' + company.name + '</strong>!'
+              }).exec(function(err, feed){
+                res.redirect('/auth/signin');
+              });
+            });
+          });
+        });
+      } else {
+        res.send('A user already exists with that email');
+      }
+    });
   },
 
   /**
@@ -286,15 +287,16 @@ module.exports = {
   },
 
   /**
-   * @via     HTTP
-   * @method  GET
+   * @via     Socket
+   * @method  POST
    */
   signout: function(req, res) {
-    ExceptionService.require(req, res, { GET: true });
+    ExceptionService.require(req, res, { socket: true, POST: true });
 
     req.session.authenticated = false;
     req.session.userinfo = undefined;
-    res.redirect('/auth/signin');
+
+    res.json({ success: true });
   },
 
   /**

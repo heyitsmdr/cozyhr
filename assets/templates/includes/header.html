@@ -7,10 +7,10 @@
         <div class="menuitem"><a class="" href="/#!/you">You</a></div>
         <div class="menuitem"><a class="" href="/#!/calendar">Calendar</a></div>
         <div class="menuitem"><a class="" href="/#!/timeclock">Timeclock</a></div>
-        <div class="menuitem"><a class="admin" ng-class="{selected: $root.pageId === $root.PAGES.ADMIN}" href="/#!/admin/general">Admin</a></div>
+        <div class="menuitem" ng-if="session.userinfo.role.companyAdmin"><a class="admin" ng-class="{selected: $root.pageId === $root.PAGES.ADMIN}" href="/#!/admin/general">Admin</a></div>
       </div>
       <div class="1u">
-        <div class="menuitem"><a href="/auth/signout">Signout</a></div>
+        <div class="menuitem"><a href="/#!/signout">Signout</a></div>
       </div>
     </div>
   </div>
