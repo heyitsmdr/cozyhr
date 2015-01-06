@@ -26,19 +26,23 @@ Cozy.controller('DashController', function($scope, $rootScope, $feed, $offices, 
     });
   }, true);
 
-  $scope.writeComment = $bounce(function(feedId, event) {
+  $scope.writeComment = function(feedId, event) {
     if(event.keyCode === 13) {
-      $(event.target).prop({ disabled: true });
-      $(event.target).css({ color: '#ccc' });
-      $feed.writeComment(feedId, event.target.value)
-        .finally(function() {
-          $(event.target)
-            .prop({ disabled: false })
-            .css({ color: '#000' })
-            .val('')
-            .focus();
-        });
+      $scope._writeComment(feedId, event);
     }
+  };
+
+  $scope._writeComment = $bounce(function(feedId, event) {
+    $(event.target).prop({ disabled: true });
+    $(event.target).css({ color: '#ccc' });
+    $feed.writeComment(feedId, event.target.value)
+      .finally(function() {
+        $(event.target)
+          .prop({ disabled: false })
+          .css({ color: '#000' })
+          .val('')
+          .focus();
+      });
   });
 
   $scope.removeComment = $bounce(function(commentId) {
