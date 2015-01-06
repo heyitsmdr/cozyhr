@@ -86,6 +86,7 @@
         "Cozy"   : true,
         "skel": false,
         "jBox": false,
+        "swal": false,
         // Server-side
         "_": false,
         "sails": false,

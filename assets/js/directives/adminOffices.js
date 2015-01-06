@@ -30,6 +30,7 @@ Cozy.directive('adminOffices', function($cozy, $rootScope, $bounce) {
             $scope.officeName = '';
 
             $scope.offices.push({
+              id: response.office.id,
               name: response.office.name,
               positionCount: 0
             });

@@ -578,9 +578,11 @@ module.exports = {
       }
 
       // same company?
-      if(office.company != req.session.userinfo.company.id) {
+      if(office.company !== req.session.userinfo.company.id) {
         throw ExceptionService.error('Office does not belong to this company.');
       }
+
+      // TODO: Check if anyone is clocked in a position that is being deleted.
 
       // Destroy positions associated with office
       Position.destroy({ office: office.id }, es.wrap(function(e) {
@@ -615,7 +617,7 @@ module.exports = {
 
     Office.findOne(officeId).exec(es.wrap(function(e, office){
       if(e || !office) {
-        throw ExceptionService.error('Office not found.');
+        throw ExceptionService.error('Office not found.', { fatal: false });
       }
 
       // same company?
@@ -628,7 +630,7 @@ module.exports = {
         positions.forEach(function(_position) {
           _position.delete = _position.id;
         });
-        res.json(positions);
+        res.json({ success: true, positions: positions });
       }));
     }));
   },
@@ -682,6 +684,8 @@ module.exports = {
       if(position.company !== req.session.userinfo.company.id) {
         throw ExceptionService.error('Position does not belong to this company.');
       }
+
+      // TODO: Check if anyone is clocked in to this position.
 
       Position.destroy({ id: req.param('positionId')}, es.wrap(function(e) {
         if(e) {

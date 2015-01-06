@@ -1,4 +1,4 @@
-Cozy.directive('adminOfficePositions', function($cozy, $rootScope, $bounce, $compile) {
+Cozy.directive('adminOfficePositions', function($cozy, $location, $rootScope, $bounce, $compile) {
   return {
     restrict: 'E',
     templateUrl: 'templates/directives/admin-office-positions.html',
@@ -7,7 +7,12 @@ Cozy.directive('adminOfficePositions', function($cozy, $rootScope, $bounce, $com
       $cozy.get('/admin/getOfficePositions', {
         officeId: $scope.id
       }).then(function(response) {
-        $scope.positions = response;
+        if(response.success) {
+          $scope.positions = response.positions;
+        } else {
+          $location.path('/admin/offices');
+          $rootScope.notify('The specified office does not exist.', { color: 'red' });
+        }
       });
 
       $scope.$watch('positions.length', function() {
@@ -78,12 +83,20 @@ Cozy.directive('adminOfficePositions', function($cozy, $rootScope, $bounce, $com
           confirmButtonText: 'Yes, delete it!',
           closeOnConfirm: false
         }, function() {
-          swal({
-            title: 'Deleted!',
-            text: 'The office has been deleted!',
-            closeOnConfirm: false
-          }, function() {
-            swal({title:"", timer:1});
+          $cozy.post('/admin/deleteOffice', {
+            officeId: $scope.id
+          }).then(function(response) {
+            if(response.success === true) {
+              swal({
+                title: 'Deleted!',
+                text: 'The office has been deleted!',
+                closeOnConfirm: false
+              }, function() {
+                swal({title:"", timer:1});
+                $location.path('/admin/offices');
+                $scope.$apply(); // This is needed since $location.path is being called from outside Angular
+              });
+            }
           });
         });
       });
