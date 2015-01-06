@@ -52,7 +52,7 @@ module.exports = {
     PopUser.one({ email: req.param('email') }, es.wrap(function(e, user) {
       if(e || !user) {
         MetricService.increment('signin.failed');
-        throw ExceptionService.error('The email address has not been found.', { fatal: false });
+        throw ExceptionService.error('The email address has not been found.<br><br>Contact your company for an account.', { fatal: false });
       } else {
         bcrypt.compare(req.param('password'), user.password, es.wrap(function (err, match) {
           if(!match) {
