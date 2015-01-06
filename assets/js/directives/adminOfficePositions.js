@@ -52,14 +52,13 @@ Cozy.directive('adminOfficePositions', function($cozy, $rootScope, $bounce, $com
       });
 
       $scope.deletePosition = $bounce(function(positionId) {
-        console.log('ok..');
         $cozy.post('/admin/deleteOfficePosition', {
           positionId: positionId
         })
         .then(function(response) {
           if(response.success) {
             $scope.positions = $scope.positions.filter(function(_position) {
-              if(_position.id === positionId) {
+              if(_position.delete === positionId) {
                 return false;
               } else {
                 return true;
