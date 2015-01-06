@@ -69,6 +69,20 @@ Cozy.config(function($routeProvider, $locationProvider) {
         factory: mustBeAuthenticated
       }
     })
+    .when('/employee/:id', {
+      templateUrl: '/templates/employee.html',
+      controller: 'EmployeeController',
+      resolve: {
+        factory: mustBeAuthenticated
+      }
+    })
+    .when('/employee/:id/:subsection', {
+      templateUrl: '/templates/employee.html',
+      controller: 'EmployeeController',
+      resolve: {
+        factory: mustBeAuthenticated
+      }
+    })
     .when('/admin/:subpage/:id/:subsection', {
       templateUrl: '/templates/admin.html',
       controller: 'AdminController',
@@ -201,7 +215,8 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
   // Next, set up rootScope (avail to all controllers)
   $rootScope.PAGES = {
     ADMIN: 0,
-    DASHBOARD: 1
+    DASHBOARD: 1,
+    EMPLOYEE: 2
   };
 
   $rootScope.fancyDate = function(a, b, fancyReturn, opt) {

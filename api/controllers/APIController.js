@@ -16,6 +16,17 @@ module.exports = {
     Office
       .find({ company: req.session.userinfo.company.id })
       .then(function(companyOffices) {
+        var officePositions = Position
+          .find({ office: _.pluck(companyOffices, 'id' )})
+          .then(function(_officePositions) {
+            return _officePositions;
+          });
+        return [companyOffices, officePositions];
+      })
+      .spread(function(companyOffices, officePositions) {
+        companyOffices.forEach(function(_office) {
+          _office.positionCount = _.where(officePositions, { office: _office.id }).length
+        });
         res.json(companyOffices);
       })
       .catch(es.wrap(function(err) {

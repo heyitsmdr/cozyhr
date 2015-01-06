@@ -1,0 +1,40 @@
+<div class="section">
+  <div class="header">
+    Basic Information
+  </div>
+
+  <div class="content">
+    <div id="employeeContainer">
+
+      <!-- Full Name -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Full Name</div>
+          <div class="subtitle">This is your full, legal name.</div>
+        </div>
+        <div class="setting"><input type="text" ng-model="fullName"></div>
+      </div>
+
+      <!-- Picture -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Picture</div>
+          <div class="subtitle">Your profile picture across the site.</div>
+        </div>
+        <div class="setting margin3">
+          <employeepicture picture="employee.picture" id="employee.id"></employeepicture>
+          <div class="text">We use <strong>Gravatar</strong> for this.<br>Click <a href="http://www.gravatar.com" target="_new">here</a> to edit it.</div>
+        </div>
+      </div>
+
+      <!-- Save -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title green">Save</div>
+          <div class="subtitle green">Be sure to save when you're done!</div>
+        </div>
+        <div class="setting"><input type="button" value="Save Settings" ng-click="saveSettings()"></div>
+      </div>
+    </div>
+  </div>
+</div>

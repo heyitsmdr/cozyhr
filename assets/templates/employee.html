@@ -1,0 +1,23 @@
+<div id="pageAdmin" class="sectionContainer">
+
+  <div class="row">
+    <!-- Role Sidebar -->
+    <div class="-1u 2u sidemenu">
+      <div class="head"><employeepicture picture="employee.picture" id="employee.id" small="true"></employeepicture><div class="name">{{employee.firstName}} {{employee.lastName}}</div></div>
+      <a class="item" href="/#!/employee/{{id}}"><div ng-class="{selected: subSection === null}">Public Profile</div></a>
+      <a class="item" href="/#!/employee/{{id}}/info"><div ng-class="{selected: subSection === 'info'}"><i class="fa fa-info"></i>&nbsp;&nbsp;Basic Information</div></a>
+    </div>
+
+    <div class="8u admincontent">
+
+      <div ng-if="subSection === null">
+        <employee-profile></employee-profile>
+      </div>
+
+      <div ng-if="subSection === 'info'">
+        <employee-info></employee-info>
+      </div>
+
+    </div>
+  </div>
+</div>
