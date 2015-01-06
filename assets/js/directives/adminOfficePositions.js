@@ -67,6 +67,26 @@ Cozy.directive('adminOfficePositions', function($cozy, $rootScope, $bounce, $com
           }
         });
       });
+
+      $scope.deleteOffice = $bounce(function() {
+        swal({
+          title: 'Are you sure?',
+          text: 'This office and the associated positions will be deleted from your company!',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#DD6B55',
+          confirmButtonText: 'Yes, delete it!',
+          closeOnConfirm: false
+        }, function() {
+          swal({
+            title: 'Deleted!',
+            text: 'The office has been deleted!',
+            closeOnConfirm: false
+          }, function() {
+            swal({title:"", timer:1});
+          });
+        });
+      });
     }
 
   };
