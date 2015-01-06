@@ -358,35 +358,6 @@ module.exports = {
   },
 
   /**
-   * @via     HTTP
-   * @method  GET
-   */
-  getOffices: function(req, res) {
-    var es = ExceptionService.require(req, res, { GET: true });
-
-    // Get all the offices for the company
-    Office.find({ company: req.session.userinfo.company.id }).exec(es.wrap(function(e, offices) {
-      if(e) {
-        throw ExceptionService.error('Could not find office.');
-      }
-
-      // Count the positions at each office asynchonously
-      async.each(offices, es.wrap(function(office, done) {
-        Position.find({ office: office.id }).exec(es.wrap(function(e, positions) {
-          if(e) {
-            throw ExceptionService.error('Could not get positions at office.');
-          }
-          office.positionCount = positions.length;
-          done();
-        }));
-      }), es.wrap(function() {
-        // Send to view
-        res.json(offices);
-      }));
-    }));
-  },
-
-  /**
    * @via     Socket
    * @method  POST
    */

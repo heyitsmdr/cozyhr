@@ -11,10 +11,29 @@ module.exports = {
   syncOffices: function(req, res) {
     var es = ExceptionService.require(req, res, { socket: true, GET: true });
 
+    // TODO: Add positionCount
+
     Office
       .find({ company: req.session.userinfo.company.id })
       .then(function(companyOffices) {
         res.json(companyOffices);
+      })
+      .catch(es.wrap(function(err) {
+        throw ExceptionService.error(err);
+      }));
+  },
+
+  /**
+   * @via     Socket
+   * @method  GET
+   */
+  syncEmployees: function(req, res) {
+    var es = ExceptionService.require(req, res, { socket: true, GET: true });
+
+    PopUser
+      .manyPromise({ company: req.session.userinfo.company.id }, {})
+      .then(function(employees) {
+        res.json(employees);
       })
       .catch(es.wrap(function(err) {
         throw ExceptionService.error(err);

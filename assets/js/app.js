@@ -17,8 +17,6 @@ var mustBeAuthenticated = function($q, $rootScope, $location, $authUser) {
   var deferred = $q.defer();
 
   $authUser.sync(true).then(function() {
-    console.log($rootScope.session);
-
     if($rootScope.session.authenticated) {
       deferred.resolve(true);
     } else {

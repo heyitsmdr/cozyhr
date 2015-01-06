@@ -17,6 +17,8 @@ Cozy.factory('$authUser', function($q, $cozy, $rootScope) {
 
           $rootScope.session = sessionData;
 
+          console.log('$authUser', sessionData);
+
           deferred.resolve(sessionData);
         })
         .error(function() {

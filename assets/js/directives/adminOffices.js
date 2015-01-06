@@ -1,19 +1,19 @@
-Cozy.directive('adminOffices', function($cozy, $rootScope, $bounce) {
+Cozy.directive('adminOffices', function($cozy, $rootScope, $offices, $bounce) {
   return {
     restrict: 'E',
     templateUrl: 'templates/directives/admin-offices.html',
     link: function($scope) {
 
-      $cozy.get('/admin/getOffices').then(function(response) {
-        $scope.offices = response;
+      $offices.sync().then(function(companyOffices) {
+        $scope.offices = companyOffices;
       });
 
-      $scope.$watch('offices.length', function(newValue) {
+      $scope.$watch('offices.length', function() {
         $('#companyOffices').dataTable({
           "destroy": true,
           "pageLength": 50,
           "columns": [
-            { "data": "name", "render": function(d,t,r,m) { return "<a href='/#!/admin/office/" + r.id + "'>"+d+"</a>"; } },
+            { "data": "name", "render": function(d,t,r) { return "<a href='/#!/admin/office/" + r.id + "'>"+d+"</a>"; } },
             { "data": "positionCount" }
           ],
           "data": $scope.offices || []

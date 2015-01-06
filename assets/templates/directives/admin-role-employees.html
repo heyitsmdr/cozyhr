@@ -1,0 +1,34 @@
+<div class="section">
+  <div class="content">
+    <i class="fa fa-info-circle"></i>&nbsp;&nbsp;View the employees that are in the <strong>{{roleName}}</strong> role from here.
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header">
+    Employees in {{roleName}}
+  </div>
+
+  <div class="content">
+    <table id="roleEmployees" class="display" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th class="left-align" width="85%">Employee</th>
+          <th width="15%">Office</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr ng-repeat="employee in roleEmployees">
+          <td data-order="{{employee.lastName}}, {{employee.firstName}}">
+            <a href="/#!/employee/{{employee.id}}"><div class="picture" style="background-image:url('{{employee.picture}}')"></div></a>
+            <div class="name"><a href="/#!/employee/{{employee.id}}">{{employee.lastName}}, {{employee.firstName}}</a><br><span class="email">{{employee.email}}</span></div>
+          </td>
+          <td><div class="office">-</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

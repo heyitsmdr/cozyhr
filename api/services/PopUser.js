@@ -15,7 +15,7 @@ function UserPopulated(search, callback) {
 
     callback( e, user );
   });
-};
+}
 
 function UserPopulatedPromise(search) {
   return User.findOne(search)
@@ -37,14 +37,14 @@ function UserPopulatedPromise(search) {
 
     return user;
   });
-};
+}
 
 function UsersPopulated(search, opt, callback) {
   var _U = User.find();
   _U.where(search);
 
   if(opt.sort) {
-    _U.sort(opt.sort)
+    _U.sort(opt.sort);
   }
 
   _U.populate('company').populate('role').exec(function(e, users) {
@@ -64,40 +64,32 @@ function UsersPopulated(search, opt, callback) {
 
     callback( e, users );
   });
-};
+}
 
 function UsersPopulatedPromise(search, opt) {
   var _U = User.find();
   _U.where(search);
 
   if(opt.sort) {
-    _U.sort(opt.sort)
+    _U.sort(opt.sort);
   }
 
-  _U.populate('company').populate('role').then(function(users) {
-    if(users) {
-      users.forEach(function(user) {
-        // Set up special functions
-        user.genPicture = function(smallPicture) {
-          return {
-            name: this.fullName(),
-            picture: this.picture,
-            small: smallPicture,
-            position: this.role.jobTitle
-          };
-        };
+  _U
+    .populate('company')
+    .populate('role')
+    .then(function(_users) {
+      _users.forEach(function(_user) {
+        _user.roleId = _user.role.id;
       });
-    }
-
-    return users;
-  });
+      return _users;
+    });
 
   return _U;
-};
+}
 
 module.exports = {
   one: UserPopulated,
   onePromise: UserPopulatedPromise,
   many: UsersPopulated,
   manyPromise: UsersPopulatedPromise
-}
+};
