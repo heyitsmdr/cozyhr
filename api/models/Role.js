@@ -6,6 +6,8 @@
  *
  */
 
+// TODO: Convert companyId into a company model
+
 module.exports = {
 
   attributes: {

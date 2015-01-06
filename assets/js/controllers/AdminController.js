@@ -1,4 +1,4 @@
-Cozy.controller('AdminController', function($scope, $rootScope, $routeParams, $offices, $location) {
+Cozy.controller('AdminController', function($scope, $rootScope, $routeParams, $offices, $roles, $location) {
   $rootScope.subsection = 'Admin';
   $rootScope.pageId = $rootScope.PAGES.ADMIN;
 
@@ -32,10 +32,25 @@ Cozy.controller('AdminController', function($scope, $rootScope, $routeParams, $o
         ];
       });
       break;
+    case 'role':
+      $scope.sidebarType = 'role';
+
+      $roles.getRoleById($scope.id).then(function(roleDetails) {
+        $scope.roleName = roleDetails.jobTitle;
+
+        $scope.crumbs = [
+          { name: 'Roles', location: '/#!/admin/roles' },
+          { name: roleDetails.jobTitle, location: '/#!/admin/role/' + roleDetails.id }
+        ];
+      });
+      break;
   }
 
   // Default Subsections
   if($scope.adminSection === 'office' && !$scope.adminSubsection) {
     $location.path('/admin/office/' + $scope.id + '/positions');
+  }
+  else if($scope.adminSection === 'role' && !$scope.adminSubsection) {
+    $location.path('/admin/role/' + $scope.id + '/job');
   }
 });

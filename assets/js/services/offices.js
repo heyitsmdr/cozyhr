@@ -27,15 +27,7 @@ Cozy.factory('$offices', function($q, $cozy) {
     getOfficeById: function(officeId) {
       var deferred = $q.defer();
 
-      if(offices) {
-        var officesById = _.indexBy(offices, 'id');
-        if(officesById[officeId]) {
-          deferred.resolve(officesById[officeId]);
-          return deferred.promise;
-        }
-      }
-
-      this.sync(false).then(function() {
+      this.sync(true).then(function() {
         var officesById = _.indexBy(offices, 'id');
         if(officesById[officeId]) {
           deferred.resolve( officesById[officeId] );

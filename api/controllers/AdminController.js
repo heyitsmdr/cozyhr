@@ -258,54 +258,15 @@ module.exports = {
   },
 
   /**
-   * @via     HTTP
-   * @method  GET
-   */
-  roles: function(req, res) {
-    ExceptionService.require(req, res, { GET: true });
-
-    res.view('admin/base', {
-      selectedPage: 'admin',
-      selectedSection: 'roles',
-      breadcrumbs: [ { name: 'Roles' } ]
-    });
-  },
-
-  /**
-   * @via     Socket
-   * @method  GET
-   */
-  getRoles: function(req, res) {
-    var es = ExceptionService.require(req, res, { socket: true, GET: true });
-
-    // Get all the roles for the company
-    Role.find({ companyId: req.session.userinfo.company.id }).exec(es.wrap(function(e, roles) {
-      if(e) {
-        throw ExceptionService.error('Could not get roles within company.');
-      }
-
-      // Count the employees asynchonously
-      async.each(roles, es.wrap(function(role, done) {
-        User.find({ role: role.id }).exec(es.wrap(function(e, usrs) {
-          if(e) {
-            throw ExceptionService.error('Error counting users for role.');
-          }
-          role.employeeCount = usrs.length;
-          done(); // go to next permission/role
-        }));
-      }), es.wrap(function() {
-        // Send to view
-        res.json(roles);
-      }));
-    }));
-  },
-
-  /**
    * @via     Socket
    * @method  POST
    */
   createRole: function(req, res) {
     var es = ExceptionService.require(req, res, { socket: true, POST: true });
+
+    if(!req.param('roleName') || req.param('roleName').length === 0) {
+      throw ExceptionService.error('Blank role name.');
+    }
 
     Role.find({ jobTitle: req.param('roleName') }).exec(es.wrap(function(e, roles) {
       if(e) {
@@ -321,65 +282,7 @@ module.exports = {
           jobTitle: req.param('roleName'),
           companyAdmin: false
         }).exec(es.wrap(function(err, newRole) {
-          res.json({"success": true, "role": newRole})
-        }));
-      }
-    }));
-  },
-
-  /**
-   * @via     HTTP
-   * @method  GET
-   */
-  role: function(req, res) {
-    var es = ExceptionService.require(req, res, { GET: true });
-
-    var roleId = req.param('id');
-
-    if(!roleId) {
-      throw ExceptionService.error('No role id specified.');
-    }
-
-    Role.findOne(roleId).exec(es.wrap(function(e, role){
-      if(e || !role) {
-        throw ExceptionService.error('Role not found.');
-      }
-
-      // same company?
-      if(role.companyId != req.session.userinfo.company.id) {
-        throw ExceptionService.error('Role does not belong to this company.');
-      }
-
-      var validSections = ['info', 'employees'];
-      var selectedSection = req.param('section') || 'info';
-
-      if(validSections.indexOf(selectedSection) == -1) {
-        throw ExceptionService.error('Invalid section identifier.');
-      }
-
-      if(selectedSection == 'info') {
-        res.view('admin/subpages/role/base', {
-          selectedPage: 'admin',
-          selectedSection: 'info',
-          breadcrumbs: [
-              { name: 'Roles', href: '/admin/roles' },
-              { name: role.jobTitle }
-            ],
-          mustacheTemplates: ['accrualSetting'],
-          role: role
-        });
-      } else if(selectedSection == 'employees') {
-        PopUser.many({company: req.session.userinfo.company.id, role: roleId}, {sort: 'lastName ASC'}, es.wrap(function(e, employees) {
-          res.view('admin/subpages/role/base', {
-            selectedPage: 'admin',
-            selectedSection: 'employees',
-            breadcrumbs: [
-              { name: 'Roles', href: '/admin/roles' },
-              { name: role.jobTitle }
-            ],
-            role: role,
-            employees: employees
-          });
+          res.json({ success: true, role: newRole });
         }));
       }
     }));
@@ -398,40 +301,44 @@ module.exports = {
       throw ExceptionService.error('No role id specified.');
     }
 
-    Role.findOne(roleId)
-    .then(function(role) {
-      if(!role) {
-        var err = new Error('Could not find role.');
-        err.fatal = true;
-        throw err;
-      }
+    Role
+      .findOne(roleId)
+      .then(function(role) {
+        if(!role) {
+          var err = new Error('Could not find role.');
+          err.fatal = true;
+          throw err;
+        }
 
-      // same company?
-      if(role.companyId != req.session.userinfo.company.id) {
-        var err = new Error('Role does not belong to this company.');
-        err.fatal = true;
-        throw err;
-      }
+        // same company?
+        if(role.companyId !== req.session.userinfo.company.id) {
+          var err = new Error('Role does not belong to this company.');
+          err.fatal = true;
+          throw err;
+        }
 
-      // has users assigned to it?
-      var roleUsers = User.find({ role: role.id }).then(function(users) {
-        return users;
-      });
+        // has users assigned to it?
+        var roleUsers = User.find({ role: role.id }).then(function(users) {
+          return users;
+        });
 
-      return [role.id, roleUsers];
-    }).spread(function(roleId, roleUsers) {
-      if(roleUsers.length >= 1) {
-        var err = new Error('There are one or more employees set to this role.');
-        err.fatal = false;
-        throw err;
-      }
+        return [role.id, roleUsers];
+      })
+      .spread(function(roleId, roleUsers) {
+        if(roleUsers.length >= 1) {
+          var err = new Error('There are one or more employees set to this role.');
+          err.fatal = false;
+          throw err;
+        }
 
-      return Role.destroy({ id: roleId }).then();
-    }).then(function() {
-      res.json({ success: true });
-    }).catch(es.wrap(function(err) {
-      throw ExceptionService.error(err, { fatal: err.fatal });
-    }));
+        return Role.destroy({ id: roleId }).then();
+      })
+      .then(function() {
+        res.json({ success: true });
+      })
+      .catch(es.wrap(function(err) {
+        throw ExceptionService.error(err, { fatal: err.fatal });
+      }));
 
 
   },
@@ -485,6 +392,10 @@ module.exports = {
    */
   createOffice: function(req, res) {
     var es = ExceptionService.require(req, res, { socket: true, POST: true });
+
+    if(!req.param('officeName') || req.param('officeName').length === 0) {
+      throw ExceptionService.error('Blank office name.');
+    }
 
     Office.find({ name: req.param('officeName'), company: req.session.userinfo.company.id }).exec(es.wrap(function(e, offices) {
       if(e) {

@@ -95,6 +95,8 @@
         "Clock": false,
         "PopUser": false,
         "User": false,
-        "CompanyFeedComment": false
+        "CompanyFeedComment": false,
+        "Position": false,
+        "Role": false
     }
 }

@@ -1,15 +1,14 @@
-Cozy.directive('adminRoles', function($cozy, $rootScope, $bounce) {
+Cozy.directive('adminRoles', function($cozy, $rootScope, $roles, $bounce) {
   return {
     restrict: 'E',
     templateUrl: 'templates/directives/admin-roles.html',
     link: function($scope) {
 
-      $cozy.get('/admin/getRoles')
-        .then(function(response) {
-          $scope.roles = response;
-        });
+      $roles.sync().then(function(companyRoles) {
+        $scope.roles = companyRoles;
+      });
 
-      $scope.$watch('roles', function(newValue) {
+      $scope.$watch('roles.length', function() {
         $('#companyRoles').dataTable({
           "destroy": true,
           "pageLength": 50,
@@ -22,7 +21,22 @@ Cozy.directive('adminRoles', function($cozy, $rootScope, $bounce) {
       });
 
       $scope.createRole = $bounce(function() {
+        if(!$scope.roleName) {
+          return;
+        }
 
+        $cozy
+          .post('/admin/createRole', {
+            roleName: $scope.roleName
+          })
+          .then(function(response) {
+            if(response.success) {
+              $roles.addNewRole(response.role);
+              $scope.roleName = '';
+            } else {
+              $rootScope.notify(response.error, { color: 'red' });
+            }
+          });
       });
 
     }

@@ -25,6 +25,35 @@ module.exports = {
    * @via     Socket
    * @method  GET
    */
+  syncRoles: function(req, res) {
+    var es = ExceptionService.require(req, res, { socket: true, GET: true });
+
+    Role
+      .find({ companyId: req.session.userinfo.company.id })
+      .then(function(companyRoles) {
+        var employeesInRole = User
+          .find({ role: _.pluck(companyRoles, 'id') })
+          .then(function(_employeesInRole) {
+            return _employeesInRole;
+          });
+
+        return [companyRoles, employeesInRole];
+      })
+      .spread(function(companyRoles, employeesInRole) {
+        companyRoles.forEach(function(_role) {
+          _role.employeeCount = _.where( employeesInRole, { role: _role.id }).length;
+        });
+        res.json(companyRoles);
+      })
+      .catch(es.wrap(function(err) {
+        throw ExceptionService.error(err);
+      }));
+  },
+
+  /**
+   * @via     Socket
+   * @method  GET
+   */
   syncWorkers: function(req, res) {
     var es = ExceptionService.require(req, res, { socket: true, GET: true });
 
@@ -60,8 +89,7 @@ module.exports = {
 
         res.json(response);
       })
-      .catch(es.wrap(function(err) {
-        console.error(err);
+      .catch(es.wrap(function() {
         throw ExceptionService.error('Could not get working clocks.');
       }));
   }

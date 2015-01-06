@@ -4,10 +4,9 @@ Cozy.directive('adminOffices', function($cozy, $rootScope, $bounce) {
     templateUrl: 'templates/directives/admin-offices.html',
     link: function($scope) {
 
-      $cozy.get('/admin/getOffices')
-        .then(function(response) {
-          $scope.offices = response;
-        });
+      $cozy.get('/admin/getOffices').then(function(response) {
+        $scope.offices = response;
+      });
 
       $scope.$watch('offices.length', function(newValue) {
         $('#companyOffices').dataTable({
@@ -22,6 +21,10 @@ Cozy.directive('adminOffices', function($cozy, $rootScope, $bounce) {
       });
 
       $scope.createOffice = $bounce(function() {
+        if(!$scope.officeName) {
+          return;
+        }
+
         $cozy.post('/admin/createOffice', {
           officeName: $scope.officeName
         })

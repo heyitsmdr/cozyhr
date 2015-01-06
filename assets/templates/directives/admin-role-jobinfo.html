@@ -1,0 +1,98 @@
+<div class="section">
+  <div class="header">
+    {{::roleName}} Information
+  </div>
+
+  <div class="content">
+    <div id="roleContainer">
+
+      <!-- Name -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Name</div>
+          <div class="subtitle">The name of the role.</div>
+        </div>
+        <div class="setting"><input type="text" ng-model="roleName"></div>
+      </div>
+
+      <!-- Base Pay Type -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Base Pay Type</div>
+          <div class="subtitle">Set the base pay type for this role.</div>
+        </div>
+        <div class="setting">
+          <input type="button" class="gray" value="Hourly">&nbsp;
+          <input type="button" class="gray disabled" value="Salary">
+        </div>
+      </div>
+
+      <!-- Base Pay -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Base Pay</div>
+          <div class="subtitle">Set the base pay for this role.</div>
+        </div>
+        <div class="setting"><input type="text" id="txtBasePay" style="width:100px" value=""></div>
+      </div>
+
+      <!-- PTO Accrual Rate -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">PTO Accrual Rate</div>
+          <div class="subtitle">Determine how fast this role accrues PTO.</div>
+        </div>
+        <div class="setting"></div>
+      </div>
+
+      <!-- Sick Time Accrual Rate -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Sick Time Accrual Rate</div>
+          <div class="subtitle">Determine how fast this role accrues sick time.</div>
+        </div>
+        <div class="setting"></div>
+      </div>
+
+      <!-- Vacation Time Accrual Rate -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title">Vacation Time Accrual Rate</div>
+          <div class="subtitle">Determine how fast this role accrues Vacation Time.</div>
+        </div>
+        <div class="setting"></div>
+      </div>
+
+      <!-- Save -->
+      <div class="settingWrapper">
+        <div class="info">
+          <div class="title green">Save</div>
+          <div class="subtitle green">Be sure to save when you're done!</div>
+        </div>
+        <div class="setting"><input type="button" value="Save Settings" ng-click="saveSettings()"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="sectionSpace"></div>
+
+<div class="section">
+  <div class="header red">
+    Danger Zone
+  </div>
+
+  <div class="content">
+
+    <!-- Delete Role -->
+    <div class="settingWrapper">
+      <div class="info">
+        <div class="title red">Delete Role</div>
+        <div class="subtitle red">If you would like to delete the role entirely, you can click the button below. <strong>There is no way to undo this action.</strong></div>
+      </div>
+      <div class="setting right"><input type="button" class="red margin15 large" value="Delete Role" ng-click="deleteRole()"></div>
+    </div>
+
+  </div>
+</div>

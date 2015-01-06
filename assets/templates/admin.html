@@ -26,6 +26,12 @@
       <div class="head"><i class="fa fa-building-o"></i>&nbsp;&nbsp;{{officeName}}</div>
       <a class="item" href="/#!/admin/office/{{id}}/positions"><div ng-class="{selected: adminSubsection === 'positions'}">Positions</div></a>
     </div>
+    <!-- Role Sidebar -->
+    <div class="-1u 2u sidemenu" ng-show="sidebarType==='role'">
+      <div class="head"><i class="fa fa-cubes"></i>&nbsp;&nbsp;{{roleName}}</div>
+      <a class="item" href="/#!/admin/role/{{id}}/job"><div ng-class="{selected: adminSubsection === 'job'}">Job Information</div></a>
+      <a class="item" href="/#!/admin/role/{{id}}/employees"><div ng-class="{selected: adminSubsection === 'employees'}">Employees</div></a>
+    </div>
 
     <div class="8u admincontent">
 
@@ -47,6 +53,10 @@
 
       <div ng-if="adminSection === 'office' && adminSubsection === 'positions'">
         <admin-office-positions></admin-office-positions>
+      </div>
+
+      <div ng-if="adminSection === 'role' && adminSubsection === 'job'">
+        <admin-role-jobinfo></admin-role-jobinfo>
       </div>
 
     </div>
