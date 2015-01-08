@@ -13,6 +13,21 @@ var companyInfo = function($q, $cozy, $location) {
   return deferred.promise;
 };
 
+var mustNotBeAuthenticated = function($q, $rootScope, $location, $authUser) {
+  var deferred = $q.defer();
+
+  $authUser.sync(true).then(function() {
+    if(!$rootScope.session.authenticated) {
+      deferred.resolve(true);
+    } else {
+      deferred.reject();
+      $location.path('/dash');
+    }
+  });
+
+  return deferred.promise;
+};
+
 var mustBeAuthenticated = function($q, $rootScope, $location, $authUser) {
   var deferred = $q.defer();
 
@@ -52,6 +67,7 @@ Cozy.config(function($routeProvider, $locationProvider) {
       templateUrl: '/templates/signin.html',
       controller: 'SigninController',
       resolve: {
+        factory: mustNotBeAuthenticated,
         companyData: companyInfo
       }
     })
