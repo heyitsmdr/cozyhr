@@ -122,6 +122,37 @@ module.exports = {
       .catch(es.wrap(function() {
         throw ExceptionService.error('Could not get working clocks.');
       }));
+  },
+
+  /**
+   * @via     Socket
+   * @method  POST
+   */
+  saveEmployeeInfo: function(req, res) {
+    var es = ExceptionService.require(req, res, { socket: true, POST: true });
+
+    var userId = ValidationService.validate(req.param('userId')).notEmpty().get();
+    var fullName = ValidationService.validate(req.param('fullName')).notEmpty().get();
+
+    User
+      .findOne({ id: userId })
+      .then(function(user) {
+        if(user.id !== req.session.userinfo.id && !req.session.userinfo.role.companyAdmin) {
+          throw ExceptionService.error('Not permitted to update this user.');
+        }
+
+        return User
+          .update({ id: user.id }, {})
+          .then(function(_user) {
+            return _user;
+          });
+      })
+      .then(function() {
+        res.json({ success: true });
+      })
+      .catch(es.wrap(function() {
+        throw ExceptionService.error('Failed to update user.');
+      }));
   }
 
 };

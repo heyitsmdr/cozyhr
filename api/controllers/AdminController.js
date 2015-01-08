@@ -126,48 +126,6 @@ module.exports = {
   },
 
   /**
-   * @via     HTTP
-   * @method  GET
-   * @note    You don't need admin privs to see /admin/employee! Keep this in mind.
-   */
-  employee: function(req, res) {
-    var es = ExceptionService.require(req, res, { socket: false, GET: true });
-
-    var userId = req.param('id');
-
-    if(!userId) {
-      throw ExceptionService.error('No employee id specified.');
-    }
-
-    PopUser.one(userId, es.wrap(function(e, employee) {
-      if(e || !employee) {
-        throw ExceptionService.error('Employee not found.');
-      }
-
-      // same company?
-      if(employee.company.id != req.session.userinfo.company.id) {
-        throw ExceptionService.error('Employee is not from this company.');
-      }
-
-      // is this you? if not, need admin
-      if(employee.id !== req.session.userinfo.id && !req.session.userinfo.role.companyAdmin) {
-        throw ExceptionService.error('You are not permitted to perform this action.');
-      }
-
-      // okay
-      res.view('admin/subpages/employee/base', {
-        selectedPage: 'admin',
-        employee: employee,
-        selectedSection: 'basic',
-        breadcrumbs: [
-          { name: 'Employees', href: '/admin/employees' },
-          { name: employee.fullName() }
-        ],
-      });
-    }));
-  },
-
-  /**
    * @via     Socket
    * @method  POST
    */

@@ -35,6 +35,27 @@ ValidationResponse.prototype.hasErrors = function() {
   }
 };
 
+function ValidationObject(variable) {
+  this.variable = variable;
+  this.errors = [];
+}
+
+ValidationObject.prototype.notEmpty = function() {
+  if(!this.variable || this.variable.length === 0) {
+    this.errors.push('IS_EMPTY');
+  }
+
+  return this;
+};
+
+ValidationObject.prototype.get = function() {
+  if(this.errors.length >= 1) {
+    throw ExceptionService.error('Validation error.');
+  } else {
+    return this.variable;
+  }
+}
+
 module.exports = {
   /* Checks */
   NOT_EMPTY: 'NOT_EMPTY',
@@ -72,5 +93,9 @@ module.exports = {
     });
 
     return validationResponse;
+  },
+
+  validate: function(validationVar) {
+    return new ValidationObject(validationVar);
   }
 };
