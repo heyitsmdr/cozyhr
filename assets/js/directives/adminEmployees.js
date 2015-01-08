@@ -1,4 +1,4 @@
-Cozy.directive('adminEmployees', function($cozy, $rootScope, $bounce, $timeout) {
+Cozy.directive('adminEmployees', function($cozy, $rootScope, $bounce, $timeout, $invites, $employees, $roles) {
   return {
     restrict: 'E',
     templateUrl: 'templates/directives/admin-employees.html',
@@ -6,6 +6,18 @@ Cozy.directive('adminEmployees', function($cozy, $rootScope, $bounce, $timeout) 
       $('#selNewEmployeeRole').chosen({
         width: '200px'
       });
+
+      $employees.sync().then(function(_employees) {
+        $scope.employees = _employees;
+      });
+
+      $roles.sync().then(function(_roles) {
+        $scope.roles = _roles;
+      });
+
+      $scope.getInvites = $invites.bindableGetInvites;
+
+      $invites.sync();
 
       $scope.$watch('employees', function(newValue) {
         if(!newValue) {
@@ -21,13 +33,6 @@ Cozy.directive('adminEmployees', function($cozy, $rootScope, $bounce, $timeout) 
           });
         });
       });
-
-      $cozy.get('/admin/getEmployees')
-        .then(function(response) {
-          $scope.roles = response.roles;
-          $scope.invites = response.invites;
-          $scope.employees = response.employees;
-        });
 
       $scope.$watch('roles', function() {
         $scope.$evalAsync(function() {
@@ -52,10 +57,7 @@ Cozy.directive('adminEmployees', function($cozy, $rootScope, $bounce, $timeout) 
 
             $scope.inviteEmployeeEmail = '';
 
-            $scope.invites.push({
-              inviteEmail: response.email,
-              invitedRole: response.role
-            });
+            $invites.addNewInvite(response.inviteId, response.email, response.role);
           } else {
             $rootScope.notify(response.error, { color: 'red' });
           }
@@ -68,13 +70,7 @@ Cozy.directive('adminEmployees', function($cozy, $rootScope, $bounce, $timeout) 
         })
         .then(function(response) {
           if(response.success) {
-            $scope.invites = $scope.invites.filter(function(_invite) {
-              if(_invite.id === inviteId) {
-                return false;
-              } else {
-                return true;
-              }
-            });
+            $invites.removeInvite(inviteId);
           }
         });
       });

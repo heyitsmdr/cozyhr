@@ -126,6 +126,24 @@ module.exports = {
 
   /**
    * @via     Socket
+   * @method  GET
+   */
+  syncInvites: function(req, res) {
+    var es = ExceptionService.require(req, res, { socket: true, GET: true });
+
+    Invite
+      .find({ invitedTo: req.session.userinfo.company.id })
+      .populate('invitedRole')
+      .then(function(companyInvites) {
+        res.json(companyInvites);
+      })
+      .catch(es.wrap(function(err) {
+        throw ExceptionService.error(err);
+      }));
+  },
+
+  /**
+   * @via     Socket
    * @method  POST
    */
   saveEmployeeInfo: function(req, res) {

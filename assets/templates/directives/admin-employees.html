@@ -23,7 +23,7 @@
 
 <div class="sectionSpace"></div>
 
-<div class="section" ng-if="invites.length > 0">
+<div class="section" ng-if="getInvites().length > 0">
   <div class="header">
     Invited Employees
   </div>
@@ -31,12 +31,12 @@
   <div class="content">
     You've invited the following employees:
     <ul>
-      <li ng-repeat="invite in invites">{{invite.inviteEmail}} in <strong>{{invite.invitedRole.jobTitle}}</strong> (<a href="#">resend email</a>) (<span ng-click="deleteInvite(invite.id)">delete invite</span>)</li>
+      <li ng-repeat="invite in getInvites()">{{invite.inviteEmail}} in <strong>{{invite.invitedRole.jobTitle}}</strong> (<a href="#">resend email</a>) (<span ng-click="deleteInvite(invite.id)">delete invite</span>)</li>
     </ul>
   </div>
 </div>
 
-<div class="sectionSpace" ng-if="invites.length > 0"></div>
+<div class="sectionSpace" ng-if="getInvites().length > 0"></div>
 
 <div class="section">
   <div class="header">

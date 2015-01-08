@@ -1,38 +1,6 @@
 module.exports = {
   /**
    * @via     Socket
-   * @method  GET
-   */
-  getEmployees: function(req, res) {
-    var es = ExceptionService.require(req, res, { socket: true, GET: true });
-
-    PopUser.many({company: req.session.userinfo.company.id}, {sort: 'lastName ASC'}, es.wrap(function (e, employees) {
-      if(e) {
-        throw ExceptionService.error('Could not find user.');
-      }
-
-      Role.find({ companyId: req.session.userinfo.company.id }).exec(es.wrap(function(e, roles) {
-        if(e) {
-          throw ExceptionService.error('Could not get roles for company.');
-        }
-
-        Invite.find({ invitedTo: req.session.userinfo.company.id }).populate('invitedRole').exec(es.wrap(function(e, invites) {
-          if(e) {
-            throw ExceptionService.error('Could not find invites for company.');
-          }
-
-          res.json({
-            employees: employees,
-            roles: roles,
-            invites: invites
-          });
-        }));
-      }));
-    }));
-  },
-
-  /**
-   * @via     Socket
    * @method  POST
    */
   createInvite: function(req, res) {
@@ -87,6 +55,7 @@ module.exports = {
               // done
               res.json({
                 success: true,
+                inviteId: inviteKey.id,
                 email: invitedEmail,
                 role: role
               });
@@ -118,38 +87,6 @@ module.exports = {
       Invite.destroy({ id: inviteKey }).exec(es.wrap(function(e) {
         if(e) {
           throw ExceptionService.error('Error deleting invite key.');
-        }
-
-        res.json({ success: true });
-      }));
-    }));
-  },
-
-  /**
-   * @via     Socket
-   * @method  POST
-   */
-  saveEmployee: function(req, res) {
-    var es = ExceptionService.require(req, res, { socket: true, POST: true });
-
-    var userId = req.param('userId');
-
-    User.findOne(userId).exec(es.wrap(function(e, user) {
-      if(e || !user) {
-        throw ExceptionService.error('User not found.');
-      }
-
-      // is it you? if not, are you admin?
-      if(user.id !== req.session.userinfo.id && !req.session.userinfo.role.companyAdmin) {
-        throw ExceptionService.error('Not permitted to edit this user.');
-      }
-
-      // alright, let us continue
-      var fullName = req.param('fullName');
-
-      User.update({ id: user.id }, {}).exec(es.wrap(function(e, updatedUser) {
-        if(e) {
-          throw ExceptionService.error('Could not update user.');
         }
 
         res.json({ success: true });
