@@ -28,7 +28,7 @@ function checkConnectionToGraphite(callback) {
   socket.on('close', function() {
     isConnected = false;
   });
-};
+}
 
 function graphiteReporter() {
   if(QUEUE.length === 0) {
@@ -51,7 +51,7 @@ function graphiteReporter() {
       queueMetric.value = 0;
     });
   });
-};
+}
 
 if(typeof sails === 'undefined' || sails.config.metricsEnabled !== false) {
   setInterval(graphiteReporter, REPORT_INTERVAL);
