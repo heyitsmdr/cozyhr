@@ -3,16 +3,15 @@ var sleep = require('sleep');
 var emailTemplates = require('swig-email-templates');
 
 function EmailQueue() {
-  this._queue; // RabbitMQ-Queue
-};
+
+}
 
 EmailQueue.prototype.sendEmail = function(opt) {
   emailTemplates({ root: __dirname + "/../email-templates" }, function(err, render) {
     opt.templateVars.subject = opt.subject;
     render(opt.template+'.html', opt.templateVars, function(err, html, text) {
       if(err) {
-        console.log('Error rendering template: ' + opt.template + '.html');
-        return;
+        throw new Error('Error rendering template: ' + opt.template + '.html');
       }
       sendgrid.send({
         to: opt.to,
@@ -21,10 +20,11 @@ EmailQueue.prototype.sendEmail = function(opt) {
         text: text,
         html: html
       }, function(err, json) {
-        if(err)
-          console.log(err);
-        else
+        if(err) {
+          throw new Error(err);
+        } else {
           console.log(json);
+        }
       });
     });
   });

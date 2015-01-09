@@ -32,14 +32,15 @@ amqpConnection.on('ready', function() {
           _q.bind(exchange.name, mapping.route);
         });
         // Set up consumer
-        _q.subscribe({ ack: true, prefetchCount: 5 }, function(message, headers, deliveryInfo, ack) {
+        _q.subscribe({ ack: true, prefetchCount: 1 }, function(message, headers, deliveryInfo, ack) {
           for(var x = 0; x < queue.map.length; x++) {
             if(queue.map[x].route == deliveryInfo.routingKey) {
               try {
                 eval('queue.instance.' + queue.map[x].action)(message);
-                ack.acknowledge();
+                _q.shift(); // acknowledge
               } catch(ex) {
                 console.log(ex);
+                _q.shift(true, true); // reject, and add back to queue
               }
               break;
             }
