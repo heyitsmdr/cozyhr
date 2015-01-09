@@ -6,8 +6,8 @@ function EmailQueue() {
 
 }
 
-EmailQueue.prototype.sendEmail = function(opt) {
-  emailTemplates({ root: __dirname + "/../email-templates" }, function(err, render) {
+EmailQueue.prototype.sendEmail = function(opt, done) {
+  emailTemplates({ root: __dirname + "/../email-templaates" }, function(err, render) {
     opt.templateVars.subject = opt.subject;
     render(opt.template+'.html', opt.templateVars, function(err, html, text) {
       if(err) {
@@ -24,6 +24,7 @@ EmailQueue.prototype.sendEmail = function(opt) {
           throw new Error(err);
         } else {
           console.log(json);
+          done();
         }
       });
     });

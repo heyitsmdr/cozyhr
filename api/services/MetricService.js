@@ -1,10 +1,12 @@
 var net = require('net');
 var util = require('util');
-var socket = false;;
+var socket = false;
 var isConnected = false;
 
 var REPORT_INTERVAL = 10 * 1000; // 10 Seconds
 var QUEUE = [];
+
+var log = ((typeof sails !== 'undefined') ? sails.log : console);
 
 function checkConnectionToGraphite(callback) {
   if(isConnected) {
@@ -14,7 +16,7 @@ function checkConnectionToGraphite(callback) {
   socket = net.createConnection(2003, "graphite.cozyhr.com");
 
   socket.on('connect', function() {
-    sails.log.info('[MetricService]', 'Connection to Graphite established.');
+    log.info('[MetricService]', 'Connection to Graphite established.');
     isConnected = true;
     callback();
   });
@@ -29,15 +31,20 @@ function checkConnectionToGraphite(callback) {
 };
 
 function graphiteReporter() {
-  if(QUEUE.length === 0)
+  if(QUEUE.length === 0) {
     return;
+  }
 
   checkConnectionToGraphite(function() {
     QUEUE.forEach(function(queueMetric) {
       var _reportedMetric = util.format("%s.%s %s\n", (process.env.NODE_ENV || 'development') + '.' + (process.env.DYNO || 'web.0'), queueMetric.metric + ' ' + queueMetric.value, Math.floor(Date.now() / 1000));
 
-      if(sails.config.consoleFiltering.metrics)
-        sails.log.verbose('[MetricService]', 'Sending metric:', _reportedMetric.replace("\n", ""));
+      if(typeof sails !== 'undefined' && sails.config.consoleFiltering.metrics) {
+        log.verbose('[MetricService]', 'Sending metric:', _reportedMetric.replace("\n", ""));
+      } else {
+        // When worker users this service
+        log.info('[MetricService]', 'Sending metric:', _reportedMetric.replace("\n", ""));
+      }
 
       socket.write(_reportedMetric);
 
@@ -46,10 +53,10 @@ function graphiteReporter() {
   });
 };
 
-if(sails.config.metricsEnabled !== false) {
+if(typeof sails === 'undefined' || sails.config.metricsEnabled !== false) {
   setInterval(graphiteReporter, REPORT_INTERVAL);
 } else {
-  sails.log.info('[MetricService]', 'The metric service has been disabled by your config.');
+  log.info('[MetricService]', 'The metric service has been disabled by your config.');
 }
 
 module.exports = {

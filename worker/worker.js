@@ -1,62 +1,71 @@
 // RabbitMQ
-var amqpConnection = require('amqp').createConnection({ url: "amqp://lu00GelV:-KdaPhbsdrAk70Af8seGdTb5hDglCcWU@furry-willow-20.bigwig.lshift.net:11142/R4MZ5zE8NSMd", clientProperties: { product: process.env.DYNO || 'worker.0' } });
-var exchangeName = 'cozyhr-' + (process.env.NODE_ENV || 'development');
-var exchange;
+var amqpConnection = require('amqp').createConnection({
+  host: 'rabbitmq.int.cozyhr.com',
+  port: 5672,
+  login: 'cozy',
+  password: '#CF3fxEH9!',
+  vhost: '/',
+  clientProperties: { product: process.env.DYNO || 'worker.0' }
+});
+var env = (process.env.NODE_ENV || 'development');
+var MetricService = require('../api/services/MetricService.js');
 
 // Queues (qs)
 var qs = [
   {
     name: 'EmailQueue',
     module: require('./queues/EmailQueue'),
-    queueName: 'queue-email',
-    map: [{ route: 'send_email', action: 'sendEmail' }]
+    queueName: env.substr(0, 3) + '-queue-email',
+    map: [{ route: 'send_email', action: 'sendEmail' }],
+    instance: null
   }
 ];
 
 amqpConnection.on('ready', function() {
-  console.log('RabbitMQ: Connected and ready.');
+  console.log('Connection established to AMQP server.');
 
-  exchange = amqpConnection.exchange( exchangeName );
+  // Set up Queues
+  qs.forEach(function(queue) {
+    // Check instance
+    if(queue.instance !== null) {
+      console.log('[' + queue.name + '] Now consuming messages in ' + queue.queueName + '');
+      return;
+    }
 
-  exchange.on('open', function() {
-    console.log('RabbitMQ: Exchange opened (' + exchange.name + ')');
-    // Set up Queues
-    qs.forEach(function(queue) {
-      // Load the instance
-      queue.instance = new queue.module();
-      // Create the queue and bind to the exchange
-      amqpConnection.queue(queue.queueName, { autoDelete: false }, function(_q) {
-        queue.instance._queue = _q;
-        // Bind based on mappings
-        queue.map.forEach(function(mapping) {
-          _q.bind(exchange.name, mapping.route);
-        });
-        // Set up consumer
-        _q.subscribe({ ack: true, prefetchCount: 1 }, function(message, headers, deliveryInfo, ack) {
-          for(var x = 0; x < queue.map.length; x++) {
-            if(queue.map[x].route == deliveryInfo.routingKey) {
-              try {
-                eval('queue.instance.' + queue.map[x].action)(message);
+    // Load the instance
+    queue.instance = new queue.module();
+    // Create the queue and bind to the exchange
+    amqpConnection.queue(queue.queueName, { durable: true, autoDelete: false }, function(_q) {
+      queue.instance._queue = _q;
+
+      // Set up consumer
+      _q.subscribe({ ack: true, prefetchCount: 1 }, function(message, headers, deliveryInfo) {
+        for(var x = 0; x < queue.map.length; x++) {
+          if(queue.map[x].route === deliveryInfo.routingKey) {
+            try {
+              queue.instance[queue.map[x].action](message, function() {
+                MetricService.increment('rabbitmq.completed_requests');
                 _q.shift(); // acknowledge
-              } catch(ex) {
-                console.log(ex);
-                _q.shift(true, true); // reject, and add back to queue
-              }
-              break;
+              });
+            } catch(ex) {
+              console.log(ex);
+              MetricService.increment('rabbitmq.failed_requests');
+              _q.shift(true, false); // reject, and don't add back to queue
             }
-          };
-        });
-        // Output
-        _q.on('queueBindOk', function() {
-          console.log('RabbitMQ[' + queue.name + ']: Now consuming messages in ' + queue.queueName + '');
-        });
+            break;
+          }
+        }
       });
+
+      // Log
+      console.log('[' + queue.name + '] Now consuming messages in ' + queue.queueName + '');
     });
   });
+
 });
 
 process.on('SIGINT', function() {
   amqpConnection.disconnect();
-  console.log('RabbitMQ: Closing connection');
+  console.log('Closing connection to AMQP server.');
   process.exit();
 });
