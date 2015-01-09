@@ -44,6 +44,9 @@ Cozy.controller('AdminController', function($scope, $rootScope, $routeParams, $o
         ];
       });
       break;
+    case 'billing':
+      $scope.crumbs = [{ name: 'Billing', location: '/#!/admin/billing' }];
+      break;
   }
 
   // Default Subsections

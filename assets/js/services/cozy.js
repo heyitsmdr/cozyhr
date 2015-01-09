@@ -27,6 +27,49 @@ Cozy.factory('$cozy', function($sails) {
 
         b(c);
       });
+    },
+
+    confirm: function(opt) {
+      swal({
+        title: opt.title || 'Are you sure?',
+        text: opt.text || 'This will be deleted.',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#DD6B55',
+        confirmButtonText: opt.confirm || 'Yes, delete it!',
+        closeOnConfirm: false
+      }, function() {
+
+        opt.confirmed(function(confirmedOpt) {
+          swal({
+            title: confirmedOpt.title || 'Deleted!',
+            text: confirmedOpt.text || 'The item has been deleted!',
+            closeOnConfirm: false
+          }, function() {
+            swal({title:"", timer:1});
+
+            if(typeof confirmedOpt.confirmed === 'function') {
+              confirmedOpt.confirmed();
+            }
+          });
+        });
+
+      });
+    },
+
+    notify: function(content, options) {
+      if(options === undefined) {
+        options = {};
+      }
+
+      return new jBox('Notice', {
+        content: content,
+        autoClose: 5000,
+        animation: {open: 'flip', close: 'flip'},
+        color: (options.color || 'black'),
+        audio: ((options.sound===true) ? '/sounds/bling2' : '')
+      });
     }
+
   };
 });

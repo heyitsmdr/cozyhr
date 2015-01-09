@@ -6,7 +6,7 @@
         <div class="menuitem"><a ng-class="{selected: $root.pageId === $root.PAGES.DASHBOARD}" href="/#!/dash">Dashboard</a></div>
         <div class="menuitem"><a class="" href="/#!/you">You</a></div>
         <div class="menuitem"><a class="" href="/#!/calendar">Calendar</a></div>
-        <div class="menuitem"><a class="" href="/#!/timeclock">Timeclock</a></div>
+        <div class="menuitem"><a ng-class="{selected: $root.pageId === $root.PAGES.TIMECLOCK}" href="/#!/timeclock">Timeclock</a></div>
         <div class="menuitem" ng-if="session.userinfo.role.companyAdmin"><a class="admin" ng-class="{selected: $root.pageId === $root.PAGES.ADMIN}" href="/#!/admin/general">Admin</a></div>
       </div>
       <div class="1u">

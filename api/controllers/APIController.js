@@ -25,7 +25,8 @@ module.exports = {
       })
       .spread(function(companyOffices, officePositions) {
         companyOffices.forEach(function(_office) {
-          _office.positionCount = _.where(officePositions, { office: _office.id }).length
+          _office.positionCount = _.where(officePositions, { office: _office.id }).length;
+          _office.positions = _.where(officePositions, { office: _office.id });
         });
         res.json(companyOffices);
       })

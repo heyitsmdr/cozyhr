@@ -51,6 +51,10 @@
         <admin-offices></admin-offices>
       </div>
 
+      <div ng-if="adminSection === 'billing'">
+        <admin-billing></admin-billing>
+      </div>
+
       <div ng-if="adminSection === 'office' && adminSubsection === 'positions'">
         <admin-office-positions></admin-office-positions>
       </div>

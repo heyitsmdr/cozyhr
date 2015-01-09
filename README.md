@@ -1,6 +1,6 @@
 # CozyHR
 
-This application is built with [Sails](http://sailsjs.org) which is an MVC-framework for node.js. The view-side (client-side) does not use any type of framework. We've built page helper objects that surround each page.
+This application uses [Sails](http://sailsjs.org) (an MVC-framework for node.js) for the server and [Angular](http://www.angularjs.org) (an MV*-framework) for the client.
 
 Dependency libraries:
 - jQuery 1.11.1

@@ -85,6 +85,13 @@ Cozy.config(function($routeProvider, $locationProvider) {
         factory: mustBeAuthenticated
       }
     })
+    .when('/timeclock', {
+      templateUrl: '/templates/timeclock.html',
+      controller: 'TimeclockController',
+      resolve: {
+        factory: mustBeAuthenticated
+      }
+    })
     .when('/employee/:id', {
       templateUrl: '/templates/employee.html',
       controller: 'EmployeeController',
@@ -232,7 +239,8 @@ Cozy.controller('PageController', function($scope, $rootScope, $sails, $authUser
   $rootScope.PAGES = {
     ADMIN: 0,
     DASHBOARD: 1,
-    EMPLOYEE: 2
+    EMPLOYEE: 2,
+    TIMECLOCK: 3
   };
 
   $rootScope.fancyDate = function(a, b, fancyReturn, opt) {
