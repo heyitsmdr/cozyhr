@@ -10,6 +10,8 @@ var amqpConnection = require('amqp').createConnection({
 var exchangeName = 'cozyhr-' + (process.env.NODE_ENV || 'development');
 var exchange = null;
 var queueReady = false;
+var serverIsShuttingDown = false;
+var closeTimeout = null;
 
 amqpConnection.on('ready', function() {
   sails.log.info('[QueueService]', 'Connection to RabbitMQ established.');
@@ -25,11 +27,30 @@ amqpConnection.on('ready', function() {
   });
 });
 
-process.on('SIGINT', function() {
-  amqpConnection.disconnect();
-  queueReady = false;
+amqpConnection.on('close', function() {
   sails.log.info('[QueueService]', 'The connection to RabbitMQ is being closed.');
-  process.exit();
+
+  queueReady = false;
+
+  if(serverIsShuttingDown) {
+    if(closeTimeout) {
+      clearTimeout(closeTimeout);
+    }
+
+    amqpConnection = null;
+    process.exit();
+  }
+});
+
+process.on('SIGINT', function() {
+  serverIsShuttingDown = true;
+
+  amqpConnection.disconnect();
+
+  // Allow 5 seconds for the connection to close, then forcefully close the app
+  closeTimeout = setInterval(function() {
+    process.exit();
+  }, 5000);
 });
 
 module.exports = {

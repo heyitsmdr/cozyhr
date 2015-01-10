@@ -9,6 +9,8 @@ var amqpConnection = require('amqp').createConnection({
 });
 var env = (process.env.NODE_ENV || 'development');
 var MetricService = require('../api/services/MetricService.js');
+var workerIsShuttingDown = false;
+var closeTimeout = null;
 
 // Queues (qs)
 var qs = [
@@ -61,11 +63,26 @@ amqpConnection.on('ready', function() {
       console.log('[' + queue.name + '] Now consuming messages in ' + queue.queueName + '');
     });
   });
+});
 
+amqpConnection.on('close', function() {
+  console.log('Connection closed.');
+
+  if(workerIsShuttingDown) {
+    if(closeTimeout) {
+      clearTimeout(closeTimeout);
+    }
+
+    amqpConnection = null;
+    process.exit();
+  }
 });
 
 process.on('SIGINT', function() {
+  workerIsShuttingDown = true;
   amqpConnection.disconnect();
+  closeTimeout = setTimeout(function() {
+    process.exit();
+  }, 5000);
   console.log('Closing connection to AMQP server.');
-  process.exit();
 });
