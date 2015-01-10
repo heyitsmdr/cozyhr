@@ -136,7 +136,7 @@ Cozy.factory('$feed', function($q, $cozy, $timeout, $rootScope) {
     writeComment: function(feedId, comment) {
       var deferred = $q.defer();
 
-      if(!comment || comment.replace(/ /g, '').length === 0) {
+      if(!comment || comment.replace(/ /g, '').length === 0 || comment.length < 2) {
         deferred.reject();
         return deferred.promise;
       }

@@ -121,7 +121,7 @@ module.exports = {
 					content: req.param('comment')
 				}).exec(es.wrap(function(err, newComment){
 					if(err) {
-						throw ExceptionService.error('Could not create new comment.');
+						throw ExceptionService.error(err);
 					}
 
 					newComment.authorId = req.session.userinfo.id;

@@ -41,7 +41,7 @@ function ValidationObject(variable) {
 }
 
 ValidationObject.prototype.notEmpty = function() {
-  if(!this.variable || this.variable.length === 0) {
+  if(!this.variable || this.variable.length === 0 || this.variable.replace(/ /g, '').length === 0) {
     this.errors.push('IS_EMPTY');
   }
 
